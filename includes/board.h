@@ -1,6 +1,7 @@
 #pragma once
 
 #include "lib.h"
+#include "move.h"
 #include "position.h"
 #include "square.h"
 
@@ -26,6 +27,20 @@ class CastlingRights {
 };
 
 class Board {
+  public:
+    Board();
+    ~Board();
+
+    double value_for(Color ally_color) const;
+    Color get_current_player_color() const;
+    Board apply_eval_move(const Move &move) const;
+    std::vector<Move> get_legal_moves() const;
+
+    std::tuple<Move, unsigned, double> get_next_best_move(int depth) const;
+    std::tuple<Move, unsigned, double> get_next_worst_move(int depth) const;
+    double minimax(int depth, double alpha, double beta, bool is_maximizing,
+                   Color getting_move_for, unsigned board_count) const;
+
   private:
     Square squares[64];
     Position *en_passant;

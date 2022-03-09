@@ -127,3 +127,70 @@ bool Position::is_starting_pawn(Color color) const {
         return false;
     }
 }
+
+bool Position::is_kingside_rook() const {
+    return (row == 0 || row == 7) && col == 7;
+}
+
+bool Position::is_queenside_rook() const {
+    return (row == 0 || row == 7) && col == 0;
+}
+
+std::vector<Position> Position::diagonals_to(const Position &to) const {
+    if (!is_diagonal_to(to)) {
+        return {};
+    }
+
+    int row_step, col_step;
+    if (is_left_of(to)) {
+        col_step = 1;
+    } else {
+        col_step = -1;
+    }
+
+    if (is_below(to)) {
+        row_step = 1;
+    } else {
+        row_step = -1;
+    }
+
+    Position acc = *this;
+    std::vector<Position> result;
+    for (int i = 0; i < diagonal_distance(to); i++) {
+        acc = acc.add_row(row_step).add_col(col_step);
+        result.push_back(acc);
+    }
+
+    return result;
+}
+
+std::vector<Position> Position::orthogonals_to(const Position &to) const {
+    if (!is_orthogonal_to(to)) {
+        return {};
+    }
+
+    int row_step = 0, col_step = 0;
+    if (is_left_of(to)) {
+        col_step = 1;
+    } else if (is_right_of(to)) {
+        col_step = -1;
+    } else if (is_above(to)) {
+        row_step = -1;
+    } else if (is_below(to)) {
+        row_step = 1;
+    }
+
+    Position acc = *this;
+    std::vector<Position> result;
+    for (int i = 0; i < orthogonal_distance(to); i++) {
+        acc = acc.add_row(row_step).add_col(col_step);
+        result.push_back(acc);
+    }
+
+    return result;
+}
+
+bool Position::is_knights_move(const Position &other) const {
+    return (abs(row - other.row) == 2 && abs(col - other.col) == 1) ||
+           (abs(row - other.row) == 1 && abs(col - other.col) == 2);
+}

@@ -53,7 +53,7 @@ class Position {
     std::vector<Position> diagonals_to(const Position &to) const;
     std::vector<Position> orthogonals_to(const Position &to) const;
 
-    bool is_knights_move(const Position &other) const;
+    bool is_knight_move(const Position &other) const;
 
     friend std::ostream &operator<<(std::ostream &os, const Position &position);
 

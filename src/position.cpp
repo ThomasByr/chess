@@ -1,8 +1,8 @@
 #include "position.h"
 
 Position::Position() {
-    row = 0;
-    col = 0;
+    row = -1;
+    col = -1;
 }
 
 Position::Position(int row, int col) {
@@ -190,7 +190,7 @@ std::vector<Position> Position::orthogonals_to(const Position &to) const {
     return result;
 }
 
-bool Position::is_knights_move(const Position &other) const {
+bool Position::is_knight_move(const Position &other) const {
     return (abs(row - other.row) == 2 && abs(col - other.col) == 1) ||
            (abs(row - other.row) == 1 && abs(col - other.col) == 2);
 }

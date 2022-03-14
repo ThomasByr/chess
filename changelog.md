@@ -6,3 +6,4 @@
     *   port from previous repo in python
     *   better v classes so the computer can plan against the player
     *   did it in rust... am translating
+    *   added some pre-defined class in lib to avoid making a whole new file just to avoid circular imports (because we include files and not features in cpp...)

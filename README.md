@@ -11,7 +11,11 @@
 
 ## In short
 
+This is a school small project for OOP : a chess game in the command-line. It has some additional features (color map, minimax algorithm).
+
 ## Prerequisites
+
+This project currently has no prerequisites but to have a recent enough distribution of Linux. To run tests, valgrind is necessary (as well as the debug mode when running). The current makefile is set for g++-11 and the znver3 micro-architecture (Ryzen Zen3), you should modify it if needed.
 
 ## Usage
 
@@ -29,7 +33,7 @@ Moves should be typed in the command line (the program should be asking for it t
 
 1.  Why in the world is there no gui here yet ?
 
-    Well at first, this is a school small project and so we are restricted by the subject in a variety of manners. Games should be able to be played through the command line, and to program both interfaces is maybe a little to much to ask knowing that professors won't give a damn into it.
+    Well at first, this is a school small project and so we are restricted by the subject paper in a variety of manners. Games should be able to be played through the command line, and to program both interfaces is maybe a little to much to ask knowing that professors won't give a damn into it.
 
 2.  Why C++ and not C# ot Java ?
 
@@ -53,6 +57,7 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
 *   port from previous repo in python
 *   better v classes so the computer can plan against the player
 *   did it in rust... am translating
+*   added some pre-defined class in lib to avoid making a whole new file just to avoid circular imports (because we include files and not features in cpp...)
 
 </details>
 

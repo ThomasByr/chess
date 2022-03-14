@@ -4,6 +4,9 @@
 #include <string>
 #include <vector>
 
+class Board;
+class Piece;
+
 enum class Color { White, Black };
 
 Color operator!(Color color);

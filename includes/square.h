@@ -1,5 +1,6 @@
 #pragma once
 
+#include "lib.h"
 #include "piece.h"
 
 class Square {
@@ -9,11 +10,11 @@ class Square {
     ~Square();
 
     static Square from_piece(Piece *piece);
-    inline bool is_empty();
-    inline Piece *get_piece();
+    bool is_empty();
+    Piece *get_piece();
 
   private:
     Piece *piece;
 };
 
-static const Square EMPTY_SQUARE = Square{nullptr};
+static const Square EMPTY_SQUARE = Square();

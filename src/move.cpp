@@ -38,7 +38,8 @@ int Move::from_string(const std::string &move_string) {
             to = Position(move_parts[1]);
             move_type = PieceMove;
             return PieceMove;
-        } else if (move_parts.size() == 3 && move_parts[1] == "to") {
+        } else if (move_parts.size() == 3 &&
+                   (move_parts[1] == "to" || move_parts[1] == "->")) {
             from = Position(move_parts[0]);
             to = Position(move_parts[2]);
             move_type = PieceMove;

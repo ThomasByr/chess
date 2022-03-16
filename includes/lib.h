@@ -4,8 +4,13 @@
 #include <string>
 #include <vector>
 
+class Square;
+class Move;
+class Position;
 class Board;
 class Piece;
+
+class Pawn;
 
 enum class Color { White, Black };
 

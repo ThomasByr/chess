@@ -17,7 +17,7 @@ Piece::Piece(Color color, Position position) {
     }
 }
 
-// Piece::~Piece() {}
+Piece::~Piece() {}
 
 std::ostream &operator<<(std::ostream &os, const Piece &piece) {
     (void)piece;
@@ -81,3 +81,20 @@ bool Pawn::is_starting_pawn() const {
 bool Pawn::is_queenside_rook() const { return false; }
 
 bool Pawn::is_kingside_rook() const { return false; }
+
+std::vector<Move> Pawn::get_legal_moves(const Board &board) const {
+    (void)board;
+    return std::vector<Move>();
+}
+
+bool Pawn::is_legal_move(const Position &new_pos, const Board &board) const {
+    (void)new_pos;
+    (void)board;
+    return false;
+}
+
+bool Pawn::is_legal_attack(const Position &new_pos, const Board &board) const {
+    (void)new_pos;
+    (void)board;
+    return false;
+}

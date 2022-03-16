@@ -141,21 +141,21 @@ static double BLACK_PAWN_POSITION_WEIGHTS[8][8] = {
 
 class Piece {
   public:
-    inline static const int None = 0;
-    inline static const int King = 1;
-    inline static const int Pawn = 2;
-    inline static const int Knight = 3;
-    inline static const int Bishop = 4;
-    inline static const int Rook = 5;
-    inline static const int Queen = 6;
+    static const int None = 0;
+    static const int King = 1;
+    static const int Pawn = 2;
+    static const int Knight = 3;
+    static const int Bishop = 4;
+    static const int Rook = 5;
+    static const int Queen = 6;
 
-    inline static const int White = 8;
-    inline static const int Black = 16;
+    static const int White = 8;
+    static const int Black = 16;
 
-    inline static const int type_mask = 0b00111;
-    inline static const int black_mask = 0b10000;
-    inline static const int white_mask = 0b01000;
-    inline static const int color_mask = black_mask | white_mask;
+    static const int type_mask = 0b00111;
+    static const int black_mask = 0b10000;
+    static const int white_mask = 0b01000;
+    static const int color_mask = black_mask | white_mask;
 
     Piece(Color color, Position position);
     virtual ~Piece();

@@ -165,6 +165,8 @@ class Piece {
 
     int get_type() const;
 
+    std::vector<Move> get_valid_moves(std::vector<Move> &result, Board &board);
+
     virtual std::string get_name() const = 0;
     virtual int get_material_value() const = 0;
     virtual double get_weighted_value() const = 0;
@@ -173,11 +175,9 @@ class Piece {
     virtual bool is_queenside_rook() const = 0;
     virtual bool is_kingside_rook() const = 0;
 
-    virtual std::vector<Move> get_legal_moves(const Board &board) const = 0;
-    virtual bool is_legal_move(const Position &new_pos,
-                               const Board &board) const = 0;
-    virtual bool is_legal_attack(const Position &new_pos,
-                                 const Board &board) const = 0;
+    virtual std::vector<Move> get_legal_moves(Board &board) = 0;
+    virtual bool is_legal_move(const Position &new_pos, Board &board) = 0;
+    virtual bool is_legal_attack(const Position &new_pos, Board &board) = 0;
 
     virtual Piece *move_to(Position new_pos) const = 0;
 
@@ -204,9 +204,9 @@ class Pawn : public Piece {
     bool is_queenside_rook() const;
     bool is_kingside_rook() const;
 
-    std::vector<Move> get_legal_moves(const Board &board) const;
-    bool is_legal_move(const Position &new_pos, const Board &board) const;
-    bool is_legal_attack(const Position &new_pos, const Board &board) const;
+    std::vector<Move> get_legal_moves(Board &board);
+    bool is_legal_move(const Position &new_pos, Board &board);
+    bool is_legal_attack(const Position &new_pos, Board &board);
 
     friend std::ostream &operator<<(std::ostream &os, const Pawn &pawn);
 };

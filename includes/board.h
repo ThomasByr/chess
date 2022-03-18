@@ -2,7 +2,6 @@
 
 #include "lib.h"
 #include "move.h"
-#include "piece.h"
 #include "position.h"
 #include "square.h"
 

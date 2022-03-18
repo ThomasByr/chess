@@ -1,5 +1,7 @@
 #include "board.h"
 
+#include "piece.h"
+
 CastlingRights::CastlingRights() {
     kingside = true;
     queenside = true;

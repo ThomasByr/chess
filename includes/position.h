@@ -57,6 +57,8 @@ class Position {
 
     friend std::ostream &operator<<(std::ostream &os, const Position &position);
 
+    bool operator==(const Position &other) const;
+
   private:
     int row;
     int col;

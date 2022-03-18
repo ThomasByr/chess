@@ -27,6 +27,10 @@ std::ostream &operator<<(std::ostream &os, const Position &position) {
     return os;
 }
 
+bool Position::operator==(const Position &other) const {
+    return row == other.row && col == other.col;
+}
+
 const Position Position::king_position(Color color) {
     switch (color) {
     case Color::White:

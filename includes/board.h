@@ -37,13 +37,13 @@ class Board {
     double value_for(const Color &ally_color) const; //
     Color get_current_player_color() const;          //
 
-    Board apply_eval_move(const Move &move) const;
-    std::vector<Move> get_legal_moves() const;
+    Board apply_eval_move(const Move &move);
+    std::vector<Move> get_legal_moves();
 
-    std::tuple<Move, unsigned, double> get_next_best_move(int depth) const;
-    std::tuple<Move, unsigned, double> get_next_worst_move(int depth) const;
+    std::tuple<Move, unsigned, double> get_next_best_move(int depth);
+    std::tuple<Move, unsigned, double> get_next_worst_move(int depth);
     double minimax(int depth, double alpha, double beta, bool is_maximizing,
-                   Color getting_move_for, unsigned board_count) const;
+                   Color getting_move_for, unsigned board_count);
 
     Square get_square(const Position &pos) const; //
     void add_piece(Piece &piece);                 //
@@ -57,9 +57,9 @@ class Board {
     Position get_king_position(const Color &color) const; //
 
     bool is_threatened(const Position &pos, const Color &ally_color); //
-    bool is_in_check(const Color &color) const;
+    bool is_in_check(const Color &color);                             //
 
-    Board move_piece(const Position &from, const Position &to) const;
+    Board move_piece(const Position &from, const Position &to);
 
     bool can_kingside_castle(const Color &color) const;
     bool can_queenside_castle(const Color &color) const;
@@ -87,7 +87,7 @@ class Board {
 
     int get_material_advantage(const Color &color) const;
 
-    bool is_legal_move(const Move &move, const Color &player_color) const;
+    bool is_legal_move(const Move &move, const Color &player_color); //
 
   private:
     Square squares[64];

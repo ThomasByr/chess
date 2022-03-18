@@ -250,3 +250,59 @@ bool Board::is_threatened(const Position &pos, const Color &ally_color) {
     }
     return false;
 }
+
+bool Board::is_in_check(const Color &color) {
+    Position king_pos = this->get_king_position(color);
+    if (king_pos.is_off_board()) {
+        return false;
+    } else {
+        return this->is_threatened(king_pos, color);
+    }
+}
+
+bool Board::is_legal_move(const Move &move, const Color &player_color) {
+    bool tmp;
+    Position *en_passant;
+
+    switch (move.move_type) {
+    case Move::Invalid:
+        return false;
+    case Move::KingSideCastle:
+        return this->can_kingside_castle(player_color);
+    case Move::QueenSideCastle:
+        return this->can_queenside_castle(player_color);
+    case Move::Resign:
+        return true;
+    case Move::PieceMove:
+        Position from = move.from;
+        Position to = move.to;
+
+        Piece *piece = this->get_piece(from);
+        if (piece == nullptr) {
+            return false;
+        }
+        switch (piece->get_type()) {
+        case Piece::Pawn:
+            en_passant = this->en_passant;
+            tmp = false;
+            if (en_passant == nullptr) {
+                tmp = false;
+            } else {
+                tmp =
+                    ((*en_passant == from.pawn_up(player_color).next_left() ||
+                      *en_passant == from.pawn_up(player_color).next_right()) &&
+                     *en_passant == to) &&
+                    piece->get_color() == player_color;
+            }
+            return tmp || (piece->is_legal_move(to, *this) &&
+                           piece->get_color() == player_color &&
+                           !this->apply_move(move).is_in_check(player_color));
+
+        default:
+            return piece->is_legal_move(to, *this) &&
+                   piece->get_color() == player_color &&
+                   !this->apply_move(move).is_in_check(player_color);
+        }
+    }
+    return false;
+}

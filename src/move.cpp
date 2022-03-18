@@ -3,7 +3,10 @@
 Move::Move() {
     from = Position();
     to = Position();
+    move_type = Invalid;
 }
+
+Move::~Move() {}
 
 int Move::from_string(const std::string &move_string) {
     if (move_string == "resign" || move_string == "resigns") {

@@ -11,6 +11,10 @@ class Move {
     static const int Resign = 3;
     static const int Invalid = 4;
 
+    int move_type;
+    Position from;
+    Position to;
+
     Move();
     ~Move();
 
@@ -19,7 +23,4 @@ class Move {
     friend std::ostream &operator<<(std::ostream &os, const Move &move);
 
   private:
-    Position from;
-    Position to;
-    int move_type;
 };

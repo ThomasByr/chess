@@ -29,35 +29,35 @@ class CastlingRights {
 
 class Board {
   public:
-    Board();
-    ~Board();
+    Board();  //
+    ~Board(); //
 
-    double value_for(const Color &ally_color) const;
-    Color get_current_player_color() const;
+    CastlingRights *black_castling_rights;
+    CastlingRights *white_castling_rights;
 
-    Board apply_eval_move(const Move &move) const; // todo
-    std::vector<Move> get_legal_moves() const;     // todo
+    double value_for(const Color &ally_color) const; //
+    Color get_current_player_color() const;          //
+
+    Board apply_eval_move(const Move &move) const;
+    std::vector<Move> get_legal_moves() const;
 
     std::tuple<Move, unsigned, double> get_next_best_move(int depth) const;
     std::tuple<Move, unsigned, double> get_next_worst_move(int depth) const;
     double minimax(int depth, double alpha, double beta, bool is_maximizing,
                    Color getting_move_for, unsigned board_count) const;
 
-    CastlingRights *black_castling_rights;
-    CastlingRights *white_castling_rights;
+    Square get_square(const Position &pos) const; //
+    void add_piece(Piece &piece);                 //
+    Piece *get_piece(const Position &pos);        //
 
-    Square get_square(const Position &pos) const;
-    void add_piece(Piece &piece);
-    Piece *get_piece(const Position &pos);
+    bool has_ally_piece(const Position &pos, const Color &ally_color);  //
+    bool has_enemy_piece(const Position &pos, const Color &ally_color); //
+    bool has_piece(const Position &pos);                                //
+    bool has_no_piece(const Position &pos);                             //
 
-    bool has_ally_piece(const Position &pos, const Color &ally_color);
-    bool has_enemy_piece(const Position &pos, const Color &enemy_color);
-    bool has_piece(const Position &pos);
-    bool has_no_piece(const Position &pos);
+    Position get_king_position(const Color &color) const; //
 
-    Position get_king_position(const Color &color) const;
-
-    bool is_threatened(const Position &pos, const Color &ally_color) const;
+    bool is_threatened(const Position &pos, const Color &ally_color); //
     bool is_in_check(const Color &color) const;
 
     Board move_piece(const Position &from, const Position &to) const;

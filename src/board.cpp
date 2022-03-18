@@ -221,7 +221,7 @@ Position Board::get_king_position(const Color &color) const {
     return king_pos;
 }
 
-bool Board::is_threatened(const Position &pos, const Color &ally_color) const {
+bool Board::is_threatened(const Position &pos, const Color &ally_color) {
     for (int i = 0; i < 64; i++) {
         Square square = this->squares[i];
 

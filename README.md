@@ -1,6 +1,6 @@
 # Chess Game in C++
 
-> Project [instructions](https://moodle.unistra.fr/pluginfile.php/748157/mod_resource/content/11/td-echecs.html) on the Moodle page.
+> Project [instruction paper (subject)](https://moodle.unistra.fr/pluginfile.php/748157/mod_resource/content/11/td-echecs.html) on the Moodle page.
 
 1. [In short](#in-short)
 2. [Prerequisites](#prerequisites)

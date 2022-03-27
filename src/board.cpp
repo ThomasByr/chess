@@ -1,6 +1,7 @@
 #include "board.h"
 
 #include "piece.h"
+#include "result.h"
 
 CastlingRights::CastlingRights() {
     kingside = true;
@@ -42,7 +43,7 @@ BoardBuilder::BoardBuilder(const Board &board) {
     this->board = new Board(board);
 }
 
-BoardBuilder::~BoardBuilder() { delete board; }
+BoardBuilder::~BoardBuilder() {}
 
 BoardBuilder BoardBuilder::row(const Piece &piece) {
     Position pos = piece.get_pos();
@@ -141,11 +142,21 @@ BoardBuilder BoardBuilder::disable_kingside_castle(const Color &color) {
 Board BoardBuilder::build() const { return *board; }
 
 Board::Board() {
+    for (int i = 0; i < 64; i++) {
+        squares[i] = EMPTY_SQUARE;
+    }
+    turn = Color::White;
+    en_passant = nullptr;
+}
+
+Board Board::new_board() {
     BoardBuilder builder;
-    *this = builder.piece(new Pawn(Color::White, B1))
-                .piece(new Pawn(Color::White, B2))
-                .build();
-    this->en_passant = nullptr;
+    Board board = builder.piece(new Pawn(Color::White, B1))
+                      .piece(new Pawn(Color::White, B2))
+                      .build();
+    board.turn = Color::White;
+    board.en_passant = nullptr;
+    return board;
 }
 
 Board::~Board() {}
@@ -284,7 +295,6 @@ bool Board::is_legal_move(const Move &move, const Color &player_color) {
         switch (piece->get_type()) {
         case Piece::Pawn:
             en_passant = this->en_passant;
-            tmp = false;
             if (en_passant == nullptr) {
                 tmp = false;
             } else {

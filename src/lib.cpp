@@ -1,5 +1,11 @@
 #include "lib.h"
 
+void panic(const std::string &msg) {
+    std::stringstream ss;
+    ss << "panic: " << msg << " (" << strerror(errno) << ")" << std::endl;
+    throw std::runtime_error(ss.str());
+}
+
 Color operator!(Color color) {
     return color == Color::White ? Color::Black : Color::White;
 }

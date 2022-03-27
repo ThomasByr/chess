@@ -1,8 +1,13 @@
 #pragma once
 
+#include <cerrno>
+#include <cstring>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
+
+void panic [[noreturn]] (const std::string &msg);
 
 class Square;
 class Move;

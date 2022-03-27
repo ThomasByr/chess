@@ -5,17 +5,17 @@ LDLIBS =
 
 INCLUDE_PATH = ./includes
 
-TARGET    = main
+TARGET       = main
 
-SRCDIR    = src
-OBJDIR    = obj
-BINDIR    = bin
+SRCDIR       = src
+OBJDIR       = obj
+BINDIR       = bin
 
-SOURCES  := $(wildcard $(SRCDIR)/*.cpp)
-INCLUDES := $(wildcard $(INCLUDE_PATH)/*.h)
-OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
+SOURCES     := $(wildcard $(SRCDIR)/*.cpp)
+INCLUDES    := $(wildcard $(INCLUDE_PATH)/*.h)
+OBJECTS     := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
-PATH_TO_EXE = $(BINDIR)/$(TARGET)
+PATH_TO_EXE  = $(BINDIR)/$(TARGET)
 
 all : release
 

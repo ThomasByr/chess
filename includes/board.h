@@ -1,6 +1,7 @@
 #pragma once
 
 #include "lib.h"
+
 #include "move.h"
 #include "position.h"
 #include "square.h"
@@ -30,6 +31,8 @@ class Board {
   public:
     Board();  //
     ~Board(); //
+
+    static Board new_board(); //
 
     CastlingRights *black_castling_rights;
     CastlingRights *white_castling_rights;
@@ -88,6 +91,8 @@ class Board {
     int get_material_advantage(const Color &color) const;
 
     bool is_legal_move(const Move &move, const Color &player_color); //
+
+    friend std::ostream &operator<<(std::ostream &os, const Board &board);
 
   private:
     Square squares[64];

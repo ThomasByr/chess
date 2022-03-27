@@ -4,6 +4,7 @@
 #include <string>
 
 #include "lib.h"
+
 #include "move.h"
 #include "position.h"
 

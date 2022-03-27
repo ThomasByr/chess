@@ -10,6 +10,7 @@ Move::~Move() {}
 
 int Move::from_string(const std::string &move_string) {
     if (move_string == "resign" || move_string == "resigns") {
+        move_type = Resign;
         return Resign;
     } else if (move_string == "queenside castle" ||
                move_string == "castle queenside" || move_string == "O-O-O" ||

@@ -149,6 +149,16 @@ Board::Board() {
     en_passant = nullptr;
 }
 
+Board::Board(const Board &board) {
+    for (int i = 0; i < 64; i++) {
+        squares[i] = board.squares[i];
+    }
+    turn = board.turn;
+    en_passant = board.en_passant;
+    white_castling_rights = new CastlingRights(*board.white_castling_rights);
+    black_castling_rights = new CastlingRights(*board.black_castling_rights);
+}
+
 Board Board::new_board() {
     BoardBuilder builder;
     Board board = builder.piece(new Pawn(Color::White, B1))

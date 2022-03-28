@@ -30,6 +30,7 @@ class CastlingRights {
 class Board {
   public:
     Board();  //
+    Board(const Board &board);
     ~Board(); //
 
     static Board new_board(); //

@@ -79,7 +79,7 @@ std::string to_lower(const std::string &s) {
 }
 
 int main() {
-    Board board = Board();
+    Board board = Board::new_board();
     std::cout << board << std::endl;
 
     std::vector<Move> history = std::vector<Move>();

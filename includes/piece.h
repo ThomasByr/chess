@@ -211,3 +211,113 @@ class Pawn : public Piece {
 
     friend std::ostream &operator<<(std::ostream &os, const Pawn &pawn);
 };
+
+class King : public Piece {
+  public:
+    King(Color color, Position position);
+    ~King();
+
+    King *move_to(Position new_pos) const;
+
+    std::string get_name() const;
+    int get_material_value() const;
+    double get_weighted_value() const;
+
+    bool is_starting_pawn() const;
+    bool is_queenside_rook() const;
+    bool is_kingside_rook() const;
+
+    std::vector<Move> get_legal_moves(Board &board);
+    bool is_legal_move(const Position &new_pos, Board &board);
+    bool is_legal_attack(const Position &new_pos, Board &board);
+
+    friend std::ostream &operator<<(std::ostream &os, const King &king);
+};
+
+class Queen : public Piece {
+  public:
+    Queen(Color color, Position position);
+    ~Queen();
+
+    Queen *move_to(Position new_pos) const;
+
+    std::string get_name() const;
+    int get_material_value() const;
+    double get_weighted_value() const;
+
+    bool is_starting_pawn() const;
+    bool is_queenside_rook() const;
+    bool is_kingside_rook() const;
+
+    std::vector<Move> get_legal_moves(Board &board);
+    bool is_legal_move(const Position &new_pos, Board &board);
+    bool is_legal_attack(const Position &new_pos, Board &board);
+
+    friend std::ostream &operator<<(std::ostream &os, const Queen &queen);
+};
+
+class Knight : public Piece {
+  public:
+    Knight(Color color, Position position);
+    ~Knight();
+
+    Knight *move_to(Position new_pos) const;
+
+    std::string get_name() const;
+    int get_material_value() const;
+    double get_weighted_value() const;
+
+    bool is_starting_pawn() const;
+    bool is_queenside_rook() const;
+    bool is_kingside_rook() const;
+
+    std::vector<Move> get_legal_moves(Board &board);
+    bool is_legal_move(const Position &new_pos, Board &board);
+    bool is_legal_attack(const Position &new_pos, Board &board);
+
+    friend std::ostream &operator<<(std::ostream &os, const Knight &knight);
+};
+
+class Bishop : public Piece {
+  public:
+    Bishop(Color color, Position position);
+    ~Bishop();
+
+    Bishop *move_to(Position new_pos) const;
+
+    std::string get_name() const;
+    int get_material_value() const;
+    double get_weighted_value() const;
+
+    bool is_starting_pawn() const;
+    bool is_queenside_rook() const;
+    bool is_kingside_rook() const;
+
+    std::vector<Move> get_legal_moves(Board &board);
+    bool is_legal_move(const Position &new_pos, Board &board);
+    bool is_legal_attack(const Position &new_pos, Board &board);
+
+    friend std::ostream &operator<<(std::ostream &os, const Bishop &bishop);
+};
+
+class Rook : public Piece {
+  public:
+    Rook(Color color, Position position);
+    ~Rook();
+
+    Rook *move_to(Position new_pos) const;
+
+    std::string get_name() const;
+    int get_material_value() const;
+    double get_weighted_value() const;
+
+    bool is_starting_pawn() const;
+    bool is_queenside_rook() const;
+    bool is_kingside_rook() const;
+
+    std::vector<Move> get_legal_moves(Board &board);
+    bool is_legal_move(const Position &new_pos, Board &board);
+    bool is_legal_attack(const Position &new_pos, Board &board);
+
+    friend std::ostream &operator<<(std::ostream &os, const Rook &rook);
+};

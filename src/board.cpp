@@ -283,6 +283,7 @@ bool Board::is_in_check(const Color &color) {
 
 bool Board::is_legal_move(const Move &move, const Color &player_color) {
     bool tmp;
+    Piece *piece;
     Position *en_passant;
 
     switch (move.move_type) {
@@ -298,7 +299,7 @@ bool Board::is_legal_move(const Move &move, const Color &player_color) {
         Position from = move.from;
         Position to = move.to;
 
-        Piece *piece = this->get_piece(from);
+        piece = this->get_piece(from);
         if (piece == nullptr) {
             return false;
         }

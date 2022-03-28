@@ -303,6 +303,9 @@ bool Board::is_legal_move(const Move &move, const Color &player_color) {
             return false;
         }
         switch (piece->get_type()) {
+        case Piece::None:
+            return false;
+
         case Piece::Pawn:
             en_passant = this->en_passant;
             if (en_passant == nullptr) {

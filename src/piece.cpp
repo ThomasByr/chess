@@ -166,13 +166,83 @@ std::vector<Move> Pawn::get_legal_moves(Board &board) {
 }
 
 bool Pawn::is_legal_move(const Position &new_pos, Board &board) {
-    (void)new_pos;
-    (void)board;
-    return false;
+    if (board.has_ally_piece(new_pos, this->get_color()) ||
+        new_pos.is_off_board()) {
+        return false;
+    }
+    Color ally_color = this->get_color();
+    Position pos = this->get_pos();
+
+    Position up = pos.pawn_up(ally_color);
+    Position up_left = up.next_left();
+    Position up_right = up.next_right();
+
+    Position *en_passant = board.get_en_passant();
+    bool tmp = false;
+    if (en_passant != nullptr) {
+        tmp = ((*en_passant == up_left || *en_passant == up_right) &&
+               new_pos == *en_passant);
+    }
+
+    return tmp ||
+           (this->is_starting_pawn() && board.has_no_piece(new_pos) &&
+            board.has_no_piece(up) && new_pos == up.pawn_up(ally_color)) ||
+           (board.has_enemy_piece(new_pos, ally_color) && new_pos == up_left) ||
+           (board.has_enemy_piece(new_pos, ally_color) &&
+            new_pos == up_right) ||
+           (board.has_no_piece(new_pos) && new_pos == up);
 }
 
 bool Pawn::is_legal_attack(const Position &new_pos, Board &board) {
-    (void)new_pos;
-    (void)board;
-    return false;
+    if (board.has_ally_piece(new_pos, this->get_color()) ||
+        new_pos.is_off_board()) {
+        return false;
+    }
+    Color ally_color = this->get_color();
+    Position pos = this->get_pos();
+
+    Position up = pos.pawn_up(ally_color);
+    Position *en_passant = board.get_en_passant();
+    bool tmp = false;
+    if (en_passant != nullptr) {
+        tmp = ((*en_passant == up.next_left() ||
+                *en_passant == up.next_right()) &&
+               new_pos == *en_passant);
+    }
+
+    return tmp || new_pos == up.next_left() || new_pos == up.next_right();
 }
+
+King::King(Color color, Position position) : Piece(color, position) {
+    this->id |= Piece::King;
+}
+
+King::~King() {}
+
+King *King::move_to(Position new_pos) const {
+    return new King(this->color, new_pos);
+}
+
+std::string King::get_name() const { return "king"; }
+
+int King::get_material_value() const { return 99999; }
+
+double King::get_weighted_value() const {
+    double(*weights)[8] = {0};
+    switch (this->color) {
+    case Color::White:
+        weights = WHITE_KING_POSITION_WEIGHTS;
+        break;
+    case Color::Black:
+        weights = BLACK_KING_POSITION_WEIGHTS;
+        break;
+    }
+    return weights[this->get_pos().get_row()][this->get_pos().get_col()] +
+           (double)this->get_material_value() * 10.;
+}
+
+bool King::is_starting_pawn() const { return false; }
+
+bool King::is_queenside_rook() const { return false; }
+
+bool King::is_kingside_rook() const { return false; }

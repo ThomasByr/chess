@@ -175,7 +175,7 @@ Board::~Board() {}
 
 double Board::value_for(const Color &ally_color) const {
     double sum = 0;
-    for (Square square : squares) {
+    for (Square square : this->squares) {
         if (square.is_empty()) {
             continue;
         }
@@ -592,4 +592,234 @@ Board Board::apply_move(const Move &move) {
     }
     
     return *this;
+}
+
+GameResult Board::play_move(const Move &move) {
+    Color current_color = this->get_current_player_color();
+    GameResult result;
+
+    if (move.move_type == Move::Resign) {
+        result.result_type = GameResult::Victory;
+        result.winner = !current_color;
+    } else if (this->is_legal_move(move, current_color)) {
+        Board next_turn = this->apply_move(move).change_turn();
+        if (next_turn.is_checkmate()) {
+            result.result_type = GameResult::Victory;
+            result.winner = current_color;
+        } else if (next_turn.is_stalemate()) {
+            result.result_type = GameResult::Stalemate;
+        } else {
+            result.result_type = GameResult::Continuing;
+            result.next_board = next_turn;
+        }
+    } else {
+        result.result_type = GameResult::IllegalMove;
+        result.move = move;
+    }
+
+    return result;
+}
+
+std::string Board::rating_bar(unsigned len) {
+    std::tuple<Move, unsigned, double> best0 = this->get_next_best_move(2);
+    std::tuple<Move, unsigned, double> worst0 = this->get_next_worst_move(2);
+    Move best_m = std::get<0>(best0);
+    double your_best_val = std::get<2>(best0),
+           your_lowest_val = std::get<2>(worst0);
+    double your_val = your_best_val + your_lowest_val;
+
+    std::tuple<Move, unsigned, double> best1 =
+        this->apply_move(best_m).change_turn().get_next_best_move(2);
+    std::tuple<Move, unsigned, double> worst1 =
+        this->apply_move(best_m).change_turn().get_next_worst_move(2);
+    double their_best_val = std::get<2>(best1),
+           their_lowest_val = std::get<2>(worst1);
+    double their_val = their_best_val + their_lowest_val;
+
+    if (your_val < 0) {
+        your_val *= -1;
+        their_val += 2 * your_val;
+    }
+
+    if (their_val < 0) {
+        their_val *= -1;
+        your_val += 2 * their_val;
+    }
+
+    double your_percentage = your_val / (your_val + their_val);
+    double their_percentage = their_val / (your_val + their_val);
+
+    std::string your_color, their_color, white, black;
+    switch (this->turn) {
+    case Color::White:
+        your_color = "▓";
+        their_color = "░";
+        break;
+    case Color::Black:
+        your_color = "░";
+        their_color = "▓";
+        break;
+    }
+
+    switch (this->turn) {
+    case Color::White:
+        white = your_color * unsigned(double(len) * your_percentage);
+        black = their_color * unsigned(double(len) * their_percentage);
+        break;
+    case Color::Black:
+        white = their_color * unsigned(double(len) * their_percentage);
+        black = your_color * unsigned(double(len) * your_percentage);
+        break;
+    }
+
+    return white + black;
+}
+
+Color Board::get_turn_color() const { return this->turn; }
+
+Position *Board::get_en_passant() const { return this->en_passant; }
+
+Board Board::remove_all(const Color &color) const {
+    Board result = Board(*this);
+
+    for (unsigned i = 0; i < 64; i++) {
+        Piece *piece = result.squares[i].get_piece();
+        if (piece != nullptr && piece->get_color() == color) {
+            result.squares[i] = EMPTY_SQUARE;
+        }
+    }
+    return result;
+}
+
+Board Board::queen_all(const Color &color) const {
+    Board result = Board(*this);
+
+    for (unsigned i = 0; i < 64; i++) {
+        Piece *piece = result.squares[i].get_piece();
+        if (piece != nullptr && piece->get_type() != Piece::King &&
+            piece->get_color() == color) {
+            result.squares[i] = Square(new Queen(color, piece->get_pos()));
+        }
+    }
+    return result;
+}
+
+Board Board::set_turn(const Color &color) const {
+    Board result = Board(*this);
+    result.turn = color;
+    return result;
+}
+
+int Board::get_material_advantage(const Color &color) const {
+    int sum = 0;
+    for (Square square : this->squares) {
+        Piece *piece = square.get_piece();
+        if (piece == nullptr) {
+            continue;
+        }
+
+        if (piece->get_color() == color) {
+            sum += piece->get_material_value();
+        } else {
+            sum -= piece->get_material_value();
+        }
+    }
+    return sum;
+}
+
+std::ostream &operator<<(std::ostream &os, Board &board) {
+    std::string rating_bar = board.rating_bar(16);
+
+    std::string abc;
+    switch (board.get_turn_color()) {
+    case Color::White:
+        abc = " a  b  c  d  e  f  g  h";
+        break;
+    case Color::Black:
+        abc = " h  g  f  e  d  c  b  a";
+        break;
+    }
+    os << "   " << abc << "\n  ╔════════════════════════╗";
+
+    Color square_color = !board.get_turn_color();
+    unsigned height = 8, width = 8;
+
+    for (unsigned row = 0; row < height; row++) {
+        unsigned print_row = 0;
+        os << "\n";
+        switch (board.get_turn_color()) {
+        case Color::White:
+            print_row = height - row - 1;
+            break;
+        case Color::Black:
+            print_row = row;
+            break;
+        }
+        os << print_row + 1 << " ║";
+
+        for (unsigned col = 0; col < width; col++) {
+            unsigned print_col = 0;
+            switch (board.get_turn_color()) {
+            case Color::Black:
+                print_col = width - col - 1;
+                break;
+            case Color::White:
+                print_col = col;
+                break;
+            }
+
+            Position pos = Position(print_row, print_col);
+
+            std::string s;
+            Piece *piece = board.get_piece(pos);
+            if (piece != nullptr) {
+                s = piece->to_string();
+            } else {
+                switch (square_color) {
+                case Color::White:
+                    s = "░░░";
+                    break;
+                case Color::Black:
+                    s = "▓▓▓";
+                    break;
+                }
+            }
+
+            if (board.get_en_passant() != nullptr &&
+                pos == *board.get_en_passant()) {
+                os << "\x1b[34m" << s << "\x1b[m\x1b[0m";
+            } else if (board.is_threatened(pos, board.get_turn_color())) {
+                os << "\x1b[31m" << s << "\x1b[m\x1b[0m";
+            } else if (board.is_threatened(pos, !board.get_turn_color())) {
+                os << "\x1b[32m" << s << "\x1b[m\x1b[0m";
+            } else {
+                os << s;
+            }
+
+            square_color = !square_color;
+        }
+        os << "║ " << print_row + 1 << " ";
+
+        if (row == 2) {
+            int white_adv = board.get_material_advantage(Color::White);
+            int black_adv = board.get_material_advantage(Color::Black);
+
+            if (white_adv == black_adv) {
+                os << " Both sides have equal material";
+            } else if (white_adv > black_adv) {
+                os << " White +" << white_adv << " points";
+            } else {
+                os << " Black +" << black_adv << " points";
+            }
+        } else if (row == 3) {
+            os << board.get_turn_color() << " to move";
+        } else if (row == 4) {
+            os << "[" << rating_bar << "]";
+        }
+
+        square_color = !square_color;
+    }
+    os << "\n  ╚════════════════════════╝\n   " << abc << "\n";
+
+    return os;
 }

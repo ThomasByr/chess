@@ -10,13 +10,13 @@ CastlingRights::CastlingRights() {
 
 CastlingRights::~CastlingRights() {}
 
-bool CastlingRights::can_kingside_castle() const { return kingside; }
+bool CastlingRights::can_kingside_castle() const { return this->kingside; }
 
-bool CastlingRights::can_queenside_castle() const { return queenside; }
+bool CastlingRights::can_queenside_castle() const { return this->queenside; }
 
-void CastlingRights::disable_kingside() { kingside = false; }
+void CastlingRights::disable_kingside() { this->kingside = false; }
 
-void CastlingRights::disable_queenside() { queenside = false; }
+void CastlingRights::disable_queenside() { this->queenside = false; }
 
 void CastlingRights::disable_all() {
     disable_kingside();
@@ -146,6 +146,8 @@ Board::Board() {
         squares[i] = EMPTY_SQUARE;
     }
     turn = Color::White;
+    white_castling_rights = new CastlingRights();
+    black_castling_rights = new CastlingRights();
     en_passant = nullptr;
 }
 
@@ -194,9 +196,9 @@ Square Board::get_square(const Position &pos) const {
     return this->squares[((7 - pos.get_row()) * 8 + pos.get_col())];
 }
 
-void Board::add_piece(Piece &piece) {
-    Position pos = piece.get_pos();
-    this->get_square(pos) = Square::from_piece(&piece);
+void Board::add_piece(Piece *piece) {
+    Position pos = piece->get_pos();
+    this->get_square(pos) = Square::from_piece(piece);
 }
 
 Piece *Board::get_piece(const Position &pos) {
@@ -329,4 +331,265 @@ bool Board::is_legal_move(const Move &move, const Color &player_color) {
         }
     }
     return false;
+}
+
+Board Board::apply_eval_move(const Move &move) {
+    return this->apply_move(move).change_turn();
+}
+
+std::vector<Move> Board::get_legal_moves() {
+    std::vector<Move> result;
+    Color color = this->get_current_player_color();
+
+    for (Square square : this->squares) {
+        if (square.is_empty()) {
+            continue;
+        }
+        Piece *piece = square.get_piece();
+        if (piece->get_color() != color) {
+            continue;
+        }
+        std::vector<Move> moves = piece->get_legal_moves(*this);
+        for (Move m : moves) {
+            result.push_back(m);
+        }
+    }
+    return result;
+}
+
+Board Board::move_piece(const Position &from, const Position &to) {
+    Board result = Board(*this);
+    result.en_passant = nullptr;
+
+    if (from.is_off_board() || to.is_off_board()) {
+        return result;
+    }
+    Square from_square = result.get_square(from);
+
+    if (from_square.is_empty()) {
+        return result;
+    }
+    Piece *piece = from_square.get_piece();
+    // Square from_square = EMPTY_SQUARE;
+
+    if ((piece->get_type() == Piece::Pawn) &&
+        (to.get_row() == 0 || to.get_row() == 7)) {
+        piece = new Queen(piece->get_color(), piece->get_pos());
+    }
+
+    if ((piece->is_starting_pawn()) &&
+        abs(from.get_row() - to.get_row()) == 2) {
+        result.en_passant = new Position(to.pawn_back(piece->get_color()));
+    }
+
+    result.add_piece(piece->move_to(to));
+
+    CastlingRights *castling_rights;
+    switch (piece->get_color()) {
+    case Color::White:
+        castling_rights = result.white_castling_rights;
+        break;
+    case Color::Black:
+        castling_rights = result.black_castling_rights;
+        break;
+    default:
+        return result;
+    }
+
+    if (piece->get_type() == Piece::King) {
+        castling_rights->disable_all();
+    } else if (piece->is_queenside_rook()) {
+        castling_rights->disable_queenside();
+    } else if (piece->is_kingside_rook()) {
+        castling_rights->disable_kingside();
+    }
+
+    return result;
+}
+
+bool Board::can_kingside_castle(const Color &color) {
+    Position right_of_king = Position::king_position(color).next_right();
+    Piece *piece;
+    switch (color) {
+    case Color::White:
+        piece = this->get_piece(Position(0, 7));
+        if (piece == nullptr) {
+            return false;
+        }
+        return this->has_no_piece(Position(0, 5)) &&
+               this->has_no_piece(Position(0, 6)) &&
+               *piece == Rook(Color::White, Position(0, 7)) &&
+               this->white_castling_rights->can_kingside_castle() &&
+               !this->is_in_check(color) &&
+               !this->is_threatened(right_of_king, color) &&
+               !this->is_threatened(right_of_king.next_right(), color);
+    case Color::Black:
+        piece = this->get_piece(Position(7, 7));
+        if (piece == nullptr) {
+            return false;
+        }
+        return this->has_no_piece(Position(7, 5)) &&
+               this->has_no_piece(Position(7, 6)) &&
+               *piece == Rook(Color::White, Position(7, 7)) &&
+               this->black_castling_rights->can_kingside_castle() &&
+               !this->is_in_check(color) &&
+               !this->is_threatened(right_of_king, color) &&
+               !this->is_threatened(right_of_king.next_right(), color);
+    }
+    return false;
+}
+
+bool Board::can_queenside_castle(const Color &color) {
+    Piece *piece;
+    switch (color) {
+    case Color::White:
+        piece = this->get_piece(Position(0, 0));
+        if (piece == nullptr) {
+            return false;
+        }
+        return this->has_no_piece(Position(0, 1)) &&
+               this->has_no_piece(Position(0, 2)) &&
+               this->has_no_piece(Position(0, 3)) &&
+               *piece == Rook(color, Position(0, 0)) &&
+               this->white_castling_rights->can_queenside_castle() &&
+               !this->is_in_check(color) &&
+               !this->is_threatened(Position::queen_position(color), color);
+    case Color::Black:
+        piece = this->get_piece(Position(7, 0));
+        if (piece == nullptr) {
+            return false;
+        }
+        return this->has_no_piece(Position(7, 1)) &&
+               this->has_no_piece(Position(7, 2)) &&
+               this->has_no_piece(Position(7, 3)) &&
+               *piece == Rook(color, Position(7, 0)) &&
+               this->black_castling_rights->can_queenside_castle() &&
+               !this->is_in_check(color) &&
+               !this->is_threatened(Position::queen_position(color), color);
+    }
+    return false;
+}
+
+bool Board::has_sufficient_material(const Color &color) const {
+    std::vector<Piece *> pieces;
+    for (Square square : this->squares) {
+        if (square.is_empty()) {
+            continue;
+        }
+        Piece *piece = square.get_piece();
+        if (piece->get_color() == color) {
+            pieces.push_back(piece);
+        }
+    }
+
+    std::sort(pieces.begin(), pieces.end(), [](Piece *a, Piece *b) {
+        return a->get_material_value() < b->get_material_value();
+    });
+
+    if (pieces.size() == 0) {
+        return false;
+    } else if (pieces.size() == 1 && pieces[0]->get_type() == Piece::King) {
+        return false;
+    } else if (pieces.size() == 2 && pieces[0]->get_type() == Piece::King &&
+               pieces[1]->get_type() == Piece::Knight) {
+        return false;
+    } else if (pieces.size() == 2 && pieces[0]->get_type() == Piece::King &&
+               pieces[1]->get_type() == Piece::Bishop) {
+    } else if (pieces.size() == 3 && pieces[0]->get_type() == Piece::King &&
+               pieces[1]->get_type() == Piece::Knight &&
+               pieces[2]->get_type() == Piece::Knight) {
+        return false;
+    } else if (pieces.size() == 3 && pieces[0]->get_type() == Piece::King &&
+               pieces[1]->get_type() == Piece::Bishop &&
+               pieces[2]->get_type() == Piece::Bishop) {
+        return false;
+    }
+    return true;
+}
+
+bool Board::has_insufficient_material(const Color &color) const {
+    return !this->has_sufficient_material(color);
+}
+
+bool Board::is_stalemate() {
+    return (this->get_legal_moves().empty() &&
+            !this->is_in_check(this->get_current_player_color())) ||
+           (this->has_insufficient_material(this->turn) &&
+            this->has_insufficient_material(!this->turn));
+}
+
+bool Board::is_checkmate() {
+    return this->is_in_check(this->get_current_player_color()) &&
+           this->get_legal_moves().empty();
+}
+
+Board Board::change_turn() {
+    this->turn = !this->turn;
+    return *this;
+}
+
+Board Board::apply_move(const Move &move) {
+    Position *en_passant, king_pos, rook_pos, from, to;
+    Piece *piece;
+    Color player_color;
+    Board result;
+
+    switch (move.move_type) {
+    case Move::KingSideCastle:
+        king_pos = this->get_king_position(this->turn);
+        if (king_pos.is_off_board()) {
+            return *this;
+        }
+        switch (this->turn) {
+        case Color::White:
+            rook_pos = Position(0, 7);
+            break;
+        case Color::Black:
+            rook_pos = Position(7, 7);
+            break;
+        }
+        return this->move_piece(king_pos, rook_pos.next_left())
+            .move_piece(rook_pos, king_pos.next_right());
+
+    case Move::QueenSideCastle:
+        king_pos = this->get_king_position(this->turn);
+        if (king_pos.is_off_board()) {
+            return *this;
+        }
+        switch (this->turn) {
+        case Color::White:
+            rook_pos = Position(0, 0);
+            break;
+        case Color::Black:
+            rook_pos = Position(7, 0);
+            break;
+        }
+        return this->move_piece(king_pos, rook_pos.next_left().next_left())
+            .move_piece(rook_pos, king_pos.next_left());
+
+    case Move::PieceMove:
+        from = move.from, to = move.to;
+        result = this->move_piece(from, to);
+
+        en_passant = this->en_passant;
+        piece = this->get_piece(from);
+
+        if (en_passant != nullptr && piece != nullptr) {
+            player_color = piece->get_color();
+            if ((*en_passant == from.pawn_up(player_color).next_left() ||
+                 *en_passant == from.pawn_up(player_color).next_right()) &&
+                *en_passant == to) {
+                result.squares[(7 -
+                                en_passant->pawn_back(player_color).get_row()) *
+                                   8 +
+                               en_passant->get_col()] = EMPTY_SQUARE;
+            }
+        }
+        return result;
+
+    case Move::Resign:
+        return this->remove_all(this->turn).queen_all(!this->turn);
+    }
+    
+    return *this;
 }

@@ -41,8 +41,8 @@ class Board {
     double value_for(const Color &ally_color) const; //
     Color get_current_player_color() const;          //
 
-    Board apply_eval_move(const Move &move);
-    std::vector<Move> get_legal_moves();
+    Board apply_eval_move(const Move &move); //
+    std::vector<Move> get_legal_moves();     //
 
     std::tuple<Move, unsigned, double> get_next_best_move(int depth);
     std::tuple<Move, unsigned, double> get_next_worst_move(int depth);
@@ -50,7 +50,7 @@ class Board {
                    Color getting_move_for, unsigned board_count);
 
     Square get_square(const Position &pos) const; //
-    void add_piece(Piece &piece);                 //
+    void add_piece(Piece *piece);                 //
     Piece *get_piece(const Position &pos);        //
 
     bool has_ally_piece(const Position &pos, const Color &ally_color);  //
@@ -63,20 +63,20 @@ class Board {
     bool is_threatened(const Position &pos, const Color &ally_color); //
     bool is_in_check(const Color &color);                             //
 
-    Board move_piece(const Position &from, const Position &to);
+    Board move_piece(const Position &from, const Position &to); //
 
-    bool can_kingside_castle(const Color &color) const;
-    bool can_queenside_castle(const Color &color) const;
+    bool can_kingside_castle(const Color &color);  //
+    bool can_queenside_castle(const Color &color); //
 
-    bool has_sufficient_material(const Color &color) const;
-    bool has_insufficient_material(const Color &color) const;
+    bool has_sufficient_material(const Color &color) const;   //
+    bool has_insufficient_material(const Color &color) const; //
 
-    bool is_stalemate() const;
-    bool is_checkmate() const;
+    bool is_stalemate(); //
+    bool is_checkmate(); //
 
-    Board change_turn() const;
+    Board change_turn(); //
 
-    Board apply_move(const Move &move) const;
+    Board apply_move(const Move &move); //
 
     GameResult play_move(const Move &move);
 

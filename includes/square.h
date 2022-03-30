@@ -51,7 +51,7 @@ class Square {
     Piece *get_piece();
 
   private:
-    Piece *piece;
+    Piece *piece; // piece on the square or nullptr if empty
 };
 
 static const Square EMPTY_SQUARE = Square(); // Empty square

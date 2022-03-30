@@ -19,9 +19,9 @@ class GameResult {
 
     int result_type;
 
-    Color winner;
-    Board next_board;
-    Move move;
+    Color winner;     // Color::White or Color::Black if result_type == Victory
+    Board next_board; // Board after the move if result_type == Continuing
+    Move move;        // Move that was played if result_type == IllegalMove
 
     /**
      * @brief GameResult constructor

@@ -18,8 +18,8 @@ class Move {
     static const int Invalid = 4;
 
     int move_type;
-    Position from;
-    Position to;
+    Position from; // Position of the piece that is moving
+    Position to;   // Position of the piece that is moving to
 
     /**
      * @brief Move constructor
@@ -37,6 +37,13 @@ class Move {
      */
     int from_string(const std::string &move_string);
 
+    /**
+     * @brief fmt a move
+     *
+     * @param os ostream
+     * @param move move
+     * @return std::ostream& - ostream
+     */
     friend std::ostream &operator<<(std::ostream &os, const Move &move);
 
   private:

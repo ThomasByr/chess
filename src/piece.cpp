@@ -27,6 +27,12 @@ std::ostream &operator<<(std::ostream &os, const Piece &piece) {
     return os;
 }
 
+std::string Piece::to_string() const {
+    std::stringstream ss;
+    ss << " " << *this << " ";
+    return ss.str();
+}
+
 Color Piece::get_color() const { return this->color; }
 
 Position Piece::get_pos() const { return this->position; }

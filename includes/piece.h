@@ -184,6 +184,7 @@ class Piece {
 
     friend std::ostream &operator<<(std::ostream &os, const Piece &piece);
     bool operator==(const Piece &other) const;
+    std::string to_string() const;
 
   protected:
     int id;

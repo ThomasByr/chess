@@ -163,9 +163,27 @@ Board::Board() {
 
 Board Board::new_board() {
     BoardBuilder builder;
-    Board board = builder.piece(new Pawn(Color::White, B1))
-                      .piece(new Pawn(Color::White, B2))
+    Board board = builder.piece(new Rook(Color::Black, A8))
+                      .piece(new Knight(Color::Black, B8))
+                      .piece(new Bishop(Color::Black, C8))
+                      .piece(new Queen(Color::Black, D8))
+                      .piece(new King(Color::Black, E8))
+                      .piece(new Bishop(Color::Black, F8))
+                      .piece(new Knight(Color::Black, G8))
+                      .piece(new Rook(Color::Black, H8))
+                      .row(Pawn(Color::Black, A7))
+                      .row(Pawn(Color::White, A2))
+                      .piece(new Rook(Color::White, A1))
+                      .piece(new Knight(Color::White, B1))
+                      .piece(new Bishop(Color::White, C1))
+                      .piece(new Queen(Color::White, D1))
+                      .piece(new King(Color::White, E1))
+                      .piece(new Bishop(Color::White, F1))
+                      .piece(new Knight(Color::White, G1))
+                      .piece(new Rook(Color::White, H1))
+                      .enable_castling()
                       .build();
+
     board.turn = Color::White;
     board.en_passant = nullptr;
     return board;

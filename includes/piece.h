@@ -183,6 +183,7 @@ class Piece {
     virtual Piece *move_to(Position new_pos) const = 0;
 
     friend std::ostream &operator<<(std::ostream &os, const Piece &piece);
+    bool operator==(const Piece &other) const;
 
   protected:
     int id;

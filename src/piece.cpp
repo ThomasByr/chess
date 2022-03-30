@@ -58,6 +58,12 @@ std::vector<Move> Piece::get_valid_moves(std::vector<Move> &result,
     return moves;
 }
 
+bool Piece::operator==(const Piece &piece) const {
+    return this->get_color() == piece.get_color() &&
+           this->get_type() == piece.get_type() &&
+           this->get_pos() == piece.get_pos() && this->get_pos().is_on_board();
+}
+
 Pawn::Pawn(Color color, Position position) : Piece(color, position) {
     this->id |= Piece::Pawn;
 }

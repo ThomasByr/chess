@@ -6,14 +6,15 @@ LDLIBS =
 INCLUDE_PATH = ./includes
 
 TARGET       = main
+FILEXT       = cpp
 
 SRCDIR       = src
 OBJDIR       = obj
 BINDIR       = bin
 
-SOURCES     := $(wildcard $(SRCDIR)/*.cpp)
+SOURCES     := $(wildcard $(SRCDIR)/*.$(FILEXT))
 INCLUDES    := $(wildcard $(INCLUDE_PATH)/*.h)
-OBJECTS     := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
+OBJECTS     := $(SOURCES:$(SRCDIR)/%.$(FILEXT)=$(OBJDIR)/%.o)
 
 PATH_TO_EXE  = $(BINDIR)/$(TARGET)
 
@@ -45,7 +46,7 @@ $(PATH_TO_EXE): $(OBJECTS)
 	$(CC) -o $@ $^ $(CFLAGS) $(LDLIBS)
 	@echo "\033[92mLinking complete!\033[0m"
 
-$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp $(INCLUDES)
+$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.$(FILEXT) $(INCLUDES)
 	mkdir -p $(OBJDIR)
 	$(CC) -o $@ -c $< $(CFLAGS) -isystem$(INCLUDE_PATH)
 

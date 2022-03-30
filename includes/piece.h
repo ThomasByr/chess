@@ -158,6 +158,8 @@ class Piece {
     static const int white_mask = 0b01000;
     static const int color_mask = black_mask | white_mask;
 
+    static bool is_sliding_piece(int piece);
+
     Piece(Color color, Position position);
     virtual ~Piece();
 
@@ -187,9 +189,9 @@ class Piece {
     std::string to_string() const;
 
   protected:
-    int id;
-    Color color;
-    Position position;
+    int id;            // type + color
+    Color color;       // enum class
+    Position position; // position on the board
 };
 
 class Pawn : public Piece {

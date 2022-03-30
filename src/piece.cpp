@@ -21,6 +21,8 @@ Piece::Piece(Color color, Position position) {
 
 Piece::~Piece() {}
 
+bool Piece::is_sliding_piece(int piece) { return (piece & 0b100) != 0; }
+
 std::ostream &operator<<(std::ostream &os, const Piece &piece) {
     (void)piece;
     os << "?";

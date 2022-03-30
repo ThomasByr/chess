@@ -42,6 +42,17 @@ const Position Position::king_position(Color color) {
     }
 }
 
+const Position Position::queen_position(Color color) {
+    switch (color) {
+    case Color::White:
+        return Position(0, 3);
+    case Color::Black:
+        return Position(7, 3);
+    default:
+        return Position();
+    }
+}
+
 bool Position::is_off_board() const {
     return row < 0 || row > 7 || col < 0 || col > 7;
 }

@@ -18,11 +18,16 @@ class GameResult;
 class Piece;
 
 class Pawn;
+class King;
+class Queen;
+class Knight;
+class Bishop;
+class Rook;
 
 /**
  * @brief The Color class
  *
- * This class represents the color of a player.
+ * This class represents the color of a player/piece.
  */
 enum class Color { White, Black };
 

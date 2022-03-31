@@ -841,3 +841,96 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
 
     return os;
 }
+
+std::tuple<Move, unsigned, double> Board::get_next_best_move(int depth) {
+    std::vector<Move> legal_moves = this->get_legal_moves();
+    double best_move_value = -999999.0;
+    Move best_move = Move();
+    best_move.move_type = Move::Resign;
+
+    Color color = this->get_current_player_color();
+    unsigned board_count = 0;
+
+    for (Move m : legal_moves) {
+        double child_board_value = this->apply_eval_move(m).minimax(
+            depth, -1000000.0, 1000000.0, false, color, &board_count);
+
+        if (child_board_value >= best_move_value) {
+            best_move = m;
+            best_move_value = child_board_value;
+        }
+    }
+
+    return std::make_tuple(best_move, board_count, best_move_value);
+}
+
+std::tuple<Move, unsigned, double> Board::get_next_worst_move(int depth) {
+    std::vector<Move> legal_moves = this->get_legal_moves();
+    double best_move_value = -999999.0;
+    Move best_move = Move();
+    best_move.move_type = Move::Resign;
+
+    Color color = this->get_current_player_color();
+    unsigned board_count = 0;
+
+    for (Move m : legal_moves) {
+        double child_board_value = this->apply_eval_move(m).minimax(
+            depth, -1000000.0, 1000000.0, true, !color, &board_count);
+
+        if (child_board_value >= best_move_value) {
+            best_move = m;
+            best_move_value = child_board_value;
+        }
+    }
+
+    return std::make_tuple(best_move, board_count, best_move_value);
+}
+
+double Board::minimax(int depth, double alpha, double beta, bool is_maximizing,
+                      Color getting_move_for, unsigned *board_count) {
+    *board_count += 1;
+
+    if (depth <= 0) {
+        return this->value_for(getting_move_for);
+    }
+
+    std::vector<Move> legal_moves = this->get_legal_moves();
+    double best_move_value;
+
+    if (is_maximizing) {
+        best_move_value = -999999.0;
+        for (Move m : legal_moves) {
+            double child_board_value = this->apply_eval_move(m).minimax(
+                depth - 1, alpha, beta, !is_maximizing, getting_move_for,
+                board_count);
+
+            if (child_board_value > best_move_value) {
+                best_move_value = child_board_value;
+            }
+            if (best_move_value > alpha) {
+                alpha = best_move_value;
+            }
+            if (beta <= alpha) {
+                return best_move_value;
+            }
+        }
+    } else {
+        best_move_value = 999999.0;
+        for (Move m : legal_moves) {
+            double child_board_value = this->apply_eval_move(m).minimax(
+                depth - 1, alpha, beta, !is_maximizing, getting_move_for,
+                board_count);
+
+            if (child_board_value < best_move_value) {
+                best_move_value = child_board_value;
+            }
+            if (best_move_value < beta) {
+                beta = best_move_value;
+            }
+            if (beta <= alpha) {
+                return best_move_value;
+            }
+        }
+    }
+    return best_move_value;
+}

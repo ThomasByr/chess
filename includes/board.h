@@ -118,10 +118,37 @@ class Board {
      */
     std::vector<Move> get_legal_moves();
 
+    /**
+     * @brief Get the best move for the current player with `depth` number of
+     * moves of lookahead.
+     *
+     * @param depth depth
+     * @return std::tuple<Move, unsigned, double> - best move, number of
+     * nodes, evaluation value
+     */
     std::tuple<Move, unsigned, double> get_next_best_move(int depth);
+    /**
+     * @brief Get the worst move for the current player with `depth` number of
+     * moves of lookahead.
+     *
+     * @param depth depth
+     * @return std::tuple<Move, unsigned, double> - worst move, number of
+     * nodes, evaluation value
+     */
     std::tuple<Move, unsigned, double> get_next_worst_move(int depth);
+    /**
+     * @brief Perform minimax on a certain position, and get the minimum or
+     * maximum value for a board. To get the best move, you minimize the values
+     * of the possible outcomes from your own position, and maximize the values
+     * of the replies made by the other player.
+     *
+     * In other words, choose moves with the assumption that your opponent will
+     * make the best possible replies to your moves. Moves that are seemingly
+     * good, but are easily countered, are categorically eliminated by this
+     * algorithm.
+     */
     double minimax(int depth, double alpha, double beta, bool is_maximizing,
-                   Color getting_move_for, unsigned board_count);
+                   Color getting_move_for, unsigned *board_count);
 
     /**
      * @brief Get the square object at a given position

@@ -657,3 +657,81 @@ bool Bishop::is_legal_attack(const Position &new_pos, Board &board) {
     }
     return false;
 }
+
+Knight::Knight(Color color, Position position) : Piece(color, position) {
+    this->id |= Piece::Knight;
+}
+
+Knight::~Knight() {}
+
+Knight *Knight::move_to(Position new_pos) const {
+    return new Knight(this->color, new_pos);
+}
+
+std::string Knight::get_name() const { return "knight"; }
+
+int Knight::get_material_value() const { return 3; }
+
+double Knight::get_weighted_value() const {
+    double(*weights)[8] = {0};
+    switch (this->color) {
+    case Color::White:
+        weights = WHITE_KNIGHT_POSITION_WEIGHTS;
+        break;
+    case Color::Black:
+        weights = BLACK_KNIGHT_POSITION_WEIGHTS;
+        break;
+    }
+    return weights[this->get_pos().get_row()][this->get_pos().get_col()] +
+           (double)this->get_material_value() * 10.;
+}
+
+bool Knight::is_starting_pawn() const { return false; }
+
+bool Knight::is_queenside_rook() const { return false; }
+
+bool Knight::is_kingside_rook() const { return false; }
+
+std::vector<Move> Knight::get_legal_moves(Board &board) {
+    std::vector<Move> result;
+    Color ally_color = this->get_color();
+    Position pos = this->get_pos();
+
+    for (Position p : {
+             pos.next_left().next_left().next_above(),
+             pos.next_left().next_above().next_above(),
+             pos.next_left().next_left().next_below(),
+             pos.next_left().next_below().next_below(),
+             pos.next_right().next_right().next_above(),
+             pos.next_right().next_above().next_above(),
+             pos.next_right().next_right().next_below(),
+             pos.next_right().next_below().next_below(),
+         }) {
+        if (p.is_on_board() && !board.has_ally_piece(p, ally_color)) {
+            Move move;
+            move.move_type = Move::PieceMove;
+            move.from = pos;
+            move.to = p;
+            result.push_back(move);
+        }
+    }
+    return this->get_valid_moves(result, board);
+}
+
+bool Knight::is_legal_move(const Position &new_pos, Board &board) {
+    if (board.has_ally_piece(new_pos, this->get_color()) ||
+        new_pos.is_off_board()) {
+        return false;
+    }
+
+    return this->get_pos().is_knight_move(new_pos);
+}
+
+bool Knight::is_legal_attack(const Position &new_pos, Board &board) {
+    if (board.has_ally_piece(new_pos, this->get_color()) ||
+        new_pos.is_off_board()) {
+        return false;
+    }
+
+    return this->get_pos().is_knight_move(new_pos);
+}

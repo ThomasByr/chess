@@ -121,7 +121,7 @@ double Pawn::get_weighted_value() const {
         weights = BLACK_PAWN_POSITION_WEIGHTS;
         break;
     }
-    return weights[this->get_pos().get_row()][this->get_pos().get_col()] +
+    return weights[7 - this->get_pos().get_row()][this->get_pos().get_col()] +
            (double)this->get_material_value() * 10.;
 }
 
@@ -177,8 +177,8 @@ std::vector<Move> Pawn::get_legal_moves(Board &board) {
         move.from = pos;
         move.to = up_left;
         result.push_back(move);
-    } else if (up_right.is_on_board() &&
-               board.has_enemy_piece(up_right, ally_color)) {
+    }
+    if (up_right.is_on_board() && board.has_enemy_piece(up_right, ally_color)) {
         Move move;
         move.move_type = Move::PieceMove;
         move.from = pos;
@@ -298,7 +298,7 @@ double King::get_weighted_value() const {
         weights = BLACK_KING_POSITION_WEIGHTS;
         break;
     }
-    return weights[this->get_pos().get_row()][this->get_pos().get_col()] +
+    return weights[7 - this->get_pos().get_row()][this->get_pos().get_col()] +
            (double)this->get_material_value() * 10.;
 }
 
@@ -353,12 +353,7 @@ bool King::is_legal_move(const Position &new_pos, Board &board) {
 }
 
 bool King::is_legal_attack(const Position &new_pos, Board &board) {
-    if (board.has_ally_piece(new_pos, this->get_color()) ||
-        new_pos.is_off_board()) {
-        return false;
-    }
-
-    return this->position.is_adjacent_to(new_pos);
+    return this->is_legal_move(new_pos, board);
 }
 
 Queen::Queen(Color color, Position position) : Piece(color, position) {
@@ -422,7 +417,7 @@ double Queen::get_weighted_value() const {
         weights = BLACK_QUEEN_POSITION_WEIGHTS;
         break;
     }
-    return weights[this->get_pos().get_row()][this->get_pos().get_col()] +
+    return weights[7 - this->get_pos().get_row()][this->get_pos().get_col()] +
            (double)this->get_material_value() * 10.;
 }
 
@@ -507,34 +502,7 @@ bool Queen::is_legal_move(const Position &new_pos, Board &board) {
 }
 
 bool Queen::is_legal_attack(const Position &new_pos, Board &board) {
-    if (board.has_ally_piece(new_pos, this->get_color()) ||
-        new_pos.is_off_board()) {
-        return false;
-    }
-
-    Position pos = this->get_pos();
-    if (pos.is_orthogonal_to(new_pos)) {
-        std::vector<Position> traveling = pos.orthogonals_to(new_pos);
-        traveling.pop_back();
-
-        for (Position p : traveling) {
-            if (board.has_piece(p)) {
-                return false;
-            }
-        }
-        return true;
-    } else if (pos.is_diagonal_to(new_pos)) {
-        std::vector<Position> traveling = pos.diagonals_to(new_pos);
-        traveling.pop_back();
-
-        for (Position p : traveling) {
-            if (board.has_piece(p)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    return false;
+    return this->is_legal_move(new_pos, board);
 }
 
 Rook::Rook(Color color, Position position) : Piece(color, position) {
@@ -598,7 +566,7 @@ double Rook::get_weighted_value() const {
         weights = BLACK_ROOK_POSITION_WEIGHTS;
         break;
     }
-    return weights[this->get_pos().get_row()][this->get_pos().get_col()] +
+    return weights[7 - this->get_pos().get_row()][this->get_pos().get_col()] +
            (double)this->get_material_value() * 10.;
 }
 
@@ -664,24 +632,7 @@ bool Rook::is_legal_move(const Position &new_pos, Board &board) {
 }
 
 bool Rook::is_legal_attack(const Position &new_pos, Board &board) {
-    if (board.has_ally_piece(new_pos, this->get_color()) ||
-        new_pos.is_off_board()) {
-        return false;
-    }
-
-    Position pos = this->get_pos();
-    if (pos.is_orthogonal_to(new_pos)) {
-        std::vector<Position> traveling = pos.orthogonals_to(new_pos);
-        traveling.pop_back();
-
-        for (Position p : traveling) {
-            if (board.has_piece(p)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    return false;
+    return this->is_legal_move(new_pos, board);
 }
 
 Bishop::Bishop(Color color, Position position) : Piece(color, position) {
@@ -745,7 +696,7 @@ double Bishop::get_weighted_value() const {
         weights = BLACK_BISHOP_POSITION_WEIGHTS;
         break;
     }
-    return weights[this->get_pos().get_row()][this->get_pos().get_col()] +
+    return weights[7 - this->get_pos().get_row()][this->get_pos().get_col()] +
            (double)this->get_material_value() * 10.;
 }
 
@@ -798,24 +749,7 @@ bool Bishop::is_legal_move(const Position &new_pos, Board &board) {
 }
 
 bool Bishop::is_legal_attack(const Position &new_pos, Board &board) {
-    if (board.has_ally_piece(new_pos, this->get_color()) ||
-        new_pos.is_off_board()) {
-        return false;
-    }
-
-    Position pos = this->get_pos();
-    if (pos.is_diagonal_to(new_pos)) {
-        std::vector<Position> traveling = pos.diagonals_to(new_pos);
-        traveling.pop_back();
-
-        for (Position p : traveling) {
-            if (board.has_piece(p)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    return false;
+    return this->is_legal_move(new_pos, board);
 }
 
 Knight::Knight(Color color, Position position) : Piece(color, position) {
@@ -879,7 +813,7 @@ double Knight::get_weighted_value() const {
         weights = BLACK_KNIGHT_POSITION_WEIGHTS;
         break;
     }
-    return weights[this->get_pos().get_row()][this->get_pos().get_col()] +
+    return weights[7 - this->get_pos().get_row()][this->get_pos().get_col()] +
            (double)this->get_material_value() * 10.;
 }
 
@@ -925,10 +859,5 @@ bool Knight::is_legal_move(const Position &new_pos, Board &board) {
 }
 
 bool Knight::is_legal_attack(const Position &new_pos, Board &board) {
-    if (board.has_ally_piece(new_pos, this->get_color()) ||
-        new_pos.is_off_board()) {
-        return false;
-    }
-
-    return this->get_pos().is_knight_move(new_pos);
+    return this->is_legal_move(new_pos, board);
 }

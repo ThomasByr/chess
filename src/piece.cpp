@@ -54,8 +54,6 @@ std::vector<Move> Piece::get_valid_moves(std::vector<Move> &result,
                     moves.push_back(move);
                 }
             }
-        case Move::Invalid:
-            break;
         default:
             if (board.is_legal_move(move, ally_color)) {
                 moves.push_back(move);
@@ -312,4 +310,143 @@ bool King::is_legal_attack(const Position &new_pos, Board &board) {
     }
 
     return this->position.is_adjacent_to(new_pos);
+}
+
+Queen::Queen(Color color, Position position) : Piece(color, position) {
+    this->id |= Piece::Queen;
+}
+
+Queen::~Queen() {}
+
+Queen *Queen::move_to(Position new_pos) const {
+    return new Queen(this->color, new_pos);
+}
+
+std::string Queen::get_name() const { return "queen"; }
+
+int Queen::get_material_value() const { return 9; }
+
+double Queen::get_weighted_value() const {
+    double(*weights)[8] = {0};
+    switch (this->color) {
+    case Color::White:
+        weights = WHITE_QUEEN_POSITION_WEIGHTS;
+        break;
+    case Color::Black:
+        weights = BLACK_QUEEN_POSITION_WEIGHTS;
+        break;
+    }
+    return weights[this->get_pos().get_row()][this->get_pos().get_col()] +
+           (double)this->get_material_value() * 10.;
+}
+
+bool Queen::is_starting_pawn() const { return false; }
+
+bool Queen::is_queenside_rook() const { return false; }
+
+bool Queen::is_kingside_rook() const { return false; }
+
+std::vector<Move> Queen::get_legal_moves(Board &board) {
+    std::vector<Move> result;
+    Color ally_color = this->get_color();
+    Position pos = this->get_pos();
+
+    for (unsigned row = 0; row < 8; row++) {
+        Position new_pos = Position(row, pos.get_col());
+        if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
+            new_pos.is_orthogonal_to(pos)) {
+            Move move;
+            move.move_type = Move::PieceMove;
+            move.from = pos;
+            move.to = new_pos;
+            result.push_back(move);
+        }
+    }
+    for (unsigned col = 0; col < 8; col++) {
+        Position new_pos = Position(pos.get_row(), col);
+        if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
+            new_pos.is_orthogonal_to(pos)) {
+            Move move;
+            move.move_type = Move::PieceMove;
+            move.from = pos;
+            move.to = new_pos;
+            result.push_back(move);
+        }
+    }
+    for (unsigned row = 0; row < 8; row++) {
+        for (unsigned col = 0; col < 8; col++) {
+            Position new_pos = Position(row, col);
+            if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
+                new_pos.is_diagonal_to(pos)) {
+                Move move;
+                move.move_type = Move::PieceMove;
+                move.from = pos;
+                move.to = new_pos;
+                result.push_back(move);
+            }
+        }
+    }
+    return this->get_valid_moves(result, board);
+}
+
+bool Queen::is_legal_move(const Position &new_pos, Board &board) {
+    if (board.has_ally_piece(new_pos, this->get_color()) ||
+        new_pos.is_off_board()) {
+        return false;
+    }
+
+    Position pos = this->get_pos();
+    if (pos.is_orthogonal_to(new_pos)) {
+        std::vector<Position> traveling = pos.orthogonals_to(new_pos);
+        traveling.pop_back();
+
+        for (Position p : traveling) {
+            if (board.has_piece(p)) {
+                return false;
+            }
+        }
+        return true;
+    } else if (pos.is_diagonal_to(new_pos)) {
+        std::vector<Position> traveling = pos.diagonals_to(new_pos);
+        traveling.pop_back();
+
+        for (Position p : traveling) {
+            if (board.has_piece(p)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool Queen::is_legal_attack(const Position &new_pos, Board &board) {
+    if (board.has_ally_piece(new_pos, this->get_color()) ||
+        new_pos.is_off_board()) {
+        return false;
+    }
+
+    Position pos = this->get_pos();
+    if (pos.is_orthogonal_to(new_pos)) {
+        std::vector<Position> traveling = pos.orthogonals_to(new_pos);
+        traveling.pop_back();
+
+        for (Position p : traveling) {
+            if (board.has_piece(p)) {
+                return false;
+            }
+        }
+        return true;
+    } else if (pos.is_diagonal_to(new_pos)) {
+        std::vector<Position> traveling = pos.diagonals_to(new_pos);
+        traveling.pop_back();
+
+        for (Position p : traveling) {
+            if (board.has_piece(p)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
 }

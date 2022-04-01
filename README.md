@@ -31,34 +31,37 @@ Moves should be typed in the command line (the program should be asking for it t
 
 ## F.A.Q.
 
-1.  Why in the world is there no gui here yet ?
+1.  <details><summary>Why in the world is there no gui here yet ?</summary>
 
     Well at first, this is a school small project and so we are restricted by the subject paper in a variety of manners. Games should be able to be played through the command line, and to program both interfaces is maybe a little to much to ask knowing that professors won't give a damn into it.
+    </details>
 
-2.  Why C++ and not C# ot Java ?
+2.  <details><summary>Why C++ and not C# ot Java ?</summary>
 
     Apparently, coding a small "game" in cpp is just much more pleasant than doing it in cs or java, even if super tools like unity exist... cs is just not a thing the french educational system, but unreal engine isn't taught here either so we are just here pretending coding a 2d game in the terminal in cpp is a real thing out there in the world.
+    </details>
 
-3.  It at least has an AI to it right ?
+3.  <details><summary>It at least has an AI to it right ?</summary>
 
     Well about that... That is not even on the damn paper. I, however, am going to try my best and implement it even though you can rest assured that it won't bring any bonnuses. The subject paper is just about implementing the right pieces movements for two human players, which is quite boring and serves no purpose.
+    </details>
 
-4.  Real question this time, what is the algorithm I am playing against ?
+4.  <details><summary>Real question this time, what is the algorithm I am playing against ?</summary>
 
     Well, at the time of writing, there is no AI yet, but simple evaluation functions are a thing and this shouldn't be a huge deal implementing a crude search in a tree. Alpha-beta pruning is an optimization I am looking up to, as well as move ordering. So no AI here, as it is a python thing (I wouldn't be surprised though if we were taught AI in c).
+    </details>
 
 ## Changelog
 
 Please refer to the [changelog.md](changelog.md) file for the full history.
 
 <details>
-    <summary> v0.0.1 : well... seems like I already did it (click here to expand) </summary>
+    <summary> v0.0.2 : improving AI (click here to expand) </summary>
 
-*   port from previous repo in python
-*   better v classes so the computer can plan against the player
-*   did it in rust... am translating
-*   added some pre-defined class in lib to avoid making a whole new file just to avoid circular imports (because we include files and not features in cpp...)
+*   finding bugs on copy is going to take a while
 
 </details>
 
 ## Bugs & TODO
+
+*   AI is actually stupid, supposed bug on get_legal_moves on pieces

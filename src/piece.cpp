@@ -23,17 +23,12 @@ Piece::~Piece() {}
 
 bool Piece::is_sliding_piece(int piece) { return (piece & 0b100) != 0; }
 
-std::ostream &operator<<(std::ostream &os, const Piece &piece) {
-    (void)piece;
+std::ostream &Piece::operator<<(std::ostream &os) const {
     os << "?";
     return os;
 }
 
-std::string Piece::to_string() const {
-    std::stringstream ss;
-    ss << " " << *this << " ";
-    return ss.str();
-}
+std::string Piece::to_string() const { return "?"; }
 
 Color Piece::get_color() const { return this->color; }
 
@@ -54,10 +49,12 @@ std::vector<Move> Piece::get_valid_moves(std::vector<Move> &result,
                     moves.push_back(move);
                 }
             }
+            break;
         default:
             if (board.is_legal_move(move, ally_color)) {
                 moves.push_back(move);
             }
+            break;
         }
     }
 
@@ -76,8 +73,8 @@ Pawn::Pawn(Color color, Position position) : Piece(color, position) {
 
 Pawn::~Pawn() {}
 
-std::ostream &operator<<(std::ostream &os, const Pawn &pawn) {
-    switch (pawn.get_color()) {
+std::ostream &Pawn::operator<<(std::ostream &os) const {
+    switch (this->get_color()) {
     case Color::White:
         os << "\u2659";
         break;
@@ -85,10 +82,21 @@ std::ostream &operator<<(std::ostream &os, const Pawn &pawn) {
         os << "\u265F";
         break;
     default:
-        os << "?";
+        os << "!";
         break;
     }
     return os;
+}
+
+std::string Pawn::to_string() const {
+    switch (this->get_color()) {
+    case Color::White:
+        return "\u2659";
+    case Color::Black:
+        return "\u265F";
+    default:
+        return "!";
+    }
 }
 
 Pawn *Pawn::move_to(Position new_pos) const {
@@ -231,6 +239,32 @@ King::King(Color color, Position position) : Piece(color, position) {
 
 King::~King() {}
 
+std::ostream &King::operator<<(std::ostream &os) const {
+    switch (this->get_color()) {
+    case Color::White:
+        os << "\u2654";
+        break;
+    case Color::Black:
+        os << "\u265A";
+        break;
+    default:
+        os << "!";
+        break;
+    }
+    return os;
+}
+
+std::string King::to_string() const {
+    switch (this->get_color()) {
+    case Color::White:
+        return "\u2654";
+    case Color::Black:
+        return "\u265A";
+    default:
+        return "!";
+    }
+}
+
 King *King::move_to(Position new_pos) const {
     return new King(this->color, new_pos);
 }
@@ -317,6 +351,32 @@ Queen::Queen(Color color, Position position) : Piece(color, position) {
 }
 
 Queen::~Queen() {}
+
+std::ostream &Queen::operator<<(std::ostream &os) const {
+    switch (this->get_color()) {
+    case Color::White:
+        os << "\u2655";
+        break;
+    case Color::Black:
+        os << "\u265B";
+        break;
+    default:
+        os << "!";
+        break;
+    }
+    return os;
+}
+
+std::string Queen::to_string() const {
+    switch (this->get_color()) {
+    case Color::White:
+        return "\u2655";
+    case Color::Black:
+        return "\u265B";
+    default:
+        return "!";
+    }
+}
 
 Queen *Queen::move_to(Position new_pos) const {
     return new Queen(this->color, new_pos);
@@ -457,6 +517,32 @@ Rook::Rook(Color color, Position position) : Piece(color, position) {
 
 Rook::~Rook() {}
 
+std::ostream &Rook::operator<<(std::ostream &os) const {
+    switch (this->get_color()) {
+    case Color::White:
+        os << "\u2656";
+        break;
+    case Color::Black:
+        os << "\u265C";
+        break;
+    default:
+        os << "!";
+        break;
+    }
+    return os;
+}
+
+std::string Rook::to_string() const {
+    switch (this->get_color()) {
+    case Color::White:
+        return "\u2656";
+    case Color::Black:
+        return "\u265C";
+    default:
+        return "!";
+    }
+}
+
 Rook *Rook::move_to(Position new_pos) const {
     return new Rook(this->color, new_pos);
 }
@@ -567,6 +653,32 @@ Bishop::Bishop(Color color, Position position) : Piece(color, position) {
 
 Bishop::~Bishop() {}
 
+std::ostream &Bishop::operator<<(std::ostream &os) const {
+    switch (this->get_color()) {
+    case Color::White:
+        os << "\u2657";
+        break;
+    case Color::Black:
+        os << "\u265D";
+        break;
+    default:
+        os << "!";
+        break;
+    }
+    return os;
+}
+
+std::string Bishop::to_string() const {
+    switch (this->get_color()) {
+    case Color::White:
+        return "\u2657";
+    case Color::Black:
+        return "\u265D";
+    default:
+        return "!";
+    }
+}
+
 Bishop *Bishop::move_to(Position new_pos) const {
     return new Bishop(this->color, new_pos);
 }
@@ -663,6 +775,32 @@ Knight::Knight(Color color, Position position) : Piece(color, position) {
 }
 
 Knight::~Knight() {}
+
+std::ostream &Knight::operator<<(std::ostream &os) const {
+    switch (this->get_color()) {
+    case Color::White:
+        os << "\u2658";
+        break;
+    case Color::Black:
+        os << "\u265E";
+        break;
+    default:
+        os << "!";
+        break;
+    }
+    return os;
+}
+
+std::string Knight::to_string() const {
+    switch (this->get_color()) {
+    case Color::White:
+        return "\u2658";
+    case Color::Black:
+        return "\u265E";
+    default:
+        return "!";
+    }
+}
 
 Knight *Knight::move_to(Position new_pos) const {
     return new Knight(this->color, new_pos);

@@ -184,9 +184,15 @@ class Piece {
 
     virtual Piece *move_to(Position new_pos) const = 0;
 
-    friend std::ostream &operator<<(std::ostream &os, const Piece &piece);
+    /**
+     * @brief returns the visual representation of the piece
+     *
+     * @param os ostream
+     * @return std::ostream& - ostream
+     */
+    virtual std::ostream &operator<<(std::ostream &os) const = 0;
     bool operator==(const Piece &other) const;
-    std::string to_string() const;
+    virtual std::string to_string() const = 0;
 
   protected:
     int id;            // type + color
@@ -213,7 +219,8 @@ class Pawn : public Piece {
     bool is_legal_move(const Position &new_pos, Board &board);
     bool is_legal_attack(const Position &new_pos, Board &board);
 
-    friend std::ostream &operator<<(std::ostream &os, const Pawn &pawn);
+    std::ostream &operator<<(std::ostream &os) const;
+    std::string to_string() const;
 };
 
 class King : public Piece {
@@ -235,7 +242,8 @@ class King : public Piece {
     bool is_legal_move(const Position &new_pos, Board &board);
     bool is_legal_attack(const Position &new_pos, Board &board);
 
-    friend std::ostream &operator<<(std::ostream &os, const King &king);
+    std::ostream &operator<<(std::ostream &os) const;
+    std::string to_string() const;
 };
 
 class Queen : public Piece {
@@ -257,7 +265,8 @@ class Queen : public Piece {
     bool is_legal_move(const Position &new_pos, Board &board);
     bool is_legal_attack(const Position &new_pos, Board &board);
 
-    friend std::ostream &operator<<(std::ostream &os, const Queen &queen);
+    std::ostream &operator<<(std::ostream &os) const;
+    std::string to_string() const;
 };
 
 class Knight : public Piece {
@@ -279,7 +288,8 @@ class Knight : public Piece {
     bool is_legal_move(const Position &new_pos, Board &board);
     bool is_legal_attack(const Position &new_pos, Board &board);
 
-    friend std::ostream &operator<<(std::ostream &os, const Knight &knight);
+    std::ostream &operator<<(std::ostream &os) const;
+    std::string to_string() const;
 };
 
 class Bishop : public Piece {
@@ -301,7 +311,8 @@ class Bishop : public Piece {
     bool is_legal_move(const Position &new_pos, Board &board);
     bool is_legal_attack(const Position &new_pos, Board &board);
 
-    friend std::ostream &operator<<(std::ostream &os, const Bishop &bishop);
+    std::ostream &operator<<(std::ostream &os) const;
+    std::string to_string() const;
 };
 
 class Rook : public Piece {
@@ -323,5 +334,6 @@ class Rook : public Piece {
     bool is_legal_move(const Position &new_pos, Board &board);
     bool is_legal_attack(const Position &new_pos, Board &board);
 
-    friend std::ostream &operator<<(std::ostream &os, const Rook &rook);
+    std::ostream &operator<<(std::ostream &os) const;
+    std::string to_string() const;
 };

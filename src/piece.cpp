@@ -23,13 +23,6 @@ Piece::~Piece() {}
 
 bool Piece::is_sliding_piece(int piece) { return (piece & 0b100) != 0; }
 
-std::ostream &Piece::operator<<(std::ostream &os) const {
-    os << "?";
-    return os;
-}
-
-std::string Piece::to_string() const { return "?"; }
-
 Color Piece::get_color() const { return this->color; }
 
 Position Piece::get_pos() const { return this->position; }
@@ -104,6 +97,17 @@ Pawn *Pawn::move_to(Position new_pos) const {
 }
 
 std::string Pawn::get_name() const { return "pawn"; }
+
+std::string Pawn::get_fen() const {
+    switch (this->get_color()) {
+    case Color::White:
+        return "wP";
+    case Color::Black:
+        return "bP";
+    default:
+        return "!";
+    }
+}
 
 int Pawn::get_material_value() const { return 1; }
 
@@ -271,6 +275,17 @@ King *King::move_to(Position new_pos) const {
 
 std::string King::get_name() const { return "king"; }
 
+std::string King::get_fen() const {
+    switch (this->get_color()) {
+    case Color::White:
+        return "wK";
+    case Color::Black:
+        return "bK";
+    default:
+        return "!";
+    }
+}
+
 int King::get_material_value() const { return 99999; }
 
 double King::get_weighted_value() const {
@@ -383,6 +398,17 @@ Queen *Queen::move_to(Position new_pos) const {
 }
 
 std::string Queen::get_name() const { return "queen"; }
+
+std::string Queen::get_fen() const {
+    switch (this->get_color()) {
+    case Color::White:
+        return "wQ";
+    case Color::Black:
+        return "bQ";
+    default:
+        return "!";
+    }
+}
 
 int Queen::get_material_value() const { return 9; }
 
@@ -549,6 +575,17 @@ Rook *Rook::move_to(Position new_pos) const {
 
 std::string Rook::get_name() const { return "rook"; }
 
+std::string Rook::get_fen() const {
+    switch (this->get_color()) {
+    case Color::White:
+        return "wR";
+    case Color::Black:
+        return "bR";
+    default:
+        return "!";
+    }
+}
+
 int Rook::get_material_value() const { return 5; }
 
 double Rook::get_weighted_value() const {
@@ -685,6 +722,17 @@ Bishop *Bishop::move_to(Position new_pos) const {
 
 std::string Bishop::get_name() const { return "bishop"; }
 
+std::string Bishop::get_fen() const {
+    switch (this->get_color()) {
+    case Color::White:
+        return "wB";
+    case Color::Black:
+        return "bB";
+    default:
+        return "!";
+    }
+}
+
 int Bishop::get_material_value() const { return 3; }
 
 double Bishop::get_weighted_value() const {
@@ -807,6 +855,17 @@ Knight *Knight::move_to(Position new_pos) const {
 }
 
 std::string Knight::get_name() const { return "knight"; }
+
+std::string Knight::get_fen() const {
+    switch (this->get_color()) {
+    case Color::White:
+        return "wN";
+    case Color::Black:
+        return "bN";
+    default:
+        return "!";
+    }
+}
 
 int Knight::get_material_value() const { return 3; }
 

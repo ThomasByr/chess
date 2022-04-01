@@ -171,6 +171,7 @@ class Piece {
     std::vector<Move> get_valid_moves(std::vector<Move> &result, Board &board);
 
     virtual std::string get_name() const = 0;
+    virtual std::string get_fen() const = 0;
     virtual int get_material_value() const = 0;
     virtual double get_weighted_value() const = 0;
 
@@ -208,6 +209,7 @@ class Pawn : public Piece {
     Pawn *move_to(Position new_pos) const;
 
     std::string get_name() const;
+    std::string get_fen() const;
     int get_material_value() const;
     double get_weighted_value() const;
 
@@ -231,6 +233,7 @@ class King : public Piece {
     King *move_to(Position new_pos) const;
 
     std::string get_name() const;
+    std::string get_fen() const;
     int get_material_value() const;
     double get_weighted_value() const;
 
@@ -254,6 +257,7 @@ class Queen : public Piece {
     Queen *move_to(Position new_pos) const;
 
     std::string get_name() const;
+    std::string get_fen() const;
     int get_material_value() const;
     double get_weighted_value() const;
 
@@ -277,6 +281,7 @@ class Knight : public Piece {
     Knight *move_to(Position new_pos) const;
 
     std::string get_name() const;
+    std::string get_fen() const;
     int get_material_value() const;
     double get_weighted_value() const;
 
@@ -300,6 +305,7 @@ class Bishop : public Piece {
     Bishop *move_to(Position new_pos) const;
 
     std::string get_name() const;
+    std::string get_fen() const;
     int get_material_value() const;
     double get_weighted_value() const;
 
@@ -323,6 +329,7 @@ class Rook : public Piece {
     Rook *move_to(Position new_pos) const;
 
     std::string get_name() const;
+    std::string get_fen() const;
     int get_material_value() const;
     double get_weighted_value() const;
 

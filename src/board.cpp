@@ -193,6 +193,20 @@ Board Board::new_board() {
 
 Board::~Board() {}
 
+std::string Board::end_fen() const {
+    std::string fen = "";
+
+    for (unsigned i = 64; i-- > 0;) {
+        Square s = this->squares[i];
+        Piece *piece = s.get_piece();
+        if (piece != nullptr) {
+            fen += piece->get_fen();
+        }
+        fen += ",";
+    }
+    return fen;
+}
+
 double Board::value_for(const Color &ally_color) const {
     double sum = 0;
     for (Square square : this->squares) {

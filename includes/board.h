@@ -329,6 +329,12 @@ class Board {
      */
     std::string rating_bar(unsigned len);
     /**
+     * @brief returns the current board as a fen string
+     *
+     * @return std::string - fen
+     */
+    std::string end_fen() const;
+    /**
      * @brief Get the turn color object
      *
      * @return Color - enum class

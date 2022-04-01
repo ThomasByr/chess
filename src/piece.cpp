@@ -450,3 +450,113 @@ bool Queen::is_legal_attack(const Position &new_pos, Board &board) {
     }
     return false;
 }
+
+Rook::Rook(Color color, Position position) : Piece(color, position) {
+    this->id |= Piece::Rook;
+}
+
+Rook::~Rook() {}
+
+Rook *Rook::move_to(Position new_pos) const {
+    return new Rook(this->color, new_pos);
+}
+
+std::string Rook::get_name() const { return "rook"; }
+
+int Rook::get_material_value() const { return 5; }
+
+double Rook::get_weighted_value() const {
+    double(*weights)[8] = {0};
+    switch (this->color) {
+    case Color::White:
+        weights = WHITE_ROOK_POSITION_WEIGHTS;
+        break;
+    case Color::Black:
+        weights = BLACK_ROOK_POSITION_WEIGHTS;
+        break;
+    }
+    return weights[this->get_pos().get_row()][this->get_pos().get_col()] +
+           (double)this->get_material_value() * 10.;
+}
+
+bool Rook::is_starting_pawn() const { return false; }
+
+bool Rook::is_queenside_rook() const {
+    return this->get_pos().is_queenside_rook();
+}
+
+bool Rook::is_kingside_rook() const {
+    return this->get_pos().is_kingside_rook();
+}
+
+std::vector<Move> Rook::get_legal_moves(Board &board) {
+    std::vector<Move> result;
+    Color ally_color = this->get_color();
+    Position pos = this->get_pos();
+
+    for (unsigned row = 0; row < 8; row++) {
+        Position new_pos = Position(row, pos.get_col());
+        if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
+            new_pos.is_orthogonal_to(pos)) {
+            Move move;
+            move.move_type = Move::PieceMove;
+            move.from = pos;
+            move.to = new_pos;
+            result.push_back(move);
+        }
+    }
+    for (unsigned col = 0; col < 8; col++) {
+        Position new_pos = Position(pos.get_row(), col);
+        if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
+            new_pos.is_orthogonal_to(pos)) {
+            Move move;
+            move.move_type = Move::PieceMove;
+            move.from = pos;
+            move.to = new_pos;
+            result.push_back(move);
+        }
+    }
+    return this->get_valid_moves(result, board);
+}
+
+bool Rook::is_legal_move(const Position &new_pos, Board &board) {
+    if (board.has_ally_piece(new_pos, this->get_color()) ||
+        new_pos.is_off_board()) {
+        return false;
+    }
+
+    Position pos = this->get_pos();
+    if (pos.is_orthogonal_to(new_pos)) {
+        std::vector<Position> traveling = pos.orthogonals_to(new_pos);
+        traveling.pop_back();
+
+        for (Position p : traveling) {
+            if (board.has_piece(p)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool Rook::is_legal_attack(const Position &new_pos, Board &board) {
+    if (board.has_ally_piece(new_pos, this->get_color()) ||
+        new_pos.is_off_board()) {
+        return false;
+    }
+
+    Position pos = this->get_pos();
+    if (pos.is_orthogonal_to(new_pos)) {
+        std::vector<Position> traveling = pos.orthogonals_to(new_pos);
+        traveling.pop_back();
+
+        for (Position p : traveling) {
+            if (board.has_piece(p)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}

@@ -158,6 +158,13 @@ class Board {
      */
     Square get_square(const Position &pos) const;
     /**
+     * @brief Get the square object at a given position
+     *
+     * @param pos position of the square
+     * @return Square - square
+     */
+    void set_square(const Position &pos, const Square &square);
+    /**
      * @brief replace a piece
      *
      * @param piece piece

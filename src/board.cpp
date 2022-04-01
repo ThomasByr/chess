@@ -52,7 +52,7 @@ BoardBuilder BoardBuilder::row(const Piece &piece) {
     }
 
     for (int i = 0; i < 8; i++) {
-        this->board->get_square(pos) = Square::from_piece(piece.move_to(pos));
+        this->board->set_square(pos, Square::from_piece(piece.move_to(pos)));
         pos = pos.next_right();
     }
 
@@ -66,7 +66,7 @@ BoardBuilder BoardBuilder::column(const Piece &piece) {
     }
 
     for (int i = 0; i < 8; i++) {
-        this->board->get_square(pos) = Square::from_piece(piece.move_to(pos));
+        this->board->set_square(pos, Square::from_piece(piece.move_to(pos)));
         pos = pos.next_above();
     }
 
@@ -75,7 +75,7 @@ BoardBuilder BoardBuilder::column(const Piece &piece) {
 
 BoardBuilder BoardBuilder::piece(Piece *piece) {
     Position pos = piece->get_pos();
-    this->board->get_square(pos) = Square::from_piece(piece);
+    this->board->set_square(pos, Square::from_piece(piece));
     return *this;
 }
 
@@ -186,6 +186,8 @@ Board Board::new_board() {
 
     board.turn = Color::White;
     board.en_passant = nullptr;
+
+    // std::cout << board << std::endl;
     return board;
 }
 
@@ -214,9 +216,13 @@ Square Board::get_square(const Position &pos) const {
     return this->squares[((7 - pos.get_row()) * 8 + pos.get_col())];
 }
 
+void Board::set_square(const Position &pos, const Square &square) {
+    this->squares[((7 - pos.get_row()) * 8 + pos.get_col())] = square;
+}
+
 void Board::add_piece(Piece *piece) {
     Position pos = piece->get_pos();
-    this->get_square(pos) = Square::from_piece(piece);
+    this->set_square(pos, Square::from_piece(piece));
 }
 
 Piece *Board::get_piece(const Position &pos) {
@@ -388,7 +394,7 @@ Board Board::move_piece(const Position &from, const Position &to) {
         return result;
     }
     Piece *piece = from_square.get_piece();
-    // Square from_square = EMPTY_SQUARE;
+    result.set_square(from, Square::from_piece(nullptr));
 
     if ((piece->get_type() == Piece::Pawn) &&
         (to.get_row() == 0 || to.get_row() == 7)) {
@@ -791,7 +797,7 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
             std::string s;
             Piece *piece = board.get_piece(pos);
             if (piece != nullptr) {
-                s = piece->to_string();
+                s = " " + piece->to_string() + " ";
             } else {
                 switch (square_color) {
                 case Color::White:

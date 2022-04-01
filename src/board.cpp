@@ -676,12 +676,12 @@ std::string Board::rating_bar(unsigned len) {
     std::string your_color, their_color, white, black;
     switch (this->turn) {
     case Color::White:
-        your_color = "▓";
-        their_color = "░";
+        your_color = "\u2593";
+        their_color = "\u2591";
         break;
     case Color::Black:
-        your_color = "░";
-        their_color = "▓";
+        your_color = "\u2591";
+        their_color = "\u2593";
         break;
     }
 
@@ -801,10 +801,10 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
             } else {
                 switch (square_color) {
                 case Color::White:
-                    s = "░░░";
+                    s = std::string("\u2591") * 3;
                     break;
                 case Color::Black:
-                    s = "▓▓▓";
+                    s = std::string("\u2593") * 3;
                     break;
                 }
             }

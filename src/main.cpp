@@ -156,5 +156,6 @@ int main() {
     for (Move m : history) {
         std::cout << m << std::endl;
     }
+    std::cout << board.end_fen() << std::endl;
     return 0;
 }

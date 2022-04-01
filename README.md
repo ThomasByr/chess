@@ -38,7 +38,7 @@ Moves should be typed in the command line (the program should be asking for it t
 
 2.  <details><summary>Why C++ and not C# ot Java ?</summary>
 
-    Apparently, coding a small "game" in cpp is just much more pleasant than doing it in cs or java, even if super tools like unity exist... cs is just not a thing the french educational system, but unreal engine isn't taught here either so we are just here pretending coding a 2d game in the terminal in cpp is a real thing out there in the world.
+    Apparently, coding a small "game" in cpp is just much more pleasant than doing it in cs or java, even if super tools like unity exist... cs is just not a thing the french educational system, but unreal engine isn't taught here either so we are just here pretending coding a 2d game in the terminal in cpp is a real thing out there in the world. And don't get me started on sld2... this isn't even a game engine and is slower than my dead grandmother.
     </details>
 
 3.  <details><summary>It at least has an AI to it right ?</summary>
@@ -59,6 +59,8 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
     <summary> v0.0.2 : improving AI (click here to expand) </summary>
 
 *   finding bugs on copy is going to take a while
+*   valgrind is crying : millions of pieces are created and are not freed by the os... god dammit ubuntu
+*   added the ending string but it is not even standard notation (I called it FEN anyway)
 
 </details>
 

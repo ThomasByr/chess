@@ -260,3 +260,56 @@ bool King::is_starting_pawn() const { return false; }
 bool King::is_queenside_rook() const { return false; }
 
 bool King::is_kingside_rook() const { return false; }
+
+std::vector<Move> King::get_legal_moves(Board &board) {
+    std::vector<Move> result;
+    Color ally_color = this->get_color();
+    Position pos = this->get_pos();
+
+    for (Position p : {
+             pos.next_left(),
+             pos.next_right(),
+             pos.next_above(),
+             pos.next_below(),
+             pos.next_left().next_above(),
+             pos.next_left().next_below(),
+             pos.next_right().next_above(),
+             pos.next_right().next_below(),
+         }) {
+        if (p.is_on_board() && !board.has_ally_piece(p, ally_color)) {
+            Move move;
+            move.move_type = Move::PieceMove;
+            move.from = pos;
+            move.to = p;
+            result.push_back(move);
+        }
+    }
+    if (board.can_kingside_castle(ally_color)) {
+        Move move;
+        move.move_type = Move::KingSideCastle;
+        result.push_back(move);
+    } else if (board.can_queenside_castle(ally_color)) {
+        Move move;
+        move.move_type = Move::QueenSideCastle;
+        result.push_back(move);
+    }
+    return this->get_valid_moves(result, board);
+}
+
+bool King::is_legal_move(const Position &new_pos, Board &board) {
+    if (board.has_ally_piece(new_pos, this->get_color()) ||
+        new_pos.is_off_board()) {
+        return false;
+    }
+
+    return this->position.is_adjacent_to(new_pos);
+}
+
+bool King::is_legal_attack(const Position &new_pos, Board &board) {
+    if (board.has_ally_piece(new_pos, this->get_color()) ||
+        new_pos.is_off_board()) {
+        return false;
+    }
+
+    return this->position.is_adjacent_to(new_pos);
+}

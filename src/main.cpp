@@ -87,7 +87,9 @@ int main() {
 
     while (is_running) {
         std::string s = input(">>> ");
-        s = to_lower(trim(s));
+        if (!s.empty()) {
+            s = to_lower(trim(s));
+        }
 
         Move m;
         if (s.empty()) {
@@ -133,13 +135,15 @@ int main() {
             break;
         case GameResult::Victory:
             std::cout << board << "\n";
-            std::cout << !r.winner << "loses. " << r.winner << " is victorious."
-                      << std::endl;
+            std::cout << !r.winner << " loses. " << r.winner
+                      << " is victorious." << std::endl;
             history.push_back(m);
             is_running = false;
             break;
         case GameResult::IllegalMove:
-            std::cerr << r.move << " is an illegal move." << std::endl;
+            if (is_running) {
+                std::cerr << r.move << " is an illegal move." << std::endl;
+            }
             break;
         case GameResult::Stalemate:
             std::cout << "Drawn game." << std::endl;

@@ -2,16 +2,20 @@
 
 Square Square::from_piece(Piece *piece) {
     if (piece == nullptr) {
-        return EMPTY_SQUARE;
+        return Square(nullptr);
     }
     return Square{piece};
 }
 
 Square::Square() { this->piece = nullptr; }
 
-Square::Square(Piece *piece) { this->piece = piece; }
+Square::Square(Piece *piece) {
+    // if (piece != nullptr)
+    //     std::cout << piece->get_name() << std::endl;
+    this->piece = piece;
+}
 
-Square::~Square() { delete this->piece; }
+Square::~Square() {}
 
 bool Square::is_empty() { return this->piece == nullptr; }
 

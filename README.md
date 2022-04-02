@@ -17,7 +17,7 @@ This is a school small project for OOP : a chess game in the command-line. It ha
 
 ## Prerequisites
 
-This project currently has no prerequisites but to have a recent enough distribution of Linux. To run tests (as well as the debug mode), valgrind is necessary. The current makefile is set for g++-11 and the znver3 micro-architecture (Ryzen Zen3), you should modify it if needed.
+This project currently has no prerequisites but to have a recent enough distribution of Linux. To run tests (as well as the debug mode), valgrind is necessary. You will need doxygen installed in order to build the html version of the documentation. The current makefile is set for g++-11 and the znver3 micro-architecture (Ryzen Zen3), you should modify it if needed.
 
 ## Usage
 

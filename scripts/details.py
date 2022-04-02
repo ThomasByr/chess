@@ -47,17 +47,25 @@ def update(chg: list[str]) -> None:
         readme = f.readlines()
     index0: int = None
     index1: int = None
+    seen = False
     for i, e in enumerate(readme):
         e.strip()
-        if "<details>" in e:
-            index0 = i
-        elif "</details>" in e:
-            index1 = i
+        if seen:
+            if "<details>" in e:
+                index0 = i
+            elif "</details>" in e:
+                index1 = i
+        else:
+            if "## Changelog" in e:
+                seen = True
+    if not seen:
+        raise ValueError("Error [README make] : no changelog subsection found")
     if index0 is None or index1 is None:
         raise ValueError("Error [README make] : bad format, <details> tag not found")
 
     head = chg[0]
-    head = head[4::].strip("*").replace("**", " :")
+    index_of = head.find("*")
+    head = head[index_of::].strip("*").replace("**", " :")
 
     details: list[str] = []
     details.append(f"    <summary> {head} (click here to expand) </summary>")

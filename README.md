@@ -94,6 +94,7 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
 ### TODO (first implementation version)
 
 *   command line options (file input)
+*   piece cemetary (piece symbol, times taken, for both players)
 *   move ordering
 *   Zobrist Hashing for transpositions (this technique allows to update hash rather than computing it every time)
 *   improve pawn structure on the board

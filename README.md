@@ -38,7 +38,7 @@ Moves should be typed in the command line (the program should be asking for it t
 
 2.  <details><summary>Why C++ and not C# ot Java ?</summary>
 
-    Apparently, coding a small "game" in cpp is just much more pleasant than doing it in cs or java, even if super tools like unity exist... cs is just not a thing the french educational system, but unreal engine isn't taught here either so we are just here pretending coding a 2d game in the terminal in cpp is a real thing out there in the world. And don't get me started on sld2... this isn't even a game engine and is slower than my dead grandmother.
+    Apparently, coding a small "game" in cpp is just much more pleasant than doing it in cs or java, even if super tools like unity exist... cs is just not a thing the french educational system, but unreal engine isn't taught here either so we are just here pretending coding a 2d game in the terminal in cpp is a real thing out there in the world. And don't get me started on sdl2... this isn't even a game engine and is slower than my dead grandmother.
     </details>
 
 3.  <details><summary>It at least has an AI to it right ?</summary>
@@ -49,6 +49,11 @@ Moves should be typed in the command line (the program should be asking for it t
 4.  <details><summary>Real question this time, what is the algorithm I am playing against ?</summary>
 
     Well, at the time of writing, there is no AI yet, but simple evaluation functions are a thing and this shouldn't be a huge deal implementing a crude search in a tree. Alpha-beta pruning is an optimization I am looking up to, as well as move ordering. So no AI here, as it is a python thing (I wouldn't be surprised though if we were taught AI in c).
+    </details>
+
+5.  <details><summary>The project does not even compile, are you for real ?</summary>
+
+    My guess is you did not setup g++ properly through the makefile. Compiling with -Wall -Wextra -Wpedantic should be enough to say that if it compiles on my computer, it should compile everywhere. Oh well... you can argue about that c++ standard that I use, and you could be right. Please make sure the micro-architecture -march= is right for your machine. If you are not sure, either use -march=native or remove the argument completely. Also, -std=c++20 could be not available on g++-9 and lower verions. As I suppose that copy constructors and some default constructors are automatically setup for you, please use -stdc++17 instead if you encounter any issues.
     </details>
 
 ## Changelog

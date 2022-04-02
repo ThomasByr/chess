@@ -172,8 +172,9 @@ class Piece {
      *
      * @param color color of the piece
      * @param position position of the piece
+     * @param starting_piece if the piece is a starting piece
      */
-    Piece(Color color, Position position);
+    Piece(Color color, Position position, bool starting_piece = false);
     virtual ~Piece();
 
     /**
@@ -324,6 +325,7 @@ class Piece {
     virtual std::string to_string() const = 0;
 
   protected:
+    bool status;       // if the piece has moved or was ever in check
     int id;            // type + color
     Color color;       // enum class
     Position position; // position on the board
@@ -331,7 +333,7 @@ class Piece {
 
 class Pawn : public Piece {
   public:
-    Pawn(Color color, Position position);
+    Pawn(Color color, Position position, bool starting_piece = false);
     ~Pawn();
 
     Pawn *move_to(Position new_pos) const;
@@ -355,7 +357,7 @@ class Pawn : public Piece {
 
 class King : public Piece {
   public:
-    King(Color color, Position position);
+    King(Color color, Position position, bool starting_piece = false);
     ~King();
 
     King *move_to(Position new_pos) const;
@@ -379,7 +381,7 @@ class King : public Piece {
 
 class Queen : public Piece {
   public:
-    Queen(Color color, Position position);
+    Queen(Color color, Position position, bool starting_piece = false);
     ~Queen();
 
     Queen *move_to(Position new_pos) const;
@@ -403,7 +405,7 @@ class Queen : public Piece {
 
 class Knight : public Piece {
   public:
-    Knight(Color color, Position position);
+    Knight(Color color, Position position, bool starting_piece = false);
     ~Knight();
 
     Knight *move_to(Position new_pos) const;
@@ -427,7 +429,7 @@ class Knight : public Piece {
 
 class Bishop : public Piece {
   public:
-    Bishop(Color color, Position position);
+    Bishop(Color color, Position position, bool starting_piece = false);
     ~Bishop();
 
     Bishop *move_to(Position new_pos) const;
@@ -451,7 +453,7 @@ class Bishop : public Piece {
 
 class Rook : public Piece {
   public:
-    Rook(Color color, Position position);
+    Rook(Color color, Position position, bool starting_piece = false);
     ~Rook();
 
     Rook *move_to(Position new_pos) const;

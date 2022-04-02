@@ -2,9 +2,10 @@
 
 #include "board.h"
 
-Piece::Piece(Color color, Position position) {
+Piece::Piece(Color color, Position position, bool starting_piece) {
     this->color = color;
     this->position = position;
+    this->status = !starting_piece;
 
     switch (color) {
     case Color::White:
@@ -60,7 +61,8 @@ bool Piece::operator==(const Piece &piece) const {
            this->get_pos() == piece.get_pos() && this->get_pos().is_on_board();
 }
 
-Pawn::Pawn(Color color, Position position) : Piece(color, position) {
+Pawn::Pawn(Color color, Position position, bool starting_piece)
+    : Piece(color, position, starting_piece) {
     this->id |= Piece::Pawn;
 }
 
@@ -237,7 +239,8 @@ bool Pawn::is_legal_attack(const Position &new_pos, Board &board) {
     return tmp || new_pos == up.next_left() || new_pos == up.next_right();
 }
 
-King::King(Color color, Position position) : Piece(color, position) {
+King::King(Color color, Position position, bool starting_piece)
+    : Piece(color, position, starting_piece) {
     this->id |= Piece::King;
 }
 
@@ -356,7 +359,8 @@ bool King::is_legal_attack(const Position &new_pos, Board &board) {
     return this->is_legal_move(new_pos, board);
 }
 
-Queen::Queen(Color color, Position position) : Piece(color, position) {
+Queen::Queen(Color color, Position position, bool starting_piece)
+    : Piece(color, position, starting_piece) {
     this->id |= Piece::Queen;
 }
 
@@ -505,7 +509,8 @@ bool Queen::is_legal_attack(const Position &new_pos, Board &board) {
     return this->is_legal_move(new_pos, board);
 }
 
-Rook::Rook(Color color, Position position) : Piece(color, position) {
+Rook::Rook(Color color, Position position, bool starting_piece)
+    : Piece(color, position, starting_piece) {
     this->id |= Piece::Rook;
 }
 
@@ -573,11 +578,11 @@ double Rook::get_weighted_value() const {
 bool Rook::is_starting_pawn() const { return false; }
 
 bool Rook::is_queenside_rook() const {
-    return this->get_pos().is_queenside_rook();
+    return (!this->status) && this->get_pos().is_queenside_rook();
 }
 
 bool Rook::is_kingside_rook() const {
-    return this->get_pos().is_kingside_rook();
+    return (!this->status) && this->get_pos().is_kingside_rook();
 }
 
 std::vector<Move> Rook::get_legal_moves(Board &board) {
@@ -635,7 +640,8 @@ bool Rook::is_legal_attack(const Position &new_pos, Board &board) {
     return this->is_legal_move(new_pos, board);
 }
 
-Bishop::Bishop(Color color, Position position) : Piece(color, position) {
+Bishop::Bishop(Color color, Position position, bool starting_piece)
+    : Piece(color, position, starting_piece) {
     this->id |= Piece::Bishop;
 }
 
@@ -752,7 +758,8 @@ bool Bishop::is_legal_attack(const Position &new_pos, Board &board) {
     return this->is_legal_move(new_pos, board);
 }
 
-Knight::Knight(Color color, Position position) : Piece(color, position) {
+Knight::Knight(Color color, Position position, bool starting_piece)
+    : Piece(color, position, starting_piece) {
     this->id |= Piece::Knight;
 }
 

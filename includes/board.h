@@ -10,6 +10,11 @@
 #include "position.h"
 #include "square.h"
 
+/**
+ * @brief The CastlingRights class
+ *
+ *This class represents the castling rights of a player.
+ */
 class CastlingRights {
   public:
     /**
@@ -71,6 +76,11 @@ class CastlingRights {
     bool queenside;
 };
 
+/**
+ * @brief The board class
+ *
+ * This class represents the board of a chess game.
+ */
 class Board {
   public:
     /**
@@ -409,6 +419,11 @@ class Board {
     Color turn;           // current turn color
 };
 
+/**
+ * @brief The BoardBuilder class
+ *
+ * This class is used to build a board
+ */
 class BoardBuilder {
   public:
     /**

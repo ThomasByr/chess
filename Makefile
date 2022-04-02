@@ -5,7 +5,7 @@ LDLIBS =
 
 INCLUDE_PATH = ./includes
 
-TARGET       = main
+TARGET       = echecs
 FILEXT       = cpp
 
 SRCDIR       = src
@@ -18,7 +18,10 @@ OBJECTS     := $(SOURCES:$(SRCDIR)/%.$(FILEXT)=$(OBJDIR)/%.o)
 
 PATH_TO_EXE  = $(BINDIR)/$(TARGET)
 
-all : release
+all : release docs
+
+docs:
+	@doxygen ./Doxyfile
 
 debug: CFLAGS += -Og -DDEBUG -g
 debug: $(PATH_TO_EXE)

@@ -35,7 +35,7 @@ std::string repeat(std::string str, const unsigned n) {
         return str;
     }
     str.reserve(period * n);
-    unsigned m{2};
+    unsigned m = 2;
     for (; m < n; m *= 2)
         str += str;
     str.append(str.c_str(), (n - (m / 2)) * period);

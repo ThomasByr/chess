@@ -73,7 +73,7 @@ The list of known and supported move patterns is as follow :
 
 5.  <details><summary>The project does not even compile, are you for real ?</summary>
 
-    My guess is you did not setup g++ properly through the makefile. Compiling with -Wall -Wextra -Wpedantic should be enough to say that if it compiles on my computer, it should compile everywhere. Oh well... you can argue about that c++ standard that I use, and you could be right. Please make sure the micro-architecture -march= is right for your machine. If you are not sure, either use -march=native or remove the argument completely. Also, -std=c++20 may not be available on g++-9 and lower verions. As I suppose that copy constructors and some default constructors are automatically setup for you, please use -stdc++17 or higher instead if you encounter any issues.
+    My guess is you did not setup g++ properly through the makefile. Compiling with -Wall -Wextra -Wpedantic should be enough to say that if it compiles on my computer, it should compile everywhere. Oh well... you can argue about that c++ standard that I use, and you could be right. Please make sure the micro-architecture -march= is right for your machine. If you are not sure, either use -march=native or remove the argument completely. Also, -std=c++20 may not be available on g++-9 and lower verions. As I suppose that copy constructors and some default constructors are automatically setup for you, please use -std=c++17 or higher instead if you encounter any issues.
     </details>
 
 ## Changelog

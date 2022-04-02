@@ -33,7 +33,7 @@ Compile and run a release version with
 make run-release
 ```
 
-Alternatively, you can compile with `make` and run an existing executable binary with `make run`.
+Alternatively `make release` will produce a release version of the executable, `make debug` a debug one, `make run-release` will compile and then run a release version, `make run-debug` will compile and run a debug version with valgrind, `make docs` will trigger doxygen and finally `make` builds a release version and updates the doc. You can run an existing executable with `make run`, and clean with `make clean`.
 
 Moves should be typed in the command line (the program should be asking for it though). Moves are defined by the starting position and the end position, for example b1c3 which would (at the beggining of the game) move the white knight. To play a sample game, please type `make run < tests/play.txt` and then hit enter.
 
@@ -106,3 +106,4 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
 *   improve pawn structure on the board
 *   opening book
 *   endgame
+*   iterative deepening (store best move first to prune)

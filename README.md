@@ -8,6 +8,8 @@
 4. [F.A.Q.](#faq)
 5. [Changelog](#changelog)
 6. [Bugs & TODO](#bugs--todo)
+   1. [Bugs (final correction version)](#bugs-final-correction-version)
+   2. [TODO (first implementation version)](#todo-first-implementation-version)
 
 ## In short
 
@@ -28,6 +30,18 @@ make run-release
 Alternatively, you can compile with `make` and run an existing executable binary with `make run`.
 
 Moves should be typed in the command line (the program should be asking for it though). Moves are defined by the starting position and the end position, for example b1c3 which would (at the beggining of the game) move the white knight.
+
+The list of known and supported move patterns is as follow :
+
+| move typed                                                                                                     | action                                        |
+| -------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| <details><summary>`e2e4`</summary>or `e2 e4` or `e2 to e4` or `e2 -> e4`</details>                             | move a piece                                  |
+| <details><summary>`queenside castle`</summary>or `castle queenside` or `O-O-O` or `0-0-0` or `o-o-o`</details> | castle queenside                              |
+| <details><summary>`kingside castle`</summary>or `castle kingside` or `O-O` or `0-0` or `o-o`</details>         | castle kingside                               |
+| <details><summary>` `</summary>or `best` or `b`</details>                                                      | the computer will play the best move for you  |
+| <details><summary>`worst`</summary>or `w`</details>                                                            | the computer will play the worst move for you |
+| <details><summary>`pass`</summary>or `p`</details>                                                             | to immediately change turn without playing    |
+| <details><summary>`rate`</summary>or `r`</details>                                                             | to rate the current position                  |
 
 ## F.A.Q.
 
@@ -53,7 +67,7 @@ Moves should be typed in the command line (the program should be asking for it t
 
 5.  <details><summary>The project does not even compile, are you for real ?</summary>
 
-    My guess is you did not setup g++ properly through the makefile. Compiling with -Wall -Wextra -Wpedantic should be enough to say that if it compiles on my computer, it should compile everywhere. Oh well... you can argue about that c++ standard that I use, and you could be right. Please make sure the micro-architecture -march= is right for your machine. If you are not sure, either use -march=native or remove the argument completely. Also, -std=c++20 could be not available on g++-9 and lower verions. As I suppose that copy constructors and some default constructors are automatically setup for you, please use -stdc++17 instead if you encounter any issues.
+    My guess is you did not setup g++ properly through the makefile. Compiling with -Wall -Wextra -Wpedantic should be enough to say that if it compiles on my computer, it should compile everywhere. Oh well... you can argue about that c++ standard that I use, and you could be right. Please make sure the micro-architecture -march= is right for your machine. If you are not sure, either use -march=native or remove the argument completely. Also, -std=c++20 may not be available on g++-9 and lower verions. As I suppose that copy constructors and some default constructors are automatically setup for you, please use -stdc++17 instead if you encounter any issues.
     </details>
 
 ## Changelog
@@ -66,9 +80,20 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
 *   finding bugs on copy is going to take a while
 *   valgrind is crying : millions of pieces are created and are not freed by the os... god dammit ubuntu
 *   added the ending string but it is not even standard notation (I called it FEN anyway)
+*   found a bug on get_weighted_value for pieces
 
 </details>
 
 ## Bugs & TODO
 
+### Bugs (final correction version)
+
 *   AI is actually stupid, supposed bug on get_legal_moves on pieces
+
+### TODO (first implementation version)
+
+*   move ordering
+*   Zobrist Hashing for transpositions (this technique allows to update hash rather than computing it every time)
+*   improve pawn structure on the board
+*   opening book
+*   endgame

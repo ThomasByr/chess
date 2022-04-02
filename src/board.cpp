@@ -196,13 +196,14 @@ Board::~Board() {}
 std::string Board::end_fen() const {
     std::string fen = "";
 
-    for (unsigned i = 64; i-- > 0;) {
-        Square s = this->squares[i];
-        Piece *piece = s.get_piece();
-        if (piece != nullptr) {
-            fen += piece->get_fen();
+    for (unsigned row = 0; row < 8; row++) {
+        for (unsigned col = 0; col < 8; col++) {
+            Square s = this->get_square(Position(row, col));
+            if (!s.is_empty()) {
+                fen += s.get_piece()->get_fen();
+            }
+            fen += ",";
         }
-        fen += ",";
     }
     return fen;
 }

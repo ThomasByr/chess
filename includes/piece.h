@@ -311,9 +311,9 @@ class Piece {
     virtual std::ostream &operator<<(std::ostream &os) const = 0;
     /**
      * @brief performs equality check on two pieces
-     * 
+     *
      * @param other other piece
-     * @return true - if equal (same color, type and position)
+     * @return true - if equal (same color, type and position on board)
      * @return false - otherwise
      */
     bool operator==(const Piece &other) const;

@@ -10,17 +10,17 @@ Move::~Move() {}
 
 int Move::from_string(const std::string &move_string) {
     if (move_string == "resign" || move_string == "resigns") {
-        move_type = Resign;
+        this->move_type = Resign;
         return Resign;
     } else if (move_string == "queenside castle" ||
                move_string == "castle queenside" || move_string == "O-O-O" ||
                move_string == "0-0-0" || move_string == "o-o-o") {
-        move_type = QueenSideCastle;
+        this->move_type = QueenSideCastle;
         return QueenSideCastle;
     } else if (move_string == "kingside castle" ||
                move_string == "castle kingside" || move_string == "O-O" ||
                move_string == "0-0" || move_string == "o-o") {
-        move_type = KingSideCastle;
+        this->move_type = KingSideCastle;
         return KingSideCastle;
     } else {
         std::vector<std::string> move_parts;
@@ -35,21 +35,21 @@ int Move::from_string(const std::string &move_string) {
         if (move_parts.size() == 1 && move_parts[0].size() == 4) {
             from = Position(move_parts[0].substr(0, 2));
             to = Position(move_parts[0].substr(2, 2));
-            move_type = PieceMove;
+            this->move_type = PieceMove;
             return PieceMove;
         } else if (move_parts.size() == 2) {
             from = Position(move_parts[0]);
             to = Position(move_parts[1]);
-            move_type = PieceMove;
+            this->move_type = PieceMove;
             return PieceMove;
         } else if (move_parts.size() == 3 &&
                    (move_parts[1] == "to" || move_parts[1] == "->")) {
             from = Position(move_parts[0]);
             to = Position(move_parts[2]);
-            move_type = PieceMove;
+            this->move_type = PieceMove;
             return PieceMove;
         } else {
-            move_type = Invalid;
+            this->move_type = Invalid;
             return Invalid;
         }
     }

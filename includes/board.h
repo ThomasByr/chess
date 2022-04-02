@@ -329,6 +329,12 @@ class Board {
      */
     std::string rating_bar(unsigned len);
     /**
+     * @brief evaluates the board for the current player
+     *
+     * @return double - score
+     */
+    double score();
+    /**
      * @brief returns the current board as a fen string
      *
      * @return std::string - fen

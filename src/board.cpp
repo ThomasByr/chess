@@ -163,24 +163,24 @@ Board::Board() {
 
 Board Board::new_board() {
     BoardBuilder builder;
-    Board board = builder.piece(new Rook(Color::Black, A8))
-                      .piece(new Knight(Color::Black, B8))
-                      .piece(new Bishop(Color::Black, C8))
-                      .piece(new Queen(Color::Black, D8))
-                      .piece(new King(Color::Black, E8))
-                      .piece(new Bishop(Color::Black, F8))
-                      .piece(new Knight(Color::Black, G8))
-                      .piece(new Rook(Color::Black, H8))
-                      .row(Pawn(Color::Black, A7))
-                      .row(Pawn(Color::White, A2))
-                      .piece(new Rook(Color::White, A1))
-                      .piece(new Knight(Color::White, B1))
-                      .piece(new Bishop(Color::White, C1))
-                      .piece(new Queen(Color::White, D1))
-                      .piece(new King(Color::White, E1))
-                      .piece(new Bishop(Color::White, F1))
-                      .piece(new Knight(Color::White, G1))
-                      .piece(new Rook(Color::White, H1))
+    Board board = builder.piece(new Rook(Color::Black, A8, true))
+                      .piece(new Knight(Color::Black, B8, true))
+                      .piece(new Bishop(Color::Black, C8, true))
+                      .piece(new Queen(Color::Black, D8, true))
+                      .piece(new King(Color::Black, E8, true))
+                      .piece(new Bishop(Color::Black, F8, true))
+                      .piece(new Knight(Color::Black, G8, true))
+                      .piece(new Rook(Color::Black, H8, true))
+                      .row(Pawn(Color::Black, A7, true))
+                      .row(Pawn(Color::White, A2, true))
+                      .piece(new Rook(Color::White, A1, true))
+                      .piece(new Knight(Color::White, B1, true))
+                      .piece(new Bishop(Color::White, C1, true))
+                      .piece(new Queen(Color::White, D1, true))
+                      .piece(new King(Color::White, E1, true))
+                      .piece(new Bishop(Color::White, F1, true))
+                      .piece(new Knight(Color::White, G1, true))
+                      .piece(new Rook(Color::White, H1, true))
                       .enable_castling()
                       .build();
 
@@ -628,8 +628,8 @@ Board Board::apply_move(const Move &move) {
     case Move::Resign:
         return this->remove_all(this->turn).queen_all(!this->turn);
     }
-    
-    return *this;
+
+    return result;
 }
 
 GameResult Board::play_move(const Move &move) {
@@ -648,8 +648,8 @@ GameResult Board::play_move(const Move &move) {
             result.result_type = GameResult::Stalemate;
         } else {
             result.result_type = GameResult::Continuing;
-            result.next_board = next_turn;
         }
+        result.next_board = next_turn;
     } else {
         result.result_type = GameResult::IllegalMove;
         result.move = move;
@@ -711,6 +711,35 @@ std::string Board::rating_bar(unsigned len) {
     }
 
     return white + black;
+}
+
+double Board::score() {
+    std::tuple<Move, unsigned, double> best0 = this->get_next_best_move(2);
+    std::tuple<Move, unsigned, double> worst0 = this->get_next_worst_move(2);
+    Move best_m = std::get<0>(best0);
+    double your_best_val = std::get<2>(best0),
+           your_lowest_val = std::get<2>(worst0);
+    double your_val = your_best_val + your_lowest_val;
+
+    std::tuple<Move, unsigned, double> best1 =
+        this->apply_move(best_m).change_turn().get_next_best_move(2);
+    std::tuple<Move, unsigned, double> worst1 =
+        this->apply_move(best_m).change_turn().get_next_worst_move(2);
+    double their_best_val = std::get<2>(best1),
+           their_lowest_val = std::get<2>(worst1);
+    double their_val = their_best_val + their_lowest_val;
+
+    if (your_val < 0) {
+        your_val *= -1;
+        their_val += 2 * your_val;
+    }
+
+    if (their_val < 0) {
+        their_val *= -1;
+        your_val += 2 * their_val;
+    }
+
+    return your_val - their_val;
 }
 
 Color Board::get_turn_color() const { return this->turn; }
@@ -850,9 +879,9 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
                 os << " Black +" << black_adv << " points";
             }
         } else if (row == 3) {
-            os << board.get_turn_color() << " to move";
+            os << " " << board.get_turn_color() << " to move";
         } else if (row == 4) {
-            os << "[" << rating_bar << "]";
+            os << " [" << rating_bar << "]";
         }
 
         square_color = !square_color;
@@ -864,7 +893,7 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
 
 std::tuple<Move, unsigned, double> Board::get_next_best_move(int depth) {
     std::vector<Move> legal_moves = this->get_legal_moves();
-    double best_move_value = -999999.0;
+    double best_move_value = -999999.;
     Move best_move = Move();
     best_move.move_type = Move::Resign;
 
@@ -873,7 +902,7 @@ std::tuple<Move, unsigned, double> Board::get_next_best_move(int depth) {
 
     for (Move m : legal_moves) {
         double child_board_value = this->apply_eval_move(m).minimax(
-            depth, -1000000.0, 1000000.0, false, color, &board_count);
+            depth, -1000000., 1000000., false, color, &board_count);
 
         if (child_board_value >= best_move_value) {
             best_move = m;
@@ -886,7 +915,7 @@ std::tuple<Move, unsigned, double> Board::get_next_best_move(int depth) {
 
 std::tuple<Move, unsigned, double> Board::get_next_worst_move(int depth) {
     std::vector<Move> legal_moves = this->get_legal_moves();
-    double best_move_value = -999999.0;
+    double best_move_value = -999999.;
     Move best_move = Move();
     best_move.move_type = Move::Resign;
 
@@ -895,7 +924,7 @@ std::tuple<Move, unsigned, double> Board::get_next_worst_move(int depth) {
 
     for (Move m : legal_moves) {
         double child_board_value = this->apply_eval_move(m).minimax(
-            depth, -1000000.0, 1000000.0, true, !color, &board_count);
+            depth, -1000000., 1000000., true, !color, &board_count);
 
         if (child_board_value >= best_move_value) {
             best_move = m;
@@ -918,7 +947,7 @@ double Board::minimax(int depth, double alpha, double beta, bool is_maximizing,
     double best_move_value;
 
     if (is_maximizing) {
-        best_move_value = -999999.0;
+        best_move_value = -999999.;
         for (Move m : legal_moves) {
             double child_board_value = this->apply_eval_move(m).minimax(
                 depth - 1, alpha, beta, !is_maximizing, getting_move_for,
@@ -935,7 +964,7 @@ double Board::minimax(int depth, double alpha, double beta, bool is_maximizing,
             }
         }
     } else {
-        best_move_value = 999999.0;
+        best_move_value = 999999.;
         for (Move m : legal_moves) {
             double child_board_value = this->apply_eval_move(m).minimax(
                 depth - 1, alpha, beta, !is_maximizing, getting_move_for,

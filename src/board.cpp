@@ -639,6 +639,8 @@ GameResult Board::play_move(const Move &move) {
 
     if (move.move_type == Move::Resign) {
         result.result_type = GameResult::Victory;
+        result.next_board =
+            this->remove_all(current_color).queen_all(!current_color);
         result.winner = !current_color;
     } else if (this->is_legal_move(move, current_color)) {
         Board next_turn = this->apply_move(move).change_turn();

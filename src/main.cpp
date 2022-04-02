@@ -92,15 +92,17 @@ int main() {
         }
 
         Move m;
-        if (s.empty()) {
+        if (s.empty() || s == "best" || s == "b") {
             std::cout << "Waiting for CPU to choose best move..." << std::endl;
             m = get_cpu_move(board, true);
         } else if (s == "worst" || s == "w") {
             std::cout << "Waiting for CPU to choose worst move..." << std::endl;
             m = get_cpu_move(board, false);
-        } else if (s == "rate") {
+        } else if (s == "rate" || s == "r") {
+            double score = board.score();
+            std::cout << "Score: " << score << std::endl;
             continue;
-        } else if (s == "pass") {
+        } else if (s == "pass" || s == "p") {
             board = board.change_turn();
             std::cout << board << std::endl;
             continue;

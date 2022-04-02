@@ -29,7 +29,7 @@ make run-release
 
 Alternatively, you can compile with `make` and run an existing executable binary with `make run`.
 
-Moves should be typed in the command line (the program should be asking for it though). Moves are defined by the starting position and the end position, for example b1c3 which would (at the beggining of the game) move the white knight.
+Moves should be typed in the command line (the program should be asking for it though). Moves are defined by the starting position and the end position, for example b1c3 which would (at the beggining of the game) move the white knight. To play a sample game, please type `make run < tests/play.txt` and then hit enter.
 
 The list of known and supported move patterns is as follow :
 

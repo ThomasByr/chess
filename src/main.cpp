@@ -129,6 +129,7 @@ int main() {
         }
 
         GameResult r;
+        std::cout << "\n";
         switch ((r = board.play_move(m)).result_type) {
         case GameResult::Continuing:
             board = r.next_board;
@@ -136,11 +137,12 @@ int main() {
             history.push_back(m);
             break;
         case GameResult::Victory:
-            std::cout << board << "\n";
+            std::cout << r.next_board << "\n";
             std::cout << !r.winner << " loses. " << r.winner
                       << " is victorious." << std::endl;
             history.push_back(m);
             is_running = false;
+            board = r.next_board;
             break;
         case GameResult::IllegalMove:
             if (is_running) {
@@ -151,6 +153,7 @@ int main() {
             std::cout << "Drawn game." << std::endl;
             history.push_back(m);
             is_running = false;
+            board = r.next_board;
             break;
         }
     }

@@ -21,21 +21,23 @@ PATH_TO_EXE  = $(BINDIR)/$(TARGET)
 all : release docs
 
 docs:
-	@doxygen ./Doxyfile
+	@echo "\033[95mBuilding documentation...\033[0m"
+	@doxygen ./Doxyfile > /dev/null 2>&1
+	@echo "\033[97mDocumentation built!\033[0m"
 
 debug: CFLAGS += -Og -DDEBUG -g
 debug: $(PATH_TO_EXE)
-	@echo "\033[33mRunning in debug mode!\033[0m"
+	@echo "\033[93mRunning in debug mode!\033[0m"
 
 release: CFLAGS += -Ofast
 release: $(PATH_TO_EXE)
-	@echo "\033[36mRunning in release mode!\033[0m"
+	@echo "\033[96mRunning in release mode!\033[0m"
 
 run:
 ifneq ("$(wildcard $(PATH_TO_EXE))", "")
 	./$(PATH_TO_EXE)
 else
-	@echo "\033[31mNo executable found!\033[0m"
+	@echo "\033[91mNo executable found!\033[0m"
 endif
 
 run-release: release

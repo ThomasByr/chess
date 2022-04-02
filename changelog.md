@@ -11,5 +11,6 @@
 2.  **v0.0.2** improving AI
     *   finding bugs on copy is going to take a while
     *   valgrind is crying : millions of pieces are created and are not freed by the os... god dammit ubuntu
-    *   added the ending string but it is not even standard notation (I called it FEN anyway)
+    *   added the ending string which is not even standard notation (I called it FEN anyway)
     *   found a bug on get_weighted_value for pieces
+    *   hopefully copilot can generate doxygen

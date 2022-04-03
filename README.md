@@ -1,6 +1,6 @@
-# Chess Game in C++
+# <img src="assets/chessmate.png" alt="chessmate" width="3%"/> Chess Game in C++
 
-[![Linux](https://svgshare.com/i/Zhy.svg)](https://svgshare.com/i/Zhy.svg)
+[![Linux](https://svgshare.com/i/Zhy.svg)](https://docs.microsoft.com/en-us/windows/wsl/tutorials/gui-apps)
 [![GitHub license](https://img.shields.io/github/license/ThomasByr/chess)](https://github.com/ThomasByr/chess/blob/master/LICENSE)
 [![GitHub commits](https://badgen.net/github/commits/ThomasByr/chess)](https://GitHub.com/ThomasByr/chess/commit/)
 [![GitHub latest commit](https://badgen.net/github/last-commit/ThomasByr/chess)](https://gitHub.com/ThomasByr/chess/commit/)
@@ -15,7 +15,7 @@
 
 **If you ever get this in .7z, .zip, .tar.gz, .rar or whatever archive format, please ensure you do have the latest version by paying a visit to [the home repo](https://github.com/ThomasByr/chess) on GitHub !**
 
-*note* : doxygen actually can't deal with `<details></details>` tags... please view this page on a proper web editor or even better, on GitHub
+*note* : doxygen actually can't deal with new markdown GitHub tags... please view this page on a proper web editor or even better, on GitHub
 
 1. [In short](#in-short)
 2. [Prerequisites](#prerequisites)
@@ -75,14 +75,14 @@ The list of known and supported move patterns is as follow :
     Well about that... That is not even on the damn paper. I, however, am going to try my best and implement it even though you can rest assured that it won't bring any bonnuses. The subject paper is just about implementing the right pieces movements for two human players, which is quite boring and serves no purpose.
     </details>
 
-4.  <details><summary>Real question this time, what is the algorithm I am playing against ?</summary>
+4.  <details><summary>Serious question this time, what is the algorithm I am playing against ?</summary>
 
     Well, at the time of writing, there is no AI yet, but simple evaluation functions are a thing and this shouldn't be a huge deal implementing a crude search in a tree. Alpha-beta pruning is an optimization I am looking up to, as well as move ordering. So no AI here, as it is a python thing (I wouldn't be surprised though if we were taught AI in c).
     </details>
 
 5.  <details><summary>The project does not even compile, are you for real ?</summary>
 
-    My guess is you did not setup g++ properly through the makefile. Compiling with -Wall -Wextra -Wpedantic should be enough to say that if it compiles on my computer, it should compile everywhere. Oh well... you can argue about that c++ standard that I use, and you could be right. Please make sure the micro-architecture -march= is right for your machine. If you are not sure, either use -march=native or remove the argument completely. Also, -std=c++20 may not be available on g++-9 and lower verions. As I suppose that copy constructors and some default constructors are automatically setup for you, please use -std=c++17 or higher instead if you encounter any issues.
+    My guess is you did not setup g++ properly through the makefile. Compiling with -Wall -Wextra -Wpedantic should be enough to say that if it compiles on my computer, it should compile everywhere. Oh well... you can argue about that c++ standard that I use, and you could be right. Please make sure the micro-architecture -march= is right for your machine. If you are not sure, either use -march=native or remove the argument completely. Also, -std=c++20 may not be available on g++-9 and lower verions. As I assume copy constructors and some default constructors are automatically setup for you, please use -std=c++17 or higher instead if you encounter any issues.
     </details>
 
 ## Changelog
@@ -104,7 +104,7 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
 
 ### Bugs (final correction version)
 
-*   AI is actually stupid, supposed bug on get_legal_moves on pieces
+*   ~~AI is actually stupid, supposed bug on get_legal_moves on pieces~~ (v0.0.2)
 
 ### TODO (first implementation version)
 

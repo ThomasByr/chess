@@ -9,11 +9,7 @@ Square Square::from_piece(Piece *piece) {
 
 Square::Square() { this->piece = nullptr; }
 
-Square::Square(Piece *piece) {
-    // if (piece != nullptr)
-    //     std::cout << piece->get_name() << std::endl;
-    this->piece = piece;
-}
+Square::Square(Piece *piece) { this->piece = piece; }
 
 Square::~Square() {}
 

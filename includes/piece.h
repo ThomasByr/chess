@@ -178,6 +178,8 @@ class Piece {
     virtual ~Piece();
     static Piece *from_id(int type, Color color);
 
+    virtual Piece *clone() const = 0;
+
     /**
      * @brief Get the color object
      *
@@ -337,6 +339,8 @@ class Pawn : public Piece {
     Pawn(Color color, Position position, bool starting_piece = false);
     ~Pawn();
 
+    Pawn *clone() const;
+
     Pawn *move_to(Position new_pos) const;
 
     std::string get_name() const;
@@ -360,6 +364,8 @@ class King : public Piece {
   public:
     King(Color color, Position position, bool starting_piece = false);
     ~King();
+
+    King *clone() const;
 
     King *move_to(Position new_pos) const;
 
@@ -385,6 +391,8 @@ class Queen : public Piece {
     Queen(Color color, Position position, bool starting_piece = false);
     ~Queen();
 
+    Queen *clone() const;
+
     Queen *move_to(Position new_pos) const;
 
     std::string get_name() const;
@@ -408,6 +416,8 @@ class Knight : public Piece {
   public:
     Knight(Color color, Position position, bool starting_piece = false);
     ~Knight();
+
+    Knight *clone() const;
 
     Knight *move_to(Position new_pos) const;
 
@@ -433,6 +443,8 @@ class Bishop : public Piece {
     Bishop(Color color, Position position, bool starting_piece = false);
     ~Bishop();
 
+    Bishop *clone() const;
+
     Bishop *move_to(Position new_pos) const;
 
     std::string get_name() const;
@@ -456,6 +468,8 @@ class Rook : public Piece {
   public:
     Rook(Color color, Position position, bool starting_piece = false);
     ~Rook();
+
+    Rook *clone() const;
 
     Rook *move_to(Position new_pos) const;
 

@@ -85,6 +85,8 @@ Pawn::Pawn(Color color, Position position, bool starting_piece)
     this->id |= Piece::Pawn;
 }
 
+Pawn *Pawn::clone() const { return new Pawn(*this); }
+
 Pawn::~Pawn() {}
 
 std::ostream &Pawn::operator<<(std::ostream &os) const {
@@ -265,6 +267,8 @@ King::King(Color color, Position position, bool starting_piece)
 
 King::~King() {}
 
+King *King::clone() const { return new King(*this); }
+
 std::ostream &King::operator<<(std::ostream &os) const {
     switch (this->get_color()) {
     case Color::White:
@@ -384,6 +388,8 @@ Queen::Queen(Color color, Position position, bool starting_piece)
 }
 
 Queen::~Queen() {}
+
+Queen *Queen::clone() const { return new Queen(*this); }
 
 std::ostream &Queen::operator<<(std::ostream &os) const {
     switch (this->get_color()) {
@@ -535,6 +541,8 @@ Rook::Rook(Color color, Position position, bool starting_piece)
 
 Rook::~Rook() {}
 
+Rook *Rook::clone() const { return new Rook(*this); }
+
 std::ostream &Rook::operator<<(std::ostream &os) const {
     switch (this->get_color()) {
     case Color::White:
@@ -666,6 +674,8 @@ Bishop::Bishop(Color color, Position position, bool starting_piece)
 
 Bishop::~Bishop() {}
 
+Bishop *Bishop::clone() const { return new Bishop(*this); }
+
 std::ostream &Bishop::operator<<(std::ostream &os) const {
     switch (this->get_color()) {
     case Color::White:
@@ -783,6 +793,8 @@ Knight::Knight(Color color, Position position, bool starting_piece)
 }
 
 Knight::~Knight() {}
+
+Knight *Knight::clone() const { return new Knight(*this); }
 
 std::ostream &Knight::operator<<(std::ostream &os) const {
     switch (this->get_color()) {

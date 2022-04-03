@@ -17,7 +17,7 @@ std::ostream &operator<<(std::ostream &os, Color color) {
     case Color::Black:
         return os << "Black";
     default:
-        return os << "Unknown";
+        panic("Invalid color");
     }
 }
 

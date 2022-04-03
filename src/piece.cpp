@@ -77,7 +77,7 @@ std::vector<Move> Piece::get_valid_moves(std::vector<Move> &result,
 bool Piece::operator==(const Piece &piece) const {
     return this->get_color() == piece.get_color() &&
            this->get_type() == piece.get_type() &&
-           this->get_pos() == piece.get_pos() && this->get_pos().is_on_board();
+           this->get_pos() == piece.get_pos();
 }
 
 Pawn::Pawn(Color color, Position position, bool starting_piece)
@@ -597,11 +597,11 @@ double Rook::get_weighted_value() const {
 bool Rook::is_starting_pawn() const { return false; }
 
 bool Rook::is_queenside_rook() const {
-    return (!this->status) && this->get_pos().is_queenside_rook();
+    return this->get_pos().is_queenside_rook();
 }
 
 bool Rook::is_kingside_rook() const {
-    return (!this->status) && this->get_pos().is_kingside_rook();
+    return this->get_pos().is_kingside_rook();
 }
 
 std::vector<Move> Rook::get_legal_moves(Board &board) {

@@ -25,6 +25,7 @@ class Square {
      * @param piece the piece to put on the square
      */
     Square(Piece *piece);
+    // Square(const Square &square);
     ~Square();
 
     /**
@@ -42,13 +43,13 @@ class Square {
      * @return true if the square is empty
      * @return false if the square is not empty
      */
-    bool is_empty();
+    bool is_empty() const;
     /**
      * @brief Get the piece object
      *
      * @return Piece* - the piece object, nullptr if the square is empty
      */
-    Piece *get_piece();
+    Piece *get_piece() const;
 
   private:
     Piece *piece; // piece on the square or nullptr if empty

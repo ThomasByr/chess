@@ -1,5 +1,14 @@
 # Chess Game in C++
 
+[![Linux](https://svgshare.com/i/Zhy.svg)](https://svgshare.com/i/Zhy.svg)
+[![GitHub license](https://img.shields.io/github/license/ThomasByr/chess)](https://github.com/ThomasByr/chess/blob/master/LICENSE)
+[![GitHub commits](https://badgen.net/github/commits/ThomasByr/chess)](https://GitHub.com/ThomasByr/chess/commit/)
+[![GitHub latest commit](https://badgen.net/github/last-commit/ThomasByr/chess)](https://gitHub.com/ThomasByr/chess/commit/)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/ThomasByr/chess/graphs/commit-activity)
+
+[![GitHub version](https://badge.fury.io/gh/ThomasByr%2Fchess.svg)](https://github.com/ThomasByr/chess)
+[![Author](https://img.shields.io/badge/author-@ThomasByr-blue)](https://github.com/ThomasByr)
+
 <summary>School project</summary>
 
 > Project [instruction paper (subject)](https://moodle.unistra.fr/pluginfile.php/748157/mod_resource/content/11/td-echecs.html) on the Moodle page.

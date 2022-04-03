@@ -692,17 +692,17 @@ GameResult Board::play_move(const Move &move) {
 }
 
 std::string Board::rating_bar(unsigned len) {
-    std::tuple<Move, unsigned, double> best0 = this->get_next_best_move(1);
-    std::tuple<Move, unsigned, double> worst0 = this->get_next_worst_move(1);
+    std::tuple<Move, unsigned, double> best0 = this->get_next_best_move(0);
+    std::tuple<Move, unsigned, double> worst0 = this->get_next_worst_move(0);
     Move best_m = std::get<0>(best0);
     double your_best_val = std::get<2>(best0),
            your_lowest_val = std::get<2>(worst0);
     double your_val = your_best_val + your_lowest_val;
 
     std::tuple<Move, unsigned, double> best1 =
-        this->apply_move(best_m).change_turn().get_next_best_move(1);
+        this->apply_move(best_m).change_turn().get_next_best_move(0);
     std::tuple<Move, unsigned, double> worst1 =
-        this->apply_move(best_m).change_turn().get_next_worst_move(1);
+        this->apply_move(best_m).change_turn().get_next_worst_move(0);
     double their_best_val = std::get<2>(best1),
            their_lowest_val = std::get<2>(worst1);
     double their_val = their_best_val + their_lowest_val;
@@ -747,17 +747,17 @@ std::string Board::rating_bar(unsigned len) {
 }
 
 double Board::score() {
-    std::tuple<Move, unsigned, double> best0 = this->get_next_best_move(1);
-    std::tuple<Move, unsigned, double> worst0 = this->get_next_worst_move(1);
+    std::tuple<Move, unsigned, double> best0 = this->get_next_best_move(0);
+    std::tuple<Move, unsigned, double> worst0 = this->get_next_worst_move(0);
     Move best_m = std::get<0>(best0);
     double your_best_val = std::get<2>(best0),
            your_lowest_val = std::get<2>(worst0);
     double your_val = your_best_val + your_lowest_val;
 
     std::tuple<Move, unsigned, double> best1 =
-        this->apply_move(best_m).change_turn().get_next_best_move(1);
+        this->apply_move(best_m).change_turn().get_next_best_move(0);
     std::tuple<Move, unsigned, double> worst1 =
-        this->apply_move(best_m).change_turn().get_next_worst_move(1);
+        this->apply_move(best_m).change_turn().get_next_worst_move(0);
     double their_best_val = std::get<2>(best1),
            their_lowest_val = std::get<2>(worst1);
     double their_val = their_best_val + their_lowest_val;

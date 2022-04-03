@@ -11,7 +11,7 @@
 
 <summary>School project</summary>
 
-> Project [instruction paper (subject)](https://moodle.unistra.fr/pluginfile.php/748157/mod_resource/content/11/td-echecs.html) on the Moodle page.
+> [Project instruction paper](https://moodle.unistra.fr/pluginfile.php/748157/mod_resource/content/11/td-echecs.html) (subject) on the Moodle page.
 
 **If you ever get this in .7z, .zip, .tar.gz, .rar or whatever archive format, please ensure you do have the latest version by paying a visit to [the home repo](https://github.com/ThomasByr/chess) on GitHub !**
 

@@ -149,6 +149,11 @@ Board::Board() {
     white_castling_rights = new CastlingRights();
     black_castling_rights = new CastlingRights();
     en_passant = nullptr;
+
+    for (unsigned i = 0; i < 7; i++) {
+        white_takes[i] = 0;
+        black_takes[i] = 0;
+    }
 }
 
 // Board::Board(const Board &board) {
@@ -404,10 +409,31 @@ Board Board::move_piece(const Position &from, const Position &to) {
         return result;
     }
     Square from_square = result.get_square(from);
+    Square to_square = result.get_square(to);
 
     if (from_square.is_empty()) {
         return result;
     }
+
+    // updating piece cemetery
+    if (!to_square.is_empty()) {
+        Piece *to_piece = to_square.get_piece();
+        if (to_piece->get_color() == result.get_current_player_color()) {
+            // this should not even happen assuming the move has been verified
+            panic("Trying to move a piece onto an ally piece");
+        }
+        switch (!to_piece->get_color()) {
+        case Color::White:
+            result.white_takes[to_piece->get_type()] += 1;
+            break;
+        case Color::Black:
+            result.black_takes[to_piece->get_type()] += 1;
+            break;
+        default:
+            panic("Invalid color");
+        }
+    }
+
     Piece *piece = from_square.get_piece();
     result.set_square(from, Square::from_piece(nullptr));
 
@@ -432,7 +458,7 @@ Board Board::move_piece(const Position &from, const Position &to) {
         castling_rights = result.black_castling_rights;
         break;
     default:
-        return result;
+        panic("Invalid color");
     }
 
     if (piece->get_type() == Piece::King) {
@@ -475,7 +501,7 @@ bool Board::can_kingside_castle(const Color &color) {
                !this->is_threatened(right_of_king, color) &&
                !this->is_threatened(right_of_king.next_right(), color);
     }
-    return false;
+    panic("Invalid color");
 }
 
 bool Board::can_queenside_castle(const Color &color) {
@@ -506,7 +532,7 @@ bool Board::can_queenside_castle(const Color &color) {
                !this->is_in_check(color) &&
                !this->is_threatened(Position::queen_position(color), color);
     }
-    return false;
+    panic("Invalid color");
 }
 
 bool Board::has_sufficient_material(const Color &color) const {
@@ -808,6 +834,8 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
     case Color::Black:
         abc = " h  g  f  e  d  c  b  a";
         break;
+    default:
+        panic("Invalid color");
     }
     os << "   " << abc << "\n  ╔════════════════════════╗";
 
@@ -824,6 +852,8 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
         case Color::Black:
             print_row = row;
             break;
+        default:
+            panic("Invalid color");
         }
         os << print_row + 1 << " ║";
 
@@ -836,6 +866,8 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
             case Color::White:
                 print_col = col;
                 break;
+            default:
+                panic("Invalid color");
             }
 
             Position pos = Position(print_row, print_col);
@@ -852,6 +884,8 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
                 case Color::Black:
                     s = std::string("\u2593") * 3;
                     break;
+                default:
+                    panic("Invalid color");
                 }
             }
 
@@ -870,7 +904,7 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
         }
         os << "║ " << print_row + 1 << " ";
 
-        if (row == 2) {
+        if (row == 0) {
             int white_adv = board.get_material_advantage(Color::White);
             int black_adv = board.get_material_advantage(Color::Black);
 
@@ -880,6 +914,24 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
                 os << " White +" << white_adv << " points";
             } else {
                 os << " Black +" << black_adv << " points";
+            }
+        } else if (row == 1) {
+            for (unsigned id = 1; id < 7; id++) {
+                unsigned count = board.white_takes[id];
+                Piece *piece = Piece::from_id(id, Color::Black);
+                if (count <= 0 || piece == nullptr) {
+                    continue;
+                }
+                os << " " << piece->to_string() << "*" << count;
+            }
+        } else if (row == 2) {
+            for (unsigned id = 1; id < 7; id++) {
+                unsigned count = board.black_takes[id];
+                Piece *piece = Piece::from_id(id, Color::White);
+                if (count <= 0 || piece == nullptr) {
+                    continue;
+                }
+                os << " " << piece->to_string() << "*" << count;
             }
         } else if (row == 3) {
             os << " " << board.get_turn_color() << " to move";
@@ -894,8 +946,43 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
     return os;
 }
 
+bool cmp(Board &board, Move a, Move b) {
+    Position a_pos_from = a.from;
+    Position a_pos_to = a.to;
+    Position b_pos_from = b.from;
+    Position b_pos_to = b.to;
+
+    Piece *a_piece_from = board.get_piece(a_pos_from);
+    Piece *a_piece_to = board.get_piece(a_pos_to);
+    Piece *b_piece_from = board.get_piece(b_pos_from);
+    Piece *b_piece_to = board.get_piece(b_pos_to);
+
+    // if move a is a take, but b is not, a is better
+    if (a_piece_to != nullptr && b_piece_to == nullptr) {
+        return true;
+    }
+    // if move b is a take, but a is not, b is better
+    if (b_piece_to != nullptr && a_piece_to == nullptr) {
+        return false;
+    }
+    // if both moves are takes, compare the piece values
+    if (a_piece_to != nullptr && b_piece_to != nullptr) {
+        return a_piece_to->get_material_value() >
+               b_piece_to->get_material_value();
+    }
+    // if both moves are not takes, compare the piece values
+    if (a_piece_from != nullptr && b_piece_from != nullptr) {
+        return a_piece_from->get_material_value() >
+               b_piece_from->get_material_value();
+    }
+
+    return false;
+}
+
 std::tuple<Move, unsigned, double> Board::get_next_best_move(int depth) {
     std::vector<Move> legal_moves = this->get_legal_moves();
+    std::sort(legal_moves.begin(), legal_moves.end(),
+              [&](Move a, Move b) { return cmp(*this, a, b); });
     double best_move_value = -999999.;
     Move best_move = Move();
     best_move.move_type = Move::Resign;
@@ -918,6 +1005,8 @@ std::tuple<Move, unsigned, double> Board::get_next_best_move(int depth) {
 
 std::tuple<Move, unsigned, double> Board::get_next_worst_move(int depth) {
     std::vector<Move> legal_moves = this->get_legal_moves();
+    std::sort(legal_moves.begin(), legal_moves.end(),
+              [&](Move a, Move b) { return cmp(*this, a, b); });
     double best_move_value = -999999.;
     Move best_move = Move();
     best_move.move_type = Move::Resign;
@@ -947,6 +1036,8 @@ double Board::minimax(int depth, double alpha, double beta, bool is_maximizing,
     }
 
     std::vector<Move> legal_moves = this->get_legal_moves();
+    std::sort(legal_moves.begin(), legal_moves.end(),
+              [&](Move a, Move b) { return cmp(*this, a, b); });
     double best_move_value;
 
     if (is_maximizing) {

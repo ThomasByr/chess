@@ -417,6 +417,9 @@ class Board {
     Square squares[64];   // array of squares
     Position *en_passant; // en passant position
     Color turn;           // current turn color
+
+    unsigned white_takes[7]; // black pieces count taken by white
+    unsigned black_takes[7]; // white pieces count taken by black
 };
 
 /**

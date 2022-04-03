@@ -15,12 +15,31 @@ Piece::Piece(Color color, Position position, bool starting_piece) {
         this->id = Piece::Black;
         break;
     default:
-        this->id = Piece::None;
+        panic("Invalid color");
         break;
     }
 }
 
 Piece::~Piece() {}
+
+Piece *Piece::from_id(int type, Color color) {
+    switch (type) {
+    case 1:
+        return new class King(color, A1);
+    case 2:
+        return new class Pawn(color, A1);
+    case 3:
+        return new class Knight(color, A1);
+    case 4:
+        return new class Bishop(color, A1);
+    case 5:
+        return new class Rook(color, A1);
+    case 6:
+        return new class Queen(color, A1);
+    default:
+        panic("Invalid piece id");
+    }
+}
 
 bool Piece::is_sliding_piece(int piece) { return (piece & 0b100) != 0; }
 

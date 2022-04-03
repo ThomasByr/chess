@@ -176,6 +176,7 @@ class Piece {
      */
     Piece(Color color, Position position, bool starting_piece = false);
     virtual ~Piece();
+    static Piece *from_id(int type, Color color);
 
     /**
      * @brief Get the color object

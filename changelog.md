@@ -17,3 +17,6 @@
     *   found a bug on get_weighted_value for pieces
     *   hopefully copilot can generate doxygen
     *   found a bug on generated based king position for white player
+3.  **v0.0.3** accelerating search
+    *   move ordering have reduced move evaluation by 10 times just by putting attacks before
+    *   avoided the access (when possible on pointers) to direct members of classes

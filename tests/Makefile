@@ -1,18 +1,20 @@
 CC = g++-11
-TARGET = tests
 
 CFLAGS = -march=native -Og -pipe -std=c++20 -pedantic -Wall -Wextra -Werror -DDEBUG -g
 LDLIBS =
 
 INCLUDE_PATH = ../includes
 
-SRCDIR    = ../src
-OBJDIR    = obj
+TARGET       = tests
+FILEXT	     = cpp
 
-SOURCES  := $(wildcard $(SRCDIR)/*.cpp)
-INCLUDES := $(wildcard $(INCLUDE_PATH)/*.h)
-OBJECTS0 := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
-OBJECTS   = $(filter-out $(OBJDIR)/main.o,$(OBJECTS0))
+SRCDIR       = ../src
+OBJDIR       = obj
+
+SOURCES     := $(wildcard $(SRCDIR)/*.$(FILEXT))
+INCLUDES    := $(wildcard $(INCLUDE_PATH)/*.h)
+OBJECTS0    := $(SOURCES:$(SRCDIR)/%.$(FILEXT)=$(OBJDIR)/%.o)
+OBJECTS      = $(filter-out $(OBJDIR)/main.o,$(OBJECTS0))
 
 tests: $(OBJECTS) obj/tests.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LDLIBS)
@@ -22,11 +24,11 @@ tests: $(OBJECTS) obj/tests.o
 check: clean tests
 	valgrind --leak-check=full --show-leak-kinds=all --vgdb=full -s ./$(TARGET)
 
-$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
+$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.$(FILEXT)
 	mkdir -p $(OBJDIR)
 	$(CC) -o $@ -c $< $(CFLAGS) -isystem$(INCLUDE_PATH)
 
-obj/tests.o: tests.cpp
+obj/tests.o: tests.$(FILEXT)
 	mkdir -p $(OBJDIR)
 	$(CC) -o $@ -c $< $(CFLAGS) -isystem$(INCLUDE_PATH)
 

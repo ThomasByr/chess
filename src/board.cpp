@@ -8,6 +8,11 @@ CastlingRights::CastlingRights() {
     queenside = true;
 }
 
+CastlingRights::CastlingRights(const CastlingRights &other) {
+    kingside = other.kingside;
+    queenside = other.queenside;
+}
+
 CastlingRights::~CastlingRights() {}
 
 bool CastlingRights::can_kingside_castle() const { return this->kingside; }
@@ -156,15 +161,20 @@ Board::Board() {
     }
 }
 
-// Board::Board(const Board &board) {
-//     for (int i = 0; i < 64; i++) {
-//         squares[i] = board.squares[i];
-//     }
-//     turn = board.turn;
-//     en_passant = board.en_passant;
-//     white_castling_rights = new CastlingRights(*board.white_castling_rights);
-//     black_castling_rights = new CastlingRights(*board.black_castling_rights);
-// }
+Board::Board(const Board &board) {
+    for (int i = 0; i < 64; i++) {
+        squares[i] = Square(board.squares[i]);
+    }
+    turn = board.turn;
+    en_passant = board.en_passant;
+    white_castling_rights = new CastlingRights(*board.white_castling_rights);
+    black_castling_rights = new CastlingRights(*board.black_castling_rights);
+
+    for (unsigned i = 0; i < 7; i++) {
+        white_takes[i] = board.white_takes[i];
+        black_takes[i] = board.black_takes[i];
+    }
+}
 
 Board Board::new_board() {
     BoardBuilder builder;
@@ -192,7 +202,6 @@ Board Board::new_board() {
     board.turn = Color::White;
     board.en_passant = nullptr;
 
-    // std::cout << board << std::endl;
     return board;
 }
 
@@ -277,7 +286,7 @@ bool Board::has_no_piece(const Position &pos) {
 }
 
 Position Board::get_king_position(const Color &color) const {
-    Position king_pos;
+    Position king_pos = Position(-1, -1);
     for (Square square : this->squares) {
         Piece *piece = square.get_piece();
         if (piece == nullptr) {
@@ -483,7 +492,7 @@ bool Board::can_kingside_castle(const Color &color) {
         }
         return this->has_no_piece(Position(0, 5)) &&
                this->has_no_piece(Position(0, 6)) &&
-               *piece == Rook(Color::White, Position(0, 7)) &&
+               *piece == Rook(color, Position(0, 7)) &&
                this->white_castling_rights->can_kingside_castle() &&
                !this->is_in_check(color) &&
                !this->is_threatened(right_of_king, color) &&
@@ -495,7 +504,7 @@ bool Board::can_kingside_castle(const Color &color) {
         }
         return this->has_no_piece(Position(7, 5)) &&
                this->has_no_piece(Position(7, 6)) &&
-               *piece == Rook(Color::White, Position(7, 7)) &&
+               *piece == Rook(color, Position(7, 7)) &&
                this->black_castling_rights->can_kingside_castle() &&
                !this->is_in_check(color) &&
                !this->is_threatened(right_of_king, color) &&
@@ -656,7 +665,7 @@ Board Board::apply_move(const Move &move) {
         return this->remove_all(this->turn).queen_all(!this->turn);
     }
 
-    return result;
+    panic("Invalid move type");
 }
 
 GameResult Board::play_move(const Move &move) {

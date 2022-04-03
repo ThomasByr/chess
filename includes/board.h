@@ -22,6 +22,7 @@ class CastlingRights {
      *
      */
     CastlingRights();
+    CastlingRights(const CastlingRights &other);
     ~CastlingRights();
 
     /**
@@ -88,6 +89,7 @@ class Board {
      *
      */
     Board();
+    Board(const Board &other);
     ~Board();
 
     /**

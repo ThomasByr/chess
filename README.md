@@ -97,6 +97,7 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
 *   added the ending string which is not even standard notation (I called it FEN anyway)
 *   found a bug on get_weighted_value for pieces
 *   hopefully copilot can generate doxygen
+*   found a bug on generated based king position for white player
 
 </details>
 
@@ -109,8 +110,8 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
 ### TODO (first implementation version)
 
 *   command line options (file input)
-*   piece cemetary (piece symbol, times taken, for both players)
-*   move ordering
+*   ~~piece cemetery (piece symbol, times taken, for both players)~~ (v0.0.2)
+*   ~~move ordering~~ (basic move ordering v0.0.2)
 *   Zobrist Hashing for transpositions (this technique allows to update hash rather than computing it every time)
 *   improve pawn structure on the board
 *   opening book

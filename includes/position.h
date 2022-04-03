@@ -277,7 +277,7 @@ class Position {
     bool operator==(const Position &other) const;
 
   private:
-    int row; // 0-7 (0 is white the bottom row)
+    int row; // 0-7 (0 is the white bottom row)
     int col; // 0-7 (0 is the white left column)
 };
 

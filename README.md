@@ -15,7 +15,7 @@
 
 **If you ever get this in .7z, .zip, .tar.gz, .rar or whatever archive format, please ensure you do have the latest version by paying a visit to [the home repo](https://github.com/ThomasByr/chess) on GitHub !**
 
-*note* : doxygen actually can't deal with new markdown GitHub tags... please view this page on a proper web editor or even better, on GitHub
+*note* : doxygen actually can't deal with new markdown GitHub style... please view this page on a proper web editor or even better, on GitHub
 
 1. [In short](#in-short)
 2. [Prerequisites](#prerequisites)
@@ -44,7 +44,7 @@ make run-release
 
 Alternatively `make release` will produce a release version of the executable, `make debug` a debug one, `make run-release` will compile and then run a release version, `make run-debug` will compile and run a debug version with valgrind, `make docs` will trigger doxygen and finally `make` builds a release version and updates the doc. You can run an existing executable with `make run`, and clean with `make clean`.
 
-Moves should be typed in the command line (the program should be asking for it though). Moves are defined by the starting position and the end position, for example b1c3 which would (at the beggining of the game) move the white knight. To play a sample game, please type `make run < tests/play.txt` and then hit enter.
+Moves should be typed in the command line (the program should be asking for it though). Moves are defined by the starting position and the end position, for example b1c3 which would (at the beggining of the game) move the white knight. To play a sample game, please type `make run < tests/play.txt` and then hit enter. To only view error messages on auto-play, please redirect standard output (only) `... > /dev/null` as all errors are thrown to standard error.
 
 The list of known and supported move patterns is as follow :
 
@@ -90,14 +90,9 @@ The list of known and supported move patterns is as follow :
 Please refer to the [changelog.md](changelog.md) file for the full history.
 
 <details>
-    <summary> v0.0.2 : improving AI (click here to expand) </summary>
+    <summary> v0.0.3 : accelerating search (click here to expand) </summary>
 
-*   finding bugs on copy is going to take a while
-*   valgrind is crying : millions of pieces are created and are not freed by the os... god dammit ubuntu
-*   added the ending string which is not even standard notation (I called it FEN anyway)
-*   found a bug on get_weighted_value for pieces
-*   hopefully copilot can generate doxygen
-*   found a bug on generated based king position for white player
+*   move ordering have reduced move evaluation by 10 times just by putting attacks before
 
 </details>
 
@@ -116,4 +111,4 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
 *   improve pawn structure on the board
 *   opening book
 *   endgame
-*   iterative deepening (store best move first to prune)
+*   iterative deepening (store best move first for next iteration)

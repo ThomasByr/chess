@@ -16,3 +16,4 @@
     *   added the ending string which is not even standard notation (I called it FEN anyway)
     *   found a bug on get_weighted_value for pieces
     *   hopefully copilot can generate doxygen
+    *   found a bug on generated based king position for white player

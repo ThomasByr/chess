@@ -34,11 +34,11 @@ bool Position::operator==(const Position &other) const {
 const Position Position::king_position(Color color) {
     switch (color) {
     case Color::White:
-        return Position(7, 4);
-    case Color::Black:
         return Position(0, 4);
+    case Color::Black:
+        return Position(7, 4);
     default:
-        return Position();
+        panic("Invalid color");
     }
 }
 
@@ -49,7 +49,7 @@ const Position Position::queen_position(Color color) {
     case Color::Black:
         return Position(7, 3);
     default:
-        return Position();
+        panic("Invalid color");
     }
 }
 
@@ -139,7 +139,7 @@ bool Position::is_starting_pawn(Color color) const {
     case Color::Black:
         return row == 6;
     default:
-        return false;
+        panic("Invalid color");
     }
 }
 

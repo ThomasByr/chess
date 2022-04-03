@@ -22,7 +22,6 @@ class CastlingRights {
      *
      */
     CastlingRights();
-    CastlingRights(const CastlingRights &other);
     ~CastlingRights();
 
     /**

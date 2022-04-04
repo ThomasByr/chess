@@ -44,6 +44,8 @@ Alternatively `make release` will produce a release version of the executable, `
 
 Moves should be typed in the command line (the program should be asking for it though). Moves are defined by the starting position and the end position, for example b1c3 which would (at the beggining of the game) move the white knight. To play a sample game, please type `make run < tests/play.txt` and then hit enter. To only view error messages on auto-play, please redirect standard output (only) `... > /dev/null` as all errors are thrown to standard error.
 
+Since v0.1.0, some optional arguments can be typed in the command line from "f:m:n:vqhV". At the time of writing, only vqhV are implemented but that is susceptible to change. Arguments have a short and a long version, please type `./bin/echecs --help` to learn more.
+
 The list of known and supported move patterns is as follow :
 
 | move typed                                                                                                     | action                                        |
@@ -88,10 +90,10 @@ The list of known and supported move patterns is as follow :
 Please refer to the [changelog.md](changelog.md) file for the full history.
 
 <details>
-    <summary> v0.0.3 : accelerating search (click here to expand) </summary>
+    <summary> v0.1.0 : first release package version (click here to expand) </summary>
 
-*   move ordering has reduced move evaluation by 10 times just by putting attacks before
-*   avoided the access (when possible on pointers) to direct members of classes
+*   app class
+*   command line arguments from "f:m:n:vqhV" (`./bin/echecs --help` to learn more)
 
 </details>
 
@@ -111,3 +113,4 @@ TODO (first implementation version)
 *   opening book
 *   endgame
 *   iterative deepening (store best move first for next iteration)
+*   pawn promotion

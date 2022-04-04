@@ -18,5 +18,7 @@
     *   hopefully copilot can generate doxygen
     *   found a bug on generated based king position for white player
 3.  **v0.0.3** accelerating search
-    *   move ordering have reduced move evaluation by 10 times just by putting attacks before
+    *   move ordering has reduced move evaluation by 10 times just by putting attacks before
     *   avoided the access (when possible on pointers) to direct members of classes
+4.  **v0.1.0** first release package version
+    *   app class

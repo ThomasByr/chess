@@ -23,8 +23,6 @@
 4. [F.A.Q.](#faq)
 5. [Changelog](#changelog)
 6. [Bugs & TODO](#bugs--todo)
-   1. [Bugs (final correction version)](#bugs-final-correction-version)
-   2. [TODO (first implementation version)](#todo-first-implementation-version)
 
 ## In short
 
@@ -93,16 +91,17 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
     <summary> v0.0.3 : accelerating search (click here to expand) </summary>
 
 *   move ordering have reduced move evaluation by 10 times just by putting attacks before
+*   avoided the access (when possible on pointers) to direct members of classes
 
 </details>
 
 ## Bugs & TODO
 
-### Bugs (final correction version)
+Bugs (final correction version)
 
 *   ~~AI is actually stupid, supposed bug on get_legal_moves on pieces~~ (v0.0.2)
 
-### TODO (first implementation version)
+TODO (first implementation version)
 
 *   command line options (file input)
 *   ~~piece cemetery (piece symbol, times taken, for both players)~~ (v0.0.2)

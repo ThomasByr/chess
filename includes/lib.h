@@ -8,6 +8,12 @@
 #include <utility>
 #include <vector>
 
+#define __AUTHOR__ "ThomasByr"
+
+#define __VERSION_MAJOR__ 0
+#define __VERSION_MINOR__ 1
+#define __VERSION_PATCH__ 0
+
 void panic [[noreturn]] (const std::string &msg);
 
 class Square;

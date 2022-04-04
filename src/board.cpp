@@ -666,24 +666,24 @@ GameResult Board::play_move(const Move &move) {
     GameResult result;
 
     if (move.move_type() == Move::Resign) {
-        result.result_type = GameResult::Victory;
-        result.next_board =
+        result.result_type() = GameResult::Victory;
+        result.next_board() =
             this->remove_all(current_color).queen_all(!current_color);
-        result.winner = !current_color;
+        result.winner() = !current_color;
     } else if (this->is_legal_move(move, current_color)) {
         Board next_turn = this->apply_move(move).change_turn();
         if (next_turn.is_checkmate()) {
-            result.result_type = GameResult::Victory;
-            result.winner = current_color;
+            result.result_type() = GameResult::Victory;
+            result.winner() = current_color;
         } else if (next_turn.is_stalemate()) {
-            result.result_type = GameResult::Stalemate;
+            result.result_type() = GameResult::Stalemate;
         } else {
-            result.result_type = GameResult::Continuing;
+            result.result_type() = GameResult::Continuing;
         }
-        result.next_board = next_turn;
+        result.next_board() = next_turn;
     } else {
-        result.result_type = GameResult::IllegalMove;
-        result.move = move;
+        result.result_type() = GameResult::IllegalMove;
+        result.move() = move;
     }
 
     return result;

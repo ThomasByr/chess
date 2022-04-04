@@ -22,3 +22,4 @@
     *   avoided the access (when possible on pointers) to direct members of classes
 4.  **v0.1.0** first release package version
     *   app class
+    *   command line arguments from "f:m:n:vqhV" (`./bin/echecs --help` to learn more)

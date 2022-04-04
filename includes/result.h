@@ -17,12 +17,6 @@ class GameResult {
     static const int Stalemate = 2;
     static const int IllegalMove = 3;
 
-    int result_type;
-
-    Color winner;     // Color::White or Color::Black if result_type == Victory
-    Board next_board; // Board after the move if result_type == Continuing
-    Move move;        // Move that was played if result_type == IllegalMove
-
     /**
      * @brief GameResult constructor
      *
@@ -31,5 +25,22 @@ class GameResult {
     GameResult();
     ~GameResult();
 
+    const int &result_type() const; // accessor
+    int &result_type();             // mutator
+
+    const Color &winner() const; // accessor
+    Color &winner();             // mutator
+
+    const Board &next_board() const; // accessor
+    Board &next_board();             // mutator
+
+    const Move &move() const; // accessor
+    Move &move();             // mutator
+
   private:
+    int result_type_;
+
+    Color winner_;     // Color::White or Color::Black if result_type == Victory
+    Board next_board_; // Board after the move if result_type == Continuing
+    Move move_;        // Move that was played if result_type == IllegalMove
 };

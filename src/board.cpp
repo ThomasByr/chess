@@ -47,7 +47,7 @@ BoardBuilder::~BoardBuilder() {}
 
 BoardBuilder BoardBuilder::row(const Piece &piece) {
     Position pos = piece.get_pos();
-    while (pos.get_col() > 0) {
+    while (pos.col() > 0) {
         pos = pos.next_left();
     }
 
@@ -61,7 +61,7 @@ BoardBuilder BoardBuilder::row(const Piece &piece) {
 
 BoardBuilder BoardBuilder::column(const Piece &piece) {
     Position pos = piece.get_pos();
-    while (pos.get_row() > 0) {
+    while (pos.row() > 0) {
         pos = pos.next_below();
     }
 
@@ -237,11 +237,11 @@ double Board::value_for(const Color &ally_color) const {
 Color Board::get_current_player_color() const { return turn; }
 
 Square Board::get_square(const Position &pos) const {
-    return this->squares[((7 - pos.get_row()) * 8 + pos.get_col())];
+    return this->squares[((7 - pos.row()) * 8 + pos.col())];
 }
 
 void Board::set_square(const Position &pos, const Square &square) {
-    this->squares[((7 - pos.get_row()) * 8 + pos.get_col())] = square;
+    this->squares[((7 - pos.row()) * 8 + pos.col())] = square;
 }
 
 void Board::add_piece(Piece *piece) {
@@ -442,12 +442,11 @@ Board Board::move_piece(const Position &from, const Position &to) {
     result.set_square(from, Square::from_piece(nullptr));
 
     if ((piece->get_type() == Piece::Pawn) &&
-        (to.get_row() == 0 || to.get_row() == 7)) {
+        (to.row() == 0 || to.row() == 7)) {
         piece = new Queen(piece->get_color(), piece->get_pos());
     }
 
-    if ((piece->is_starting_pawn()) &&
-        abs(from.get_row() - to.get_row()) == 2) {
+    if ((piece->is_starting_pawn()) && abs(from.row() - to.row()) == 2) {
         result.en_passant = new Position(to.pawn_back(piece->get_color()));
     }
 
@@ -648,10 +647,9 @@ Board Board::apply_move(const Move &move) {
             if ((*en_passant == from.pawn_up(player_color).next_left() ||
                  *en_passant == from.pawn_up(player_color).next_right()) &&
                 *en_passant == to) {
-                result.squares[(7 -
-                                en_passant->pawn_back(player_color).get_row()) *
+                result.squares[(7 - en_passant->pawn_back(player_color).row()) *
                                    8 +
-                               en_passant->get_col()] = EMPTY_SQUARE;
+                               en_passant->col()] = EMPTY_SQUARE;
             }
         }
         return result;

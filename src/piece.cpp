@@ -144,7 +144,7 @@ double Pawn::get_weighted_value() const {
         weights = BLACK_PAWN_POSITION_WEIGHTS;
         break;
     }
-    return weights[7 - this->get_pos().get_row()][this->get_pos().get_col()] +
+    return weights[7 - this->get_pos().row()][this->get_pos().col()] +
            (double)this->get_material_value() * 10.;
 }
 
@@ -324,7 +324,7 @@ double King::get_weighted_value() const {
         weights = BLACK_KING_POSITION_WEIGHTS;
         break;
     }
-    return weights[7 - this->get_pos().get_row()][this->get_pos().get_col()] +
+    return weights[7 - this->get_pos().row()][this->get_pos().col()] +
            (double)this->get_material_value() * 10.;
 }
 
@@ -446,7 +446,7 @@ double Queen::get_weighted_value() const {
         weights = BLACK_QUEEN_POSITION_WEIGHTS;
         break;
     }
-    return weights[7 - this->get_pos().get_row()][this->get_pos().get_col()] +
+    return weights[7 - this->get_pos().row()][this->get_pos().col()] +
            (double)this->get_material_value() * 10.;
 }
 
@@ -462,7 +462,7 @@ std::vector<Move> Queen::get_legal_moves(Board &board) {
     Position pos = this->get_pos();
 
     for (unsigned row = 0; row < 8; row++) {
-        Position new_pos = Position(row, pos.get_col());
+        Position new_pos = Position(row, pos.col());
         if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
             new_pos.is_orthogonal_to(pos)) {
             Move move;
@@ -473,7 +473,7 @@ std::vector<Move> Queen::get_legal_moves(Board &board) {
         }
     }
     for (unsigned col = 0; col < 8; col++) {
-        Position new_pos = Position(pos.get_row(), col);
+        Position new_pos = Position(pos.row(), col);
         if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
             new_pos.is_orthogonal_to(pos)) {
             Move move;
@@ -598,7 +598,7 @@ double Rook::get_weighted_value() const {
         weights = BLACK_ROOK_POSITION_WEIGHTS;
         break;
     }
-    return weights[7 - this->get_pos().get_row()][this->get_pos().get_col()] +
+    return weights[7 - this->get_pos().row()][this->get_pos().col()] +
            (double)this->get_material_value() * 10.;
 }
 
@@ -618,7 +618,7 @@ std::vector<Move> Rook::get_legal_moves(Board &board) {
     Position pos = this->get_pos();
 
     for (unsigned row = 0; row < 8; row++) {
-        Position new_pos = Position(row, pos.get_col());
+        Position new_pos = Position(row, pos.col());
         if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
             new_pos.is_orthogonal_to(pos)) {
             Move move;
@@ -629,7 +629,7 @@ std::vector<Move> Rook::get_legal_moves(Board &board) {
         }
     }
     for (unsigned col = 0; col < 8; col++) {
-        Position new_pos = Position(pos.get_row(), col);
+        Position new_pos = Position(pos.row(), col);
         if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
             new_pos.is_orthogonal_to(pos)) {
             Move move;
@@ -731,7 +731,7 @@ double Bishop::get_weighted_value() const {
         weights = BLACK_BISHOP_POSITION_WEIGHTS;
         break;
     }
-    return weights[7 - this->get_pos().get_row()][this->get_pos().get_col()] +
+    return weights[7 - this->get_pos().row()][this->get_pos().col()] +
            (double)this->get_material_value() * 10.;
 }
 
@@ -851,7 +851,7 @@ double Knight::get_weighted_value() const {
         weights = BLACK_KNIGHT_POSITION_WEIGHTS;
         break;
     }
-    return weights[7 - this->get_pos().get_row()][this->get_pos().get_col()] +
+    return weights[7 - this->get_pos().row()][this->get_pos().col()] +
            (double)this->get_material_value() * 10.;
 }
 

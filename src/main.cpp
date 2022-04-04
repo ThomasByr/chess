@@ -130,30 +130,30 @@ int main() {
 
         GameResult r;
         std::cout << "\n";
-        switch ((r = board.play_move(m)).result_type) {
+        switch ((r = board.play_move(m)).result_type()) {
         case GameResult::Continuing:
-            board = r.next_board;
+            board = r.next_board();
             std::cout << board << std::endl;
             history.push_back(m);
             break;
         case GameResult::Victory:
-            std::cout << r.next_board << "\n";
-            std::cout << !r.winner << " loses. " << r.winner
+            std::cout << r.next_board() << "\n";
+            std::cout << !r.winner() << " loses. " << r.winner()
                       << " is victorious." << std::endl;
             history.push_back(m);
             is_running = false;
-            board = r.next_board;
+            board = r.next_board();
             break;
         case GameResult::IllegalMove:
             if (is_running) {
-                std::cerr << r.move << " is an illegal move." << std::endl;
+                std::cerr << r.move() << " is an illegal move." << std::endl;
             }
             break;
         case GameResult::Stalemate:
             std::cout << "Drawn game." << std::endl;
             history.push_back(m);
             is_running = false;
-            board = r.next_board;
+            board = r.next_board();
             break;
         }
     }

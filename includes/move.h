@@ -39,7 +39,7 @@ class Move {
      * @param move_string a string representing a move
      * @return int - the type of the move (also positionned in the object)
      */
-    int from_string(const std::string &move_string);
+    int update_from_string(const std::string &move_string);
 
     /**
      * @brief fmt a move

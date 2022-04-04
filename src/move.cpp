@@ -20,7 +20,7 @@ const Position &Move::from() const { return from_; }
 
 const Position &Move::to() const { return to_; }
 
-int Move::from_string(const std::string &move_string) {
+int Move::update_from_string(const std::string &move_string) {
     if (move_string == "resign" || move_string == "resigns") {
         this->move_type_ = Resign;
         return Resign;

@@ -1,6 +1,6 @@
 //! chess-cli
 //!
-//! Copyright (c) 2022, the chess-cli authors.
+//! Copyright (c) 2022, ThomasByr.
 //! All rights reserved.
 //!
 //! Redistribution and use in source and binary forms, with or without

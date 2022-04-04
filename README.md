@@ -90,7 +90,7 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
 <details>
     <summary> v0.0.3 : accelerating search (click here to expand) </summary>
 
-*   move ordering have reduced move evaluation by 10 times just by putting attacks before
+*   move ordering has reduced move evaluation by 10 times just by putting attacks before
 *   avoided the access (when possible on pointers) to direct members of classes
 
 </details>

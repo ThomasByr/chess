@@ -68,13 +68,15 @@ class Position {
      *
      * @return int - 0..=7
      */
-    int get_row() const;
+    const int &row() const;
+    int &row();
     /**
      * @brief returns the col number
      *
      * @return int  - 0..=7
      */
-    int get_col() const;
+    const int &col() const;
+    int &col();
 
     /**
      * @brief makes a new position with the same col but a new row
@@ -277,8 +279,8 @@ class Position {
     bool operator==(const Position &other) const;
 
   private:
-    int row; // 0-7 (0 is the white bottom row)
-    int col; // 0-7 (0 is the white left column)
+    int row_; // 0-7 (0 is the white bottom row)
+    int col_; // 0-7 (0 is the white left column)
 };
 
 const Position A1 = Position(0, 0);

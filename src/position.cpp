@@ -1,34 +1,34 @@
 #include "position.h"
 
 Position::Position() {
-    row = -1;
-    col = -1;
+    row_ = -1;
+    col_ = -1;
 }
 
 Position::Position(int row, int col) {
-    this->row = row;
-    this->col = col;
+    this->row_ = row;
+    this->col_ = col;
 }
 
 Position::Position(const std::string &position_string) {
     if (position_string.size() != 2) {
-        row = -1;
-        col = -1;
+        row_ = -1;
+        col_ = -1;
     } else {
-        row = position_string[1] - '1';
-        col = position_string[0] - 'a';
+        row_ = position_string[1] - '1';
+        col_ = position_string[0] - 'a';
     }
 }
 
 Position::~Position() {}
 
 std::ostream &operator<<(std::ostream &os, const Position &position) {
-    os << (char)('a' + position.col) << (position.row + 1);
+    os << (char)('a' + position.col_) << (position.row_ + 1);
     return os;
 }
 
 bool Position::operator==(const Position &other) const {
-    return row == other.row && col == other.col;
+    return row_ == other.row_ && col_ == other.col_;
 }
 
 const Position Position::king_position(Color color) {
@@ -54,37 +54,41 @@ const Position Position::queen_position(Color color) {
 }
 
 bool Position::is_off_board() const {
-    return row < 0 || row > 7 || col < 0 || col > 7;
+    return row_ < 0 || row_ > 7 || col_ < 0 || col_ > 7;
 }
 
 bool Position::is_on_board() const { return !is_off_board(); }
 
-int Position::get_row() const { return row; }
+const int &Position::row() const { return row_; }
 
-int Position::get_col() const { return col; }
+const int &Position::col() const { return col_; }
+
+int &Position::row() { return row_; }
+
+int &Position::col() { return col_; }
 
 Position Position::add_row(int row) const {
-    return Position(this->row + row, this->col);
+    return Position(this->row_ + row, this->col_);
 }
 
 Position Position::add_col(int col) const {
-    return Position(this->row, this->col + col);
+    return Position(this->row_, this->col_ + col);
 }
 
 bool Position::is_diagonal_to(const Position &other) const {
-    return abs(row - other.row) == abs(col - other.col);
+    return abs(row_ - other.row_) == abs(col_ - other.col_);
 }
 
 int Position::diagonal_distance(const Position &other) const {
-    return abs(row - other.row);
+    return abs(row_ - other.row_);
 }
 
 bool Position::is_orthogonal_to(const Position &other) const {
-    return row == other.row || col == other.col;
+    return row_ == other.row_ || col_ == other.col_;
 }
 
 int Position::orthogonal_distance(const Position &other) const {
-    return abs(row - other.row) + abs(col - other.col);
+    return abs(row_ - other.row_) + abs(col_ - other.col_);
 }
 
 bool Position::is_adjacent_to(const Position &other) const {
@@ -97,21 +101,25 @@ bool Position::is_adjacent_to(const Position &other) const {
     }
 }
 
-bool Position::is_below(const Position &other) const { return row < other.row; }
+bool Position::is_below(const Position &other) const {
+    return row_ < other.row_;
+}
 
-bool Position::is_above(const Position &other) const { return row > other.row; }
+bool Position::is_above(const Position &other) const {
+    return row_ > other.row_;
+}
 
 bool Position::is_left_of(const Position &other) const {
-    return col < other.col;
+    return col_ < other.col_;
 }
 
 bool Position::is_right_of(const Position &other) const {
-    return col > other.col;
+    return col_ > other.col_;
 }
 
-Position Position::next_below() const { return Position(row - 1, col); }
+Position Position::next_below() const { return Position(row_ - 1, col_); }
 
-Position Position::next_above() const { return Position(row + 1, col); }
+Position Position::next_above() const { return Position(row_ + 1, col_); }
 
 Position Position::pawn_up(Color ally_color) const {
     switch (ally_color) {
@@ -128,27 +136,27 @@ Position Position::pawn_back(Color ally_color) const {
     return pawn_up(!ally_color);
 }
 
-Position Position::next_left() const { return Position(row, col - 1); }
+Position Position::next_left() const { return Position(row_, col_ - 1); }
 
-Position Position::next_right() const { return Position(row, col + 1); }
+Position Position::next_right() const { return Position(row_, col_ + 1); }
 
 bool Position::is_starting_pawn(Color color) const {
     switch (color) {
     case Color::White:
-        return row == 1;
+        return row_ == 1;
     case Color::Black:
-        return row == 6;
+        return row_ == 6;
     default:
         panic("Invalid color");
     }
 }
 
 bool Position::is_kingside_rook() const {
-    return (row == 0 || row == 7) && col == 7;
+    return (row_ == 0 || row_ == 7) && col_ == 7;
 }
 
 bool Position::is_queenside_rook() const {
-    return (row == 0 || row == 7) && col == 0;
+    return (row_ == 0 || row_ == 7) && col_ == 0;
 }
 
 std::vector<Position> Position::diagonals_to(const Position &to) const {
@@ -206,6 +214,6 @@ std::vector<Position> Position::orthogonals_to(const Position &to) const {
 }
 
 bool Position::is_knight_move(const Position &other) const {
-    return (abs(row - other.row) == 2 && abs(col - other.col) == 1) ||
-           (abs(row - other.row) == 1 && abs(col - other.col) == 2);
+    return (abs(row_ - other.row_) == 2 && abs(col_ - other.col_) == 1) ||
+           (abs(row_ - other.row_) == 1 && abs(col_ - other.col_) == 2);
 }

@@ -25,17 +25,21 @@ class GameResult {
     GameResult();
     ~GameResult();
 
-    const int &result_type() const; // accessor
-    int &result_type();             // mutator
+    const int &result_type() const;           // accessor
+    int &result_type();                       // mutator
+    void result_type(const int &result_type); // mutator
 
-    const Color &winner() const; // accessor
-    Color &winner();             // mutator
+    const Color &winner() const;      // accessor
+    Color &winner();                  // mutator
+    void winner(const Color &winner); // mutator
 
-    const Board &next_board() const; // accessor
-    Board &next_board();             // mutator
+    const Board &next_board() const;          // accessor
+    Board &next_board();                      // mutator
+    void next_board(const Board &next_board); // mutator
 
-    const Move &move() const; // accessor
-    Move &move();             // mutator
+    const Move &move() const;    // accessor
+    Move &move();                // mutator
+    void move(const Move &move); // mutator
 
   private:
     int result_type_;

@@ -67,6 +67,10 @@ int &Position::row() { return row_; }
 
 int &Position::col() { return col_; }
 
+void Position::row(const int &row) { row_ = std::move(row); }
+
+void Position::col(const int &col) { col_ = std::move(col); }
+
 Position Position::add_row(int row) const {
     return Position(this->row_ + row, this->col_);
 }

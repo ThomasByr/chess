@@ -70,6 +70,7 @@ class Position {
      */
     const int &row() const;
     int &row();
+    void row(const int &row);
     /**
      * @brief returns the col number
      *
@@ -77,6 +78,7 @@ class Position {
      */
     const int &col() const;
     int &col();
+    void col(const int &col);
 
     /**
      * @brief makes a new position with the same col but a new row

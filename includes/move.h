@@ -25,13 +25,16 @@ class Move {
     Move();
     ~Move();
 
-    const int &move_type() const; // accessor
-    int &move_type();             // mutator
+    const int &move_type() const;         // accessor
+    int &move_type();                     // mutator
+    void move_type(const int &move_type); // mutator
 
     const Position &from() const; // accessor
     const Position &to() const;   // accessor
     Position &from();             // mutator
     Position &to();               // mutator
+    void from(const Position &from);
+    void to(const Position &to);
 
     /**
      * @brief updates a non valid move to a valid move

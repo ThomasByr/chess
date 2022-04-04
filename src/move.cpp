@@ -12,6 +12,10 @@ const int &Move::move_type() const { return move_type_; }
 
 int &Move::move_type() { return move_type_; }
 
+void Move::move_type(const int &move_type) {
+    move_type_ = std::move(move_type);
+}
+
 Position &Move::from() { return from_; }
 
 Position &Move::to() { return to_; }
@@ -19,6 +23,10 @@ Position &Move::to() { return to_; }
 const Position &Move::from() const { return from_; }
 
 const Position &Move::to() const { return to_; }
+
+void Move::from(const Position &from) { from_ = std::move(from); }
+
+void Move::to(const Position &to) { to_ = std::move(to); }
 
 int Move::update_from_string(const std::string &move_string) {
     if (move_string == "resign" || move_string == "resigns") {

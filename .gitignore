@@ -41,6 +41,7 @@ x86/
 [Ll]ib64/
 [Pp]arts/
 [Vv]ar/
+[Hh]tml/
 *.egg-info/
 .installed.cfg
 *.egg

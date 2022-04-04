@@ -119,7 +119,7 @@ int main() {
             }
             continue;
         } else {
-            int t = m.from_string(s);
+            int t = m.update_from_string(s);
             switch (t) {
             case Move::Invalid:
                 std::cerr << "Invalid move: " << s << std::endl;

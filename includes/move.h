@@ -17,10 +17,6 @@ class Move {
     static const int Resign = 3;
     static const int Invalid = 4;
 
-    int move_type;
-    Position from; // Position of the piece that is moving
-    Position to;   // Position of the piece that is moving to
-
     /**
      * @brief Move constructor
      *
@@ -28,6 +24,14 @@ class Move {
      */
     Move();
     ~Move();
+
+    const int &move_type() const; // accessor
+    int &move_type();             // mutator
+
+    const Position &from() const; // accessor
+    const Position &to() const;   // accessor
+    Position &from();             // mutator
+    Position &to();               // mutator
 
     /**
      * @brief updates a non valid move to a valid move
@@ -47,4 +51,7 @@ class Move {
     friend std::ostream &operator<<(std::ostream &os, const Move &move);
 
   private:
+    int move_type_;
+    Position from_; // Position of the piece that is moving
+    Position to_;   // Position of the piece that is moving to
 };

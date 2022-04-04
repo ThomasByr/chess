@@ -336,7 +336,7 @@ bool Board::is_legal_move(const Move &move, const Color &player_color) {
     Piece *piece;
     Position *en_passant;
 
-    switch (move.move_type) {
+    switch (move.move_type()) {
     case Move::Invalid:
         return false;
     case Move::KingSideCastle:
@@ -346,8 +346,8 @@ bool Board::is_legal_move(const Move &move, const Color &player_color) {
     case Move::Resign:
         return true;
     case Move::PieceMove:
-        Position from = move.from;
-        Position to = move.to;
+        Position from = move.from();
+        Position to = move.to();
 
         piece = this->get_piece(from);
         if (piece == nullptr) {
@@ -603,7 +603,7 @@ Board Board::apply_move(const Move &move) {
     Color player_color;
     Board result;
 
-    switch (move.move_type) {
+    switch (move.move_type()) {
     case Move::KingSideCastle:
         king_pos = this->get_king_position(this->turn);
         if (king_pos.is_off_board()) {
@@ -637,7 +637,7 @@ Board Board::apply_move(const Move &move) {
             .move_piece(rook_pos, king_pos.next_left());
 
     case Move::PieceMove:
-        from = move.from, to = move.to;
+        from = move.from(), to = move.to();
         result = this->move_piece(from, to);
 
         en_passant = this->en_passant;
@@ -667,7 +667,7 @@ GameResult Board::play_move(const Move &move) {
     Color current_color = this->get_current_player_color();
     GameResult result;
 
-    if (move.move_type == Move::Resign) {
+    if (move.move_type() == Move::Resign) {
         result.result_type = GameResult::Victory;
         result.next_board =
             this->remove_all(current_color).queen_all(!current_color);
@@ -951,10 +951,10 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
 }
 
 bool cmp(Board &board, Move a, Move b) {
-    Position a_pos_from = a.from;
-    Position a_pos_to = a.to;
-    Position b_pos_from = b.from;
-    Position b_pos_to = b.to;
+    Position a_pos_from = a.from();
+    Position a_pos_to = a.to();
+    Position b_pos_from = b.from();
+    Position b_pos_to = b.to();
 
     Piece *a_piece_from = board.get_piece(a_pos_from);
     Piece *a_piece_to = board.get_piece(a_pos_to);
@@ -989,7 +989,7 @@ std::tuple<Move, unsigned, double> Board::get_next_best_move(int depth) {
               [&](Move a, Move b) { return cmp(*this, a, b); });
     double best_move_value = -999999.;
     Move best_move = Move();
-    best_move.move_type = Move::Resign;
+    best_move.move_type() = Move::Resign;
 
     Color color = this->get_current_player_color();
     unsigned board_count = 0;
@@ -1013,7 +1013,7 @@ std::tuple<Move, unsigned, double> Board::get_next_worst_move(int depth) {
               [&](Move a, Move b) { return cmp(*this, a, b); });
     double best_move_value = -999999.;
     Move best_move = Move();
-    best_move.move_type = Move::Resign;
+    best_move.move_type() = Move::Resign;
 
     Color color = this->get_current_player_color();
     unsigned board_count = 0;

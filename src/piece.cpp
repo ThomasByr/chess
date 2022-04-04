@@ -55,9 +55,9 @@ std::vector<Move> Piece::get_valid_moves(std::vector<Move> &result,
     std::vector<Move> moves;
 
     for (Move move : result) {
-        switch (move.move_type) {
+        switch (move.move_type()) {
         case Move::PieceMove:
-            if (move.from.is_on_board() && move.to.is_on_board()) {
+            if (move.from().is_on_board() && move.to().is_on_board()) {
                 if (board.is_legal_move(move, ally_color)) {
                     moves.push_back(move);
                 }
@@ -170,9 +170,9 @@ std::vector<Move> Pawn::get_legal_moves(Board &board) {
     if (en_passant != nullptr) {
         if (*en_passant == up_left || *en_passant == up_right) {
             Move move;
-            move.move_type = Move::PieceMove;
-            move.from = pos;
-            move.to = *en_passant;
+            move.move_type() = Move::PieceMove;
+            move.from() = pos;
+            move.to() = *en_passant;
             result.push_back(move);
         }
     }
@@ -180,32 +180,32 @@ std::vector<Move> Pawn::get_legal_moves(Board &board) {
     if (next_up.is_on_board() && this->is_starting_pawn() &&
         board.has_no_piece(up) && board.has_no_piece(next_up)) {
         Move move;
-        move.move_type = Move::PieceMove;
-        move.from = pos;
-        move.to = next_up;
+        move.move_type() = Move::PieceMove;
+        move.from() = pos;
+        move.to() = next_up;
         result.push_back(move);
     }
 
     if (up.is_on_board() && board.has_no_piece(up)) {
         Move move;
-        move.move_type = Move::PieceMove;
-        move.from = pos;
-        move.to = up;
+        move.move_type() = Move::PieceMove;
+        move.from() = pos;
+        move.to() = up;
         result.push_back(move);
     }
 
     if (up_left.is_on_board() && board.has_enemy_piece(up_left, ally_color)) {
         Move move;
-        move.move_type = Move::PieceMove;
-        move.from = pos;
-        move.to = up_left;
+        move.move_type() = Move::PieceMove;
+        move.from() = pos;
+        move.to() = up_left;
         result.push_back(move);
     }
     if (up_right.is_on_board() && board.has_enemy_piece(up_right, ally_color)) {
         Move move;
-        move.move_type = Move::PieceMove;
-        move.from = pos;
-        move.to = up_right;
+        move.move_type() = Move::PieceMove;
+        move.from() = pos;
+        move.to() = up_right;
         result.push_back(move);
     }
 
@@ -351,19 +351,19 @@ std::vector<Move> King::get_legal_moves(Board &board) {
          }) {
         if (p.is_on_board() && !board.has_ally_piece(p, ally_color)) {
             Move move;
-            move.move_type = Move::PieceMove;
-            move.from = pos;
-            move.to = p;
+            move.move_type() = Move::PieceMove;
+            move.from() = pos;
+            move.to() = p;
             result.push_back(move);
         }
     }
     if (board.can_kingside_castle(ally_color)) {
         Move move;
-        move.move_type = Move::KingSideCastle;
+        move.move_type() = Move::KingSideCastle;
         result.push_back(move);
     } else if (board.can_queenside_castle(ally_color)) {
         Move move;
-        move.move_type = Move::QueenSideCastle;
+        move.move_type() = Move::QueenSideCastle;
         result.push_back(move);
     }
     return this->get_valid_moves(result, board);
@@ -466,9 +466,9 @@ std::vector<Move> Queen::get_legal_moves(Board &board) {
         if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
             new_pos.is_orthogonal_to(pos)) {
             Move move;
-            move.move_type = Move::PieceMove;
-            move.from = pos;
-            move.to = new_pos;
+            move.move_type() = Move::PieceMove;
+            move.from() = pos;
+            move.to() = new_pos;
             result.push_back(move);
         }
     }
@@ -477,9 +477,9 @@ std::vector<Move> Queen::get_legal_moves(Board &board) {
         if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
             new_pos.is_orthogonal_to(pos)) {
             Move move;
-            move.move_type = Move::PieceMove;
-            move.from = pos;
-            move.to = new_pos;
+            move.move_type() = Move::PieceMove;
+            move.from() = pos;
+            move.to() = new_pos;
             result.push_back(move);
         }
     }
@@ -489,9 +489,9 @@ std::vector<Move> Queen::get_legal_moves(Board &board) {
             if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
                 new_pos.is_diagonal_to(pos)) {
                 Move move;
-                move.move_type = Move::PieceMove;
-                move.from = pos;
-                move.to = new_pos;
+                move.move_type() = Move::PieceMove;
+                move.from() = pos;
+                move.to() = new_pos;
                 result.push_back(move);
             }
         }
@@ -622,9 +622,9 @@ std::vector<Move> Rook::get_legal_moves(Board &board) {
         if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
             new_pos.is_orthogonal_to(pos)) {
             Move move;
-            move.move_type = Move::PieceMove;
-            move.from = pos;
-            move.to = new_pos;
+            move.move_type() = Move::PieceMove;
+            move.from() = pos;
+            move.to() = new_pos;
             result.push_back(move);
         }
     }
@@ -633,9 +633,9 @@ std::vector<Move> Rook::get_legal_moves(Board &board) {
         if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
             new_pos.is_orthogonal_to(pos)) {
             Move move;
-            move.move_type = Move::PieceMove;
-            move.from = pos;
-            move.to = new_pos;
+            move.move_type() = Move::PieceMove;
+            move.from() = pos;
+            move.to() = new_pos;
             result.push_back(move);
         }
     }
@@ -752,9 +752,9 @@ std::vector<Move> Bishop::get_legal_moves(Board &board) {
             if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
                 new_pos.is_diagonal_to(pos)) {
                 Move move;
-                move.move_type = Move::PieceMove;
-                move.from = pos;
-                move.to = new_pos;
+                move.move_type() = Move::PieceMove;
+                move.from() = pos;
+                move.to() = new_pos;
                 result.push_back(move);
             }
         }
@@ -878,9 +878,9 @@ std::vector<Move> Knight::get_legal_moves(Board &board) {
          }) {
         if (p.is_on_board() && !board.has_ally_piece(p, ally_color)) {
             Move move;
-            move.move_type = Move::PieceMove;
-            move.from = pos;
-            move.to = p;
+            move.move_type() = Move::PieceMove;
+            move.from() = pos;
+            move.to() = p;
             result.push_back(move);
         }
     }

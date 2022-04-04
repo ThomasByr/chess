@@ -33,19 +33,19 @@ Move get_cpu_move(Board &board, bool best) {
 
     Piece *from;
     Piece *to;
-    switch (m.move_type) {
+    switch (m.move_type()) {
     case Move::PieceMove:
-        from = board.get_piece(m.from);
-        to = board.get_piece(m.to);
+        from = board.get_piece(m.from());
+        to = board.get_piece(m.to());
         if (from != nullptr && to != nullptr) {
-            std::cout << "take " << to->get_name() << "(" << m.to << ") ";
-            std::cout << "with " << from->get_name() << "(" << m.from << ")"
+            std::cout << "take " << to->get_name() << "(" << m.to() << ") ";
+            std::cout << "with " << from->get_name() << "(" << m.from() << ")"
                       << std::endl;
         } else if (from != nullptr && to == nullptr) {
-            std::cout << "move " << from->get_name() << "(" << m.from << ") ";
-            std::cout << "to " << m.to << std::endl;
+            std::cout << "move " << from->get_name() << "(" << m.from() << ") ";
+            std::cout << "to " << m.to() << std::endl;
         } else {
-            std::cout << "move " << m.from << " to " << m.to << std::endl;
+            std::cout << "move " << m.from() << " to " << m.to() << std::endl;
         }
         break;
     case Move::KingSideCastle:

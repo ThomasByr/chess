@@ -20,6 +20,18 @@ Move App::get_cpu_move(Board &board, bool best) {
     }
     auto end = std::chrono::high_resolution_clock::now();
 
+    std::chrono::milliseconds elapsed =
+        std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    int64_t ms = elapsed.count();
+    switch (board.get_turn_color()) {
+    case Color::White:
+        this->white_thinking_time += ms;
+        break;
+    case Color::Black:
+        this->black_thinking_time += ms;
+        break;
+    }
+
     Move m = std::get<0>(r);
     unsigned count = std::get<1>(r);
     double score = std::get<2>(r);
@@ -59,11 +71,7 @@ Move App::get_cpu_move(Board &board, bool best) {
 
     if (this->verbose()) {
         std::cout << "CPU score: " << score << std::endl;
-        std::cout << "Took "
-                  << std::chrono::duration_cast<std::chrono::milliseconds>(
-                         end - start)
-                         .count()
-                  << "ms" << std::endl;
+        std::cout << "Took " << ms << "ms" << std::endl;
     }
     return m;
 }
@@ -90,6 +98,9 @@ App::App(int argc, char *argv[]) {
     quiet_ = false;
     help_ = false;
     version_ = false;
+
+    white_thinking_time = 0;
+    black_thinking_time = 0;
 
     parse_args(argc, argv);
     check_args();
@@ -338,9 +349,16 @@ int App::run() {
         }
     }
 
-    for (Move m : history) {
-        std::cout << m << std::endl;
+    if (this->verbose()) {
+        for (Move m : history) {
+            std::cout << m << std::endl;
+        }
+        std::cout << "\ntotal moves: " << history.size() << "\n";
+        std::cout << "white cpu thinking time: " << this->white_thinking_time
+                  << "ms\n";
+        std::cout << "black cpu thinking time: " << this->black_thinking_time
+                  << "ms\n";
     }
-    std::cout << board.end_fen() << std::endl;
+    std::cout << "\n" << board.end_fen() << std::endl;
     return 0;
 }

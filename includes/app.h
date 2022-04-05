@@ -93,4 +93,7 @@ class App {
     bool quiet_;           // quiet mode
     bool help_;            // display help
     bool version_;         // display version
+
+    int64_t white_thinking_time; // white thinking time
+    int64_t black_thinking_time; // black thinking time
 };

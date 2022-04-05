@@ -6,6 +6,7 @@
 [![GitHub latest commit](https://badgen.net/github/last-commit/ThomasByr/chess)](https://gitHub.com/ThomasByr/chess/commit/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/ThomasByr/chess/graphs/commit-activity)
 
+[![CodeQL](https://github.com/ThomasByr/chess/actions/workflows/codeql.yml/badge.svg)](https://github.com/ThomasByr/chess/actions/workflows/codeql.yml)
 [![GitHub version](https://badge.fury.io/gh/ThomasByr%2Fchess.svg)](https://github.com/ThomasByr/chess)
 [![Author](https://img.shields.io/badge/author-@ThomasByr-blue)](https://github.com/ThomasByr)
 
@@ -15,7 +16,7 @@
 
 **If you ever get this in .7z, .zip, .tar.gz, .rar or whatever archive format, please ensure you do have the latest version by paying a visit to [the home repo](https://github.com/ThomasByr/chess) on GitHub !**
 
-*note* : doxygen actually can't deal with new markdown GitHub style... please view this page on a proper web editor or even better, on GitHub
+_note_ : doxygen actually can't deal with new markdown GitHub style... please view this page on a proper web editor or even better, on GitHub
 
 1. [In short](#in-short)
 2. [Prerequisites](#prerequisites)
@@ -31,6 +32,17 @@ This is a school small project for OOP : a chess game in the command-line. It ha
 ## Prerequisites
 
 The base project currently has no prerequisites but to have a recent enough distribution of Linux. To run tests (as well as the debug mode), valgrind is necessary. You will need doxygen and graphviz installed in order to build the html version of the documentation.
+
+Here you can find the code standard used during dev. The compatibility version corresponds to the minimum version in which the program is guaranteed (the real min version could be much lower) to perform as originally intended in the terms and conditions mentionned in [LICENSE](LICENSE) and the [main](src/main.cpp) source file.
+
+| dev version used      | compatibility version |
+| --------------------- | --------------------- |
+| g++-11                | g++-9                 |
+| -std=c++20            | -std=c++17            |
+| valgrind-3.15.0       | \*                    |
+| python 3.10.4         | python 3.9.12         |
+| doxygen 1.8.17        | \*                    |
+| dot - graphviz 2.43.0 | \*                    |
 
 ## Usage
 
@@ -85,9 +97,9 @@ The list of known and supported move patterns is as follow :
     My guess is you did not setup g++ properly through the makefile. Compiling with -Wall -Wextra -Wpedantic should be enough to say that if it compiles on my computer, it should compile everywhere. Oh well... you can argue about that c++ standard that I use, and you could be right. Please make sure the micro-architecture -march= is right for your machine. If you are not sure, either use -march=native or remove the argument completely. Also, -std=c++20 may not be available on g++-9 and lower verions. As I assume copy constructors and some default constructors are automatically setup for you, please use -std=c++17 or higher instead if you encounter any issues. Compatibility mode for -std=c++17 has been released as of version 0.1.0.
     </details>
 
-6. <details><summary>About the doc</summary>
+6.  <details><summary>About the doc</summary>
 
-    So here is the thing. The return page does specify that we *need* to upload (and by upload, I actually mean that we need to make a static archive and upload it somewhere else but to GitHub) a html version of the doc. Doxygen (the old dinosaur) does automate the process of generating a web page based on some .md files. The Doxyfile file is set to also build class dependance graphs as well as the full history of function calls (which is why is does take a while the first time). Well I could have used Sphinx to build a beautiful version of the doc but I actually am not sure the panel of judges will know how to setup this tool (visual studio does it for you but using Windows is another debate).
+    So here is the thing. The return page does specify that we _need_ to upload (and by upload, I actually mean that we need to make a static archive and upload it somewhere else but to GitHub) a html version of the doc. Doxygen (the old dinosaur) does automate the process of generating a web page based on some .md files. The Doxyfile file is set to also build class dependance graphs as well as the full history of function calls (which is why is does take a while the first time). Well I could have used Sphinx to build a beautiful version of the doc but I actually am not sure the panel of judges will know how to setup this tool (visual studio does it for you but using Windows is another debate).
     </details>
 
 ## Changelog
@@ -97,10 +109,11 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
 <details>
     <summary> v0.1.0 : first release package version (click here to expand) </summary>
 
-*   app class
-*   command line arguments from `"f:m:n:vqhV"` (`./bin/echecs --help` to learn more)
-*   released a compatibility mode for c++17
-*   makefile does not use g++11 explicitely
+- app class
+- command line arguments from `"f:m:n:vqhV"` (`./bin/echecs --help` to learn more)
+- released a compatibility mode for c++17
+- makefile does not use g++11 explicitely
+- github workflow for security checks
 
 </details>
 
@@ -108,16 +121,16 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
 
 Bugs (final correction version)
 
-*   ~~AI is actually stupid, supposed bug on get_legal_moves on pieces~~ (v0.0.2)
+- ~~AI is actually stupid, supposed bug on get_legal_moves on pieces~~ (v0.0.2)
 
 TODO (first implementation version)
 
-*   command line options (file input)
-*   ~~piece cemetery (piece symbol, times taken, for both players)~~ (v0.0.2)
-*   ~~move ordering~~ (basic move ordering v0.0.2)
-*   Zobrist Hashing for transpositions (this technique allows to update hash rather than computing it every time)
-*   improve pawn structure on the board
-*   opening book
-*   endgame
-*   iterative deepening (store best move first for next iteration)
-*   pawn promotion
+- ~~command line options (file input)~~ (v0.1.0)
+- ~~piece cemetery (piece symbol, times taken, for both players)~~ (v0.0.2)
+- ~~move ordering~~ (basic v0.0.2)
+- Zobrist Hashing for transpositions (this technique allows to update hash rather than computing it every time)
+- improve pawn structure on the board
+- opening book
+- endgame
+- iterative deepening (store best move first for next iteration)
+- pawn promotion

@@ -315,7 +315,9 @@ int App::run() {
             history.push_back(m);
             break;
         case GameResult::Victory:
-            std::cout << r.next_board() << "\n";
+            if (!this->quiet()) {
+                std::cout << r.next_board() << "\n";
+            }
             std::cout << !r.winner() << " loses. " << r.winner()
                       << " is victorious." << std::endl;
             history.push_back(m);

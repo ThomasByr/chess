@@ -30,7 +30,7 @@ This is a school small project for OOP : a chess game in the command-line. It ha
 
 ## Prerequisites
 
-The base project currently has no prerequisites but to have a recent enough distribution of Linux. To run tests (as well as the debug mode), valgrind is necessary. You will need doxygen and graphviz installed in order to build the html version of the documentation. The current makefile is set for g++-11 and the znver3 micro-architecture (Ryzen Zen3), you should modify it if needed.
+The base project currently has no prerequisites but to have a recent enough distribution of Linux. To run tests (as well as the debug mode), valgrind is necessary. You will need doxygen and graphviz installed in order to build the html version of the documentation.
 
 ## Usage
 
@@ -82,7 +82,7 @@ The list of known and supported move patterns is as follow :
 
 5.  <details><summary>The project does not even compile, are you for real ?</summary>
 
-    My guess is you did not setup g++ properly through the makefile. Compiling with -Wall -Wextra -Wpedantic should be enough to say that if it compiles on my computer, it should compile everywhere. Oh well... you can argue about that c++ standard that I use, and you could be right. Please make sure the micro-architecture -march= is right for your machine. If you are not sure, either use -march=native or remove the argument completely. Also, -std=c++20 may not be available on g++-9 and lower verions. As I assume copy constructors and some default constructors are automatically setup for you, please use -std=c++17 or higher instead if you encounter any issues.
+    My guess is you did not setup g++ properly through the makefile. Compiling with -Wall -Wextra -Wpedantic should be enough to say that if it compiles on my computer, it should compile everywhere. Oh well... you can argue about that c++ standard that I use, and you could be right. Please make sure the micro-architecture -march= is right for your machine. If you are not sure, either use -march=native or remove the argument completely. Also, -std=c++20 may not be available on g++-9 and lower verions. As I assume copy constructors and some default constructors are automatically setup for you, please use -std=c++17 or higher instead if you encounter any issues. Compatibility mode for -std=c++17 has been released as of version 0.1.0.
     </details>
 
 6. <details><summary>About the doc</summary>
@@ -98,7 +98,9 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
     <summary> v0.1.0 : first release package version (click here to expand) </summary>
 
 *   app class
-*   command line arguments from "f:m:n:vqhV" (`./bin/echecs --help` to learn more)
+*   command line arguments from `"f:m:n:vqhV"` (`./bin/echecs --help` to learn more)
+*   released a compatibility mode for c++17
+*   makefile does not use g++11 explicitely
 
 </details>
 

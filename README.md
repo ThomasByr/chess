@@ -1,4 +1,4 @@
-# <img src="assets/chessmate.png" alt="chessmate" width="3%"/> Chess Game in C++
+# <img src="assets/chessmate.png" alt="icon" width="3%"/> Chess Game in C++
 
 [![Linux](https://svgshare.com/i/Zhy.svg)](https://docs.microsoft.com/en-us/windows/wsl/tutorials/gui-apps)
 [![GitHub license](https://img.shields.io/github/license/ThomasByr/chess)](https://github.com/ThomasByr/chess/blob/master/LICENSE)
@@ -30,7 +30,7 @@ This is a school small project for OOP : a chess game in the command-line. It ha
 
 ## Prerequisites
 
-This project currently has no prerequisites but to have a recent enough distribution of Linux. To run tests (as well as the debug mode), valgrind is necessary. You will need doxygen installed in order to build the html version of the documentation. The current makefile is set for g++-11 and the znver3 micro-architecture (Ryzen Zen3), you should modify it if needed.
+The base project currently has no prerequisites but to have a recent enough distribution of Linux. To run tests (as well as the debug mode), valgrind is necessary. You will need doxygen and graphviz installed in order to build the html version of the documentation. The current makefile is set for g++-11 and the znver3 micro-architecture (Ryzen Zen3), you should modify it if needed.
 
 ## Usage
 
@@ -83,6 +83,11 @@ The list of known and supported move patterns is as follow :
 5.  <details><summary>The project does not even compile, are you for real ?</summary>
 
     My guess is you did not setup g++ properly through the makefile. Compiling with -Wall -Wextra -Wpedantic should be enough to say that if it compiles on my computer, it should compile everywhere. Oh well... you can argue about that c++ standard that I use, and you could be right. Please make sure the micro-architecture -march= is right for your machine. If you are not sure, either use -march=native or remove the argument completely. Also, -std=c++20 may not be available on g++-9 and lower verions. As I assume copy constructors and some default constructors are automatically setup for you, please use -std=c++17 or higher instead if you encounter any issues.
+    </details>
+
+6. <details><summary>About the doc</summary>
+
+    So here is the thing. The return page does specify that we *need* to upload (and by upload, I actually mean that we need to make a static archive and upload it somewhere else but to GitHub) a html version of the doc. Doxygen (the old dinosaur) does automate the process of generating a web page based on some .md files. The Doxyfile file is set to also build class dependance graphs as well as the full history of function calls (which is why is does take a while the first time). Well I could have used Sphinx to build a beautiful version of the doc but I actually am not sure the panel of judges will know how to setup this tool (visual studio does it for you but using Windows is another debate).
     </details>
 
 ## Changelog

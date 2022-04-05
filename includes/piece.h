@@ -140,6 +140,11 @@ static double BLACK_PAWN_POSITION_WEIGHTS[8][8] = {
     {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
 };
 
+/**
+* @brief The Piece class
+*
+* This class represents a pure virtual Piece object.
+*/
 class Piece {
   public:
     static const int None = 0;

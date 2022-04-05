@@ -31,6 +31,10 @@ bool Position::operator==(const Position &other) const {
     return row_ == other.row_ && col_ == other.col_;
 }
 
+bool Position::operator!=(const Position &other) const {
+    return !(*this == other);
+}
+
 const Position Position::king_position(Color color) {
     switch (color) {
     case Color::White:

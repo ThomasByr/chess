@@ -279,6 +279,7 @@ class Position {
      * @return false - otherwise
      */
     bool operator==(const Position &other) const;
+    bool operator!=(const Position &other) const;
 
   private:
     int row_; // 0-7 (0 is the white bottom row)

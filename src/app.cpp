@@ -192,9 +192,10 @@ void App::parse_args(int argc, char *argv[]) {
             version_ = true;
             break;
         default:
-            ss << "Unknown option: " << (char)opt << std::endl;
-            get_help(ss.str());
-            panic("");
+            // ss << "Unknown option: " << (char)opt << std::endl;
+            // get_help(ss.str());
+            // panic("");
+            break;
         }
     }
 }
@@ -285,6 +286,9 @@ int App::run() {
         } else if (s == "worst" || s == "w") {
             std::cout << "Waiting for CPU to choose worst move..." << std::endl;
             m = get_cpu_move(board, false);
+        } else if (s == "show" || s == "s") {
+            std::cout << board << std::endl;
+            continue;
         } else if (s == "rate" || s == "r") {
             double score = board.score();
             std::cout << "Score: " << score << std::endl;
@@ -293,13 +297,14 @@ int App::run() {
             board = board.change_turn();
             std::cout << board << std::endl;
             continue;
-        } else if (s == "/quit") {
+        } else if (s == "/quit" || s == "/q" || s == "/") {
             is_running = false;
-        } else if (s == "history") {
+        } else if (s == "history" || s == "h") {
             for (std::vector<Move>::size_type i = 0; i < history.size(); i++) {
                 if (i < history.size() - 1) {
-                    std::cout << history[i] << " " << history[i + 1]
+                    std::cout << history[i] << " | " << history[i + 1]
                               << std::endl;
+                    i++;
                 } else {
                     std::cout << history[i] << std::endl;
                 }

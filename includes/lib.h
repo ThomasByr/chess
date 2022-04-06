@@ -15,6 +15,13 @@
 #define __VERSION_MINOR__ 1
 #define __VERSION_PATCH__ 0
 
+#define chk(op)           \
+    do {                  \
+        if ((op) == -1) { \
+            panic(#op);   \
+        }                 \
+    } while (0)
+
 void panic [[noreturn]] (const std::string &msg);
 
 class Square;

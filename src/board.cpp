@@ -981,7 +981,7 @@ bool cmp(Board &board, Move a, Move b) {
     return false;
 }
 
-std::tuple<Move, unsigned, double> Board::get_next_best_move(int depth) {
+std::tuple<Move, u_int64_t, double> Board::get_next_best_move(int depth) {
     std::vector<Move> legal_moves = this->get_legal_moves();
     std::sort(legal_moves.begin(), legal_moves.end(),
               [&](Move a, Move b) { return cmp(*this, a, b); });
@@ -990,7 +990,7 @@ std::tuple<Move, unsigned, double> Board::get_next_best_move(int depth) {
     best_move.move_type() = Move::Resign;
 
     Color color = this->get_current_player_color();
-    unsigned board_count = 0;
+    u_int64_t board_count = 0;
 
     for (Move m : legal_moves) {
         double child_board_value = this->apply_eval_move(m).minimax(
@@ -1005,7 +1005,7 @@ std::tuple<Move, unsigned, double> Board::get_next_best_move(int depth) {
     return std::make_tuple(best_move, board_count, best_move_value);
 }
 
-std::tuple<Move, unsigned, double> Board::get_next_worst_move(int depth) {
+std::tuple<Move, u_int64_t, double> Board::get_next_worst_move(int depth) {
     std::vector<Move> legal_moves = this->get_legal_moves();
     std::sort(legal_moves.begin(), legal_moves.end(),
               [&](Move a, Move b) { return cmp(*this, a, b); });
@@ -1014,7 +1014,7 @@ std::tuple<Move, unsigned, double> Board::get_next_worst_move(int depth) {
     best_move.move_type() = Move::Resign;
 
     Color color = this->get_current_player_color();
-    unsigned board_count = 0;
+    u_int64_t board_count = 0;
 
     for (Move m : legal_moves) {
         double child_board_value = this->apply_eval_move(m).minimax(
@@ -1030,7 +1030,7 @@ std::tuple<Move, unsigned, double> Board::get_next_worst_move(int depth) {
 }
 
 double Board::minimax(int depth, double alpha, double beta, bool is_maximizing,
-                      Color getting_move_for, unsigned *board_count) {
+                      Color getting_move_for, u_int64_t *board_count) {
     *board_count += 1;
 
     if (depth <= 0) {

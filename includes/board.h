@@ -135,19 +135,19 @@ class Board {
      * moves of lookahead.
      *
      * @param depth depth
-     * @return std::tuple<Move, unsigned, double> - best move, number of
+     * @return std::tuple<Move, u_int64_t, double> - best move, number of
      * nodes, evaluation value
      */
-    std::tuple<Move, unsigned, double> get_next_best_move(int depth);
+    std::tuple<Move, u_int64_t, double> get_next_best_move(int depth);
     /**
      * @brief Get the worst move for the current player with `depth` number of
      * moves of lookahead.
      *
      * @param depth depth
-     * @return std::tuple<Move, unsigned, double> - worst move, number of
+     * @return std::tuple<Move, u_int64_t, double> - worst move, number of
      * nodes, evaluation value
      */
-    std::tuple<Move, unsigned, double> get_next_worst_move(int depth);
+    std::tuple<Move, u_int64_t, double> get_next_worst_move(int depth);
     /**
      * @brief Perform minimax on a certain position, and get the minimum or
      * maximum value for a board. To get the best move, you minimize the values
@@ -160,7 +160,7 @@ class Board {
      * algorithm.
      */
     double minimax(int depth, double alpha, double beta, bool is_maximizing,
-                   Color getting_move_for, unsigned *board_count);
+                   Color getting_move_for, u_int64_t *board_count);
 
     /**
      * @brief Get the square object at a given position
@@ -420,8 +420,8 @@ class Board {
     Position *en_passant; // en passant position
     Color turn;           // current turn color
 
-    unsigned white_takes[7]; // black pieces count taken by white
-    unsigned black_takes[7]; // white pieces count taken by black
+    unsigned short white_takes[7]; // black pieces count taken by white
+    unsigned short black_takes[7]; // white pieces count taken by black
 };
 
 /**

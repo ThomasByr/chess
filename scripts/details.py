@@ -27,7 +27,7 @@ def get_changes() -> list[str]:
     chg: list[str] = []
     for e in reversed(changelog):
         chg.append(e)
-        if e[0] != "-":
+        if e[0] != "-" and e[0] != "*":
             break
     return list(reversed(chg))
 

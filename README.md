@@ -58,7 +58,7 @@ Moves should be typed in the command line (the program should be asking for it t
 
 Since v0.1.0, some optional arguments can be typed in the command line from `"f:m:n:vqhV"`. At the time of writing, only vqhV are implemented but that is susceptible to change. Arguments have a short and a long version, please type `./bin/echecs --help` to learn more.
 
-The list of known and supported move patterns is as follow :
+The list of known and supported move patterns and commands is as follow :
 
 | move typed                                                                                                     | action                                        |
 | -------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
@@ -67,8 +67,11 @@ The list of known and supported move patterns is as follow :
 | <details><summary>`kingside castle`</summary>or `castle kingside` or `O-O` or `0-0` or `o-o`</details>         | castle kingside                               |
 | <details><summary>` `</summary>or `best` or `b`</details>                                                      | the computer will play the best move for you  |
 | <details><summary>`worst`</summary>or `w`</details>                                                            | the computer will play the worst move for you |
+| <details><summary>`show`</summary>or `s`</details>                                                             | to display the current board                  |
 | <details><summary>`pass`</summary>or `p`</details>                                                             | to immediately change turn without playing    |
 | <details><summary>`rate`</summary>or `r`</details>                                                             | to rate the current position                  |
+| <details><summary>`history`</summary>or `h`</details>                                                          | to show the valid moves history               |
+| <details><summary>`/quit`</summary>or `/q` or `/`</details>                                                    | to quit the game and display the final state  |
 
 ## F.A.Q.
 

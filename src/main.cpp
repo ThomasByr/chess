@@ -66,7 +66,12 @@
 
 #include "app.h"
 
+volatile sig_atomic_t received = 0;
+volatile sig_atomic_t ctrl_c = 0;
+volatile sig_atomic_t ctrl_z = 0;
+
 int main(int argc, char *argv[]) {
+    std_debug("running in debug mode");
     App app = App(argc, argv);
     // std::cout << app << std::endl;
 

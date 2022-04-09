@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS = -march=native -pipe -std=c++17 -pedantic -Wall -Wextra -Werror
+CFLAGS = -march=native -pipe -std=gnu++17 -pedantic -Wall -Wextra -Werror
 LDLIBS =
 
 INCLUDE_PATH = ./includes
@@ -25,7 +25,7 @@ docs:
 	@doxygen ./Doxyfile > /dev/null 2>&1
 	@echo "\033[97mDocumentation built!\033[0m"
 
-debug: CFLAGS += -Og -DDEBUG -g
+debug: CFLAGS += -Og -DDEBUG -g -ggdb
 debug: $(PATH_TO_EXE)
 	@echo "\033[93mRunning in debug mode!\033[0m"
 

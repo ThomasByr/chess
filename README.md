@@ -21,9 +21,11 @@ _note_ : doxygen actually can't deal with new markdown GitHub style... please vi
 1. [In short](#in-short)
 2. [Prerequisites](#prerequisites)
 3. [Usage](#usage)
-4. [F.A.Q.](#faq)
-5. [Changelog](#changelog)
-6. [Bugs & TODO](#bugs--todo)
+4. [Charts](#charts)
+5. [License](#license)
+6. [F.A.Q.](#faq)
+7. [Changelog](#changelog)
+8. [Bugs & TODO](#bugs--todo)
 
 ## In short
 
@@ -38,7 +40,7 @@ Here you can find the code standard used during dev. The compatibility version c
 | dev version used      | compatibility version |
 | --------------------- | --------------------- |
 | g++-11                | g++-9                 |
-| -std=c++20            | -std=c++17            |
+| -std=gnu++20          | -std=gnu++17          |
 | valgrind-3.15.0       | \*                    |
 | python 3.10.4         | python 3.9.12         |
 | doxygen 1.8.17        | \*                    |
@@ -73,6 +75,100 @@ The list of known and supported move patterns and commands is as follow :
 | <details><summary>`history`</summary>or `h`</details>                                                          | to show the valid moves history               |
 | <details><summary>`/quit`</summary>or `/q` or `/`</details>                                                    | to quit the game and display the final state  |
 
+## Charts
+
+<details><summary>Click here to view base class diagram</summary>
+
+```mermaid
+classDiagram
+    Board <-- Square
+    Square <-- Piece
+    Piece <-- Pawn : 100
+    Piece <-- Knight : 320
+    Piece <-- Bishop : 330
+    Piece <-- Rook : 500
+    Piece <-- Queen : 900
+    Piece <-- King : 20000
+    Position --> Piece : where am I ?
+    Position <-- Square : target
+    Piece <--> Move : new Piece
+    Move --> Position
+    class Piece {
+        <<virtual>>
+        + Position pos
+        + Color color
+        + int id
+        + bool status
+        get()
+        set()
+    }
+    class Square {
+        + Piece* piece
+    }
+    class Board {
+        + Square[64] squares
+    }
+    class Position {
+        + int col
+        + int row
+    }
+    class Move {
+        Position from
+        Position to
+    }
+```
+
+</details>
+
+```mermaid
+gantt
+    title Major
+    dateFormat  YYYY-MM-DD
+    section Basic chess
+    base classes            : 2022-03-20, 1d
+    copy/clone constructors : 1d
+    section Moves
+    moves for Pawn : 2022-03-20, 2d
+    moves for all  : 2022-03-22, 1d
+    section CPU
+    get best move    : 2022-03-23, 2d
+    get worst move   : 1d
+    basic evaluation : 2022-04-9, 2d
+    section command line UI
+    base board display : 2022-03-23, 1d
+    more commands      : 2022-04-01, 1d
+```
+
+## License
+
+This Chess engine is licensed under the [GPL-3.0](LICENSE) license. Please see the [license](LICENSE) file for more details.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+- Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+
+- Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+- Neither the name of the chess-cli authors nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
 ## F.A.Q.
 
 1.  <details><summary>Why in the world is there no gui here yet ?</summary>
@@ -97,7 +193,7 @@ The list of known and supported move patterns and commands is as follow :
 
 5.  <details><summary>The project does not even compile, are you for real ?</summary>
 
-    My guess is you did not setup g++ properly through the makefile. Compiling with -Wall -Wextra -Wpedantic should be enough to say that if it compiles on my computer, it should compile everywhere. Oh well... you can argue about that c++ standard that I use, and you could be right. Please make sure the micro-architecture -march= is right for your machine. If you are not sure, either use -march=native or remove the argument completely. Also, -std=c++20 may not be available on g++-9 and lower verions. As I assume copy constructors and some default constructors are automatically setup for you, please use -std=c++17 or higher instead if you encounter any issues. Compatibility mode for -std=c++17 has been released as of version 0.1.0.
+    My guess is you did not setup g++ properly through the makefile. Compiling with -Wall -Wextra -Wpedantic should be enough to say that if it compiles on my computer, it should compile everywhere. Oh well... you can argue about that c++ standard that I use, and you could be right. Please make sure the micro-architecture -march= is right for your machine. If you are not sure, either use -march=native or remove the argument completely. Also, -std=gnu++20 may not be available on g++-9 and lower verions. As I assume copy constructors and some default constructors are automatically setup for you, please use -std=gnu++17 or higher instead if you encounter any issues. Compatibility mode for -std=gnu++17 has been released as of version 0.1.0.
     </details>
 
 6.  <details><summary>About the doc</summary>
@@ -114,9 +210,11 @@ Please refer to the [changelog.md](changelog.md) file for the full history.
 
 - app class
 - command line arguments from `"f:m:n:vqhV"` (`./bin/echecs --help` to learn more)
-- released a compatibility mode for c++17
+- released a compatibility mode for gnu++17 (c++17)
 - makefile does not use g++11 explicitely
 - github workflow for security checks
+- added signal handling and async input
+- minor improvement of the evaluation function
 
 </details>
 
@@ -136,4 +234,5 @@ TODO (first implementation version)
 - opening book
 - endgame
 - iterative deepening (store best move first for next iteration)
-- pawn promotion
+- pawn promotion (knight, bishop and rook)
+- use of standard threads for the cpu to choose moves

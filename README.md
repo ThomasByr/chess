@@ -79,18 +79,18 @@ The list of known and supported move patterns and commands is as follow :
 
 ```mermaid
 classDiagram
-    Board <|-- Square
-    Square <|-- Piece
-    Piece <|-- Pawn : 100
-    Piece <|-- Knight : 320
-    Piece <|-- Bishop : 330
-    Piece <|-- Rook : 500
-    Piece <|-- Queen : 900
-    Piece <|-- King : 20000
-    Position --|> Piece : where am I ?
-    Position <|-- Square : target
-    Piece <|--|> Move : new Piece
-    Move --|> Position
+    Board <-- Square
+    Square <-- Piece
+    Piece <-- Pawn : 100
+    Piece <-- Knight : 320
+    Piece <-- Bishop : 330
+    Piece <-- Rook : 500
+    Piece <-- Queen : 900
+    Piece <-- King : 20000
+    Position --> Piece : where am I ?
+    Position <-- Square : target
+    Piece <--> Move : new Piece
+    Move --> Position
     class Piece {
         <<virtual>>
         + Position pos

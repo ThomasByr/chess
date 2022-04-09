@@ -15,6 +15,12 @@
 #define __VERSION_MINOR__ 1
 #define __VERSION_PATCH__ 0
 
+#ifndef DEBUG
+#define std_debug(msg) (void)msg;
+#else
+#define std_debug(msg) std::cout << msg << std::endl;
+#endif
+
 #define chk(op)           \
     do {                  \
         if ((op) == -1) { \
@@ -24,6 +30,7 @@
 
 void panic [[noreturn]] (const std::string &msg);
 
+class App;
 class Square;
 class Move;
 class Position;

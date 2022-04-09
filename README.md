@@ -77,8 +77,6 @@ The list of known and supported move patterns and commands is as follow :
 
 ## Charts
 
-<details><summary>Click here to view base class diagram</summary>
-
 ```mermaid
 classDiagram
     Board <|-- Square
@@ -117,8 +115,6 @@ classDiagram
         Position to
     }
 ```
-
-</details>
 
 ```mermaid
 gantt

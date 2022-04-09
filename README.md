@@ -21,11 +21,10 @@ _note_ : doxygen actually can't deal with new markdown GitHub style... please vi
 1. [In short](#in-short)
 2. [Prerequisites](#prerequisites)
 3. [Usage](#usage)
-4. [Charts](#charts)
-5. [License](#license)
-6. [F.A.Q.](#faq)
-7. [Changelog](#changelog)
-8. [Bugs & TODO](#bugs--todo)
+4. [License](#license)
+5. [F.A.Q.](#faq)
+6. [Changelog](#changelog)
+7. [Bugs & TODO](#bugs--todo)
 
 ## In short
 
@@ -74,60 +73,6 @@ The list of known and supported move patterns and commands is as follow :
 | <details><summary>`rate`</summary>or `r`</details>                                                             | to rate the current position                  |
 | <details><summary>`history`</summary>or `h`</details>                                                          | to show the valid moves history               |
 | <details><summary>`/quit`</summary>or `/q` or `/`</details>                                                    | to quit the game and display the final state  |
-
-## Charts
-
-```mermaid
-classDiagram
-    Board <-- Square
-    Square <-- Piece
-    Position --> Piece : where am I ?
-    Position <-- Square : target
-    Piece <--> Move : new Piece
-    Move --> Position
-    class Piece {
-        <<virtual>>
-        + Position pos
-        + Color color
-        + int id
-        + bool status
-        get()
-        set()
-    }
-    class Square {
-        + Piece* piece
-    }
-    class Board {
-        + Square[64] squares
-    }
-    class Position {
-        + int col
-        + int row
-    }
-    class Move {
-        Position from
-        Position to
-    }
-```
-
-```mermaid
-gantt
-    title Major
-    dateFormat  YYYY-MM-DD
-    section Basic chess
-    base classes            : 2022-03-20, 1d
-    copy/clone constructors : 1d
-    section Moves
-    moves for Pawn : 2022-03-20, 2d
-    moves for all  : 2022-03-22, 1d
-    section CPU
-    get best move    : 2022-03-23, 2d
-    get worst move   : 1d
-    basic evaluation : 2022-04-9, 2d
-    section command line UI
-    base board display : 2022-03-23, 1d
-    more commands      : 2022-04-01, 1d
-```
 
 ## License
 
@@ -194,6 +139,25 @@ POSSIBILITY OF SUCH DAMAGE.
 ## Changelog
 
 Please refer to the [changelog.md](changelog.md) file for the full history.
+
+```mermaid
+gantt
+    title Major
+    dateFormat  YYYY-MM-DD
+    section Basic chess
+    base classes            : 2022-03-20, 1d
+    copy/clone constructors : 1d
+    section Moves
+    moves for Pawn : 2022-03-20, 2d
+    moves for all  : 2022-03-22, 1d
+    section CPU
+    get best move    : 2022-03-23, 2d
+    get worst move   : 1d
+    basic evaluation : 2022-04-9, 2d
+    section command line UI
+    base board display : 2022-03-23, 1d
+    more commands      : 2022-04-01, 1d
+```
 
 <details>
     <summary> v0.1.0 : first release package version (click here to expand) </summary>

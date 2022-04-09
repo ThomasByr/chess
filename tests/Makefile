@@ -33,7 +33,7 @@ obj/tests.o: tests.$(FILEXT)
 	$(CC) -o $@ -c $< $(CFLAGS) -isystem$(INCLUDE_PATH)
 
 
-.PHONY: clean cov
+.PHONY: clean
 clean:
 	rm -f $(OBJDIR)/*.o
 	rm -f $(OBJDIR)/*.gcda

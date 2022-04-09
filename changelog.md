@@ -28,3 +28,4 @@
     - github workflow for security checks
     - added signal handling and async input
     - minor improvement of the evaluation function
+    - added basic endgame detection and alternate king map

@@ -169,6 +169,7 @@ gantt
 - github workflow for security checks
 - added signal handling and async input
 - minor improvement of the evaluation function
+- added basic endgame detection and alternate king map
 
 </details>
 
@@ -190,3 +191,4 @@ TODO (first implementation version)
 - iterative deepening (store best move first for next iteration)
 - pawn promotion (knight, bishop and rook)
 - use of standard threads for the cpu to choose moves
+- implement a max thread limit mechanism

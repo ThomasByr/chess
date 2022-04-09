@@ -20,6 +20,7 @@ PATH_TO_EXE  = $(BINDIR)/$(TARGET)
 
 all : release docs
 
+.PHONY : docs
 docs:
 	@echo "\033[95mBuilding documentation...\033[0m"
 	@doxygen ./Doxyfile > /dev/null 2>&1
@@ -56,7 +57,7 @@ $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.$(FILEXT) $(INCLUDES)
 	$(CC) -o $@ -c $< $(CFLAGS) -isystem$(INCLUDE_PATH)
 
 
-.PHONY: clean cov
+.PHONY: clean
 clean:
 	rm -f $(OBJDIR)/*.o
 	rm -f $(OBJDIR)/*.gcda

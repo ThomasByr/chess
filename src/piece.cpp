@@ -2,6 +2,144 @@
 
 #include "board.h"
 
+double WHITE_KING_POSITION_WEIGHTS[8][8] = {
+    {-30, -40, -40, -50, -50, -40, -40, -30},
+    {-30, -40, -40, -50, -50, -40, -40, -30},
+    {-30, -40, -40, -50, -50, -40, -40, -30},
+    {-30, -40, -40, -50, -50, -40, -40, -30},
+    {-20, -30, -30, -40, -40, -30, -30, -20},
+    {-10, -20, -20, -20, -20, -20, -20, -10},
+    {20, 20, 0, 0, 0, 0, 20, 20},
+    {20, 30, 10, 0, 0, 10, 30, 20},
+};
+
+double BLACK_KING_POSITION_WEIGHTS[8][8] = {
+    {20, 30, 10, 0, 0, 10, 30, 20},
+    {20, 20, 0, 0, 0, 0, 20, 20},
+    {-10, -20, -20, -20, -20, -20, -20, -10},
+    {-20, -30, -30, -40, -40, -30, -30, -20},
+    {-30, -40, -40, -50, -50, -40, -40, -30},
+    {-30, -40, -40, -50, -50, -40, -40, -30},
+    {-30, -40, -40, -50, -50, -40, -40, -30},
+    {-30, -40, -40, -50, -50, -40, -40, -30},
+};
+
+double WHITE_KING_END_GAME[8][8] = {
+    {-50, -40, -30, -20, -20, -30, -40, -50},
+    {-30, -20, -10, 0, 0, -10, -20, -30},
+    {-30, -10, 20, 30, 30, 20, -10, -30},
+    {-30, -10, 30, 40, 40, 30, -10, -30},
+    {-30, -10, 30, 40, 40, 30, -10, -30},
+    {-30, -10, 20, 30, 30, 20, -10, -30},
+    {-30, -30, 0, 0, 0, 0, -30, -30},
+    {-50, -30, -30, -30, -30, -30, -30, -50},
+};
+
+double BLACK_KING_END_GAME[8][8] = {
+    {-50, -30, -30, -30, -30, -30, -30, -50},
+    {-30, -30, 0, 0, 0, 0, -30, -30},
+    {-30, -10, 20, 30, 30, 20, -10, -30},
+    {-30, -10, 30, 40, 40, 30, -10, -30},
+    {-30, -10, 30, 40, 40, 30, -10, -30},
+    {-30, -10, 20, 30, 30, 20, -10, -30},
+    {-30, -20, -10, 0, 0, -10, -20, -30},
+    {-50, -40, -30, -20, -20, -30, -40, -50},
+};
+
+double WHITE_QUEEN_POSITION_WEIGHTS[8][8] = {
+    {-20, -10, -10, -5, -5, -10, -10, -20},
+    {-10, 0, 0, 0, 0, 0, 0, -10},
+    {-10, 0, 5, 5, 5, 5, 0, -10},
+    {-5, 0, 5, 5, 5, 5, 0, -5},
+    {0, 0, 5, 5, 5, 5, 0, -5},
+    {-10, 5, 5, 5, 5, 5, 0, -10},
+    {-10, 0, 5, 0, 0, 0, 0, -10},
+    {-20, -10, -10, -5, -5, -10, -10, -20},
+};
+
+double BLACK_QUEEN_POSITION_WEIGHTS[8][8] = {
+    {-20, -10, -10, -5, -5, -10, -10, -20},
+    {-10, 0, 5, 0, 0, 0, 0, -10},
+    {-10, 5, 5, 5, 5, 5, 0, -10},
+    {0, 0, 5, 5, 5, 5, 0, -5},
+    {-5, 0, 5, 5, 5, 5, 0, -5},
+    {-10, 0, 5, 5, 5, 5, 0, -10},
+    {-10, 0, 0, 0, 0, 0, 0, -10},
+    {-20, -10, -10, -5, -5, -10, -10, -20},
+};
+
+double WHITE_ROOK_POSITION_WEIGHTS[8][8] = {
+    {0, 0, 0, 0, 0, 0, 0, 0},   {5, 10, 10, 10, 10, 10, 10, 5},
+    {-5, 0, 0, 0, 0, 0, 0, -5}, {-5, 0, 0, 0, 0, 0, 0, -5},
+    {-5, 0, 0, 0, 0, 0, 0, -5}, {-5, 0, 0, 0, 0, 0, 0, -5},
+    {-5, 0, 0, 0, 0, 0, 0, -5}, {0, 0, 0, 5, 5, 0, 0, 0},
+};
+
+double BLACK_ROOK_POSITION_WEIGHTS[8][8] = {
+    {0, 0, 0, 5, 5, 0, 0, 0},       {-5, 0, 0, 0, 0, 0, 0, -5},
+    {-5, 0, 0, 0, 0, 0, 0, -5},     {-5, 0, 0, 0, 0, 0, 0, -5},
+    {-5, 0, 0, 0, 0, 0, 0, -5},     {-5, 0, 0, 0, 0, 0, 0, -5},
+    {5, 10, 10, 10, 10, 10, 10, 5}, {0, 0, 0, 0, 0, 0, 0, 0},
+};
+
+double WHITE_BISHOP_POSITION_WEIGHTS[8][8] = {
+    {-20, -10, -10, -10, -10, -10, -10, -20},
+    {-10, 0, 0, 0, 0, 0, 0, -10},
+    {-10, 0, 5, 10, 10, 5, 0, -10},
+    {-10, 5, 5, 10, 10, 5, 5, -10},
+    {-10, 0, 10, 10, 10, 10, 0, -10},
+    {-10, 10, 10, 10, 10, 10, 10, -10},
+    {-10, 5, 0, 0, 0, 0, 5, -10},
+    {-20, -10, -10, -10, -10, -10, -10, -20},
+};
+
+double BLACK_BISHOP_POSITION_WEIGHTS[8][8] = {
+    {-20, -10, -10, -10, -10, -10, -10, -20},
+    {-10, 5, 0, 0, 0, 0, 5, -10},
+    {-10, 10, 10, 10, 10, 10, 10, -10},
+    {-10, 0, 10, 10, 10, 10, 0, -10},
+    {-10, 5, 5, 10, 10, 5, 5, -10},
+    {-10, 0, 5, 10, 10, 5, 0, -10},
+    {-10, 0, 0, 0, 0, 0, 0, -10},
+    {-20, -10, -10, -10, -10, -10, -10, -20},
+};
+
+double WHITE_KNIGHT_POSITION_WEIGHTS[8][8] = {
+    {-50, -40, -30, -30, -30, -30, -40, -50},
+    {-40, -20, 0, 0, 0, 0, -20, -40},
+    {-30, 0, 10, 15, 15, 10, 0, -30},
+    {-30, 5, 15, 20, 20, 15, 5, -30},
+    {-30, 0, 15, 20, 20, 15, 0, -30},
+    {-30, 5, 10, 15, 15, 10, 5, -30},
+    {-40, -20, 0, 5, 5, 0, -20, -40},
+    {-50, -40, -30, -30, -30, -30, -40, -50},
+};
+
+double BLACK_KNIGHT_POSITION_WEIGHTS[8][8] = {
+    {-50, -40, -30, -30, -30, -30, -40, -50},
+    {-40, -20, 0, 5, 5, 0, -20, -40},
+    {-30, 5, 10, 15, 15, 10, 5, -30},
+    {-30, 0, 15, 20, 20, 15, 0, -30},
+    {-30, 5, 15, 20, 20, 15, 5, -30},
+    {-30, 0, 10, 15, 15, 10, 0, -30},
+    {-40, -20, 0, 0, 0, 0, -20, -40},
+    {-50, -40, -30, -30, -30, -30, -40, -50},
+};
+
+double WHITE_PAWN_POSITION_WEIGHTS[8][8] = {
+    {0, 0, 0, 0, 0, 0, 0, 0},         {50, 50, 50, 50, 50, 50, 50, 50},
+    {10, 10, 20, 30, 30, 20, 10, 10}, {5, 5, 10, 25, 25, 10, 5, 5},
+    {0, 0, 0, 20, 20, 0, 0, 0},       {5, -5, -10, 0, 0, -10, -5, 5},
+    {5, 10, 10, -20, -20, 10, 10, 5}, {0, 0, 0, 0, 0, 0, 0, 0},
+};
+
+double BLACK_PAWN_POSITION_WEIGHTS[8][8] = {
+    {0, 0, 0, 0, 0, 0, 0, 0},         {5, 10, 10, -20, -20, 10, 10, 5},
+    {5, -5, -10, 0, 0, -10, -5, 5},   {0, 0, 0, 20, 20, 0, 0, 0},
+    {5, 5, 10, 25, 25, 10, 5, 5},     {10, 10, 20, 30, 30, 20, 10, 10},
+    {50, 50, 50, 50, 50, 50, 50, 50}, {0, 0, 0, 0, 0, 0, 0, 0},
+};
+
 Piece::Piece(Color color, Position position, bool starting_piece) {
     this->color = color;
     this->position = position;
@@ -90,18 +228,7 @@ Pawn *Pawn::clone() const { return new Pawn(*this); }
 Pawn::~Pawn() {}
 
 std::ostream &Pawn::operator<<(std::ostream &os) const {
-    switch (this->get_color()) {
-    case Color::White:
-        os << "\u2659";
-        break;
-    case Color::Black:
-        os << "\u265F";
-        break;
-    default:
-        os << "!";
-        break;
-    }
-    return os;
+    return os << this->to_string();
 }
 
 std::string Pawn::to_string() const {
@@ -132,7 +259,7 @@ std::string Pawn::get_fen() const {
     }
 }
 
-int Pawn::get_material_value() const { return 1; }
+int Pawn::get_material_value() const { return 100; }
 
 double Pawn::get_weighted_value() const {
     double(*weights)[8] = {0};
@@ -145,7 +272,7 @@ double Pawn::get_weighted_value() const {
         break;
     }
     return weights[7 - this->get_pos().row()][this->get_pos().col()] +
-           (double)this->get_material_value() * 10.;
+           (double)this->get_material_value();
 }
 
 bool Pawn::is_starting_pawn() const {
@@ -270,18 +397,7 @@ King::~King() {}
 King *King::clone() const { return new King(*this); }
 
 std::ostream &King::operator<<(std::ostream &os) const {
-    switch (this->get_color()) {
-    case Color::White:
-        os << "\u2654";
-        break;
-    case Color::Black:
-        os << "\u265A";
-        break;
-    default:
-        os << "!";
-        break;
-    }
-    return os;
+    return os << this->to_string();
 }
 
 std::string King::to_string() const {
@@ -312,7 +428,7 @@ std::string King::get_fen() const {
     }
 }
 
-int King::get_material_value() const { return 99999; }
+int King::get_material_value() const { return 20000; }
 
 double King::get_weighted_value() const {
     double(*weights)[8] = {0};
@@ -325,7 +441,7 @@ double King::get_weighted_value() const {
         break;
     }
     return weights[7 - this->get_pos().row()][this->get_pos().col()] +
-           (double)this->get_material_value() * 10.;
+           (double)this->get_material_value();
 }
 
 bool King::is_starting_pawn() const { return false; }
@@ -392,18 +508,7 @@ Queen::~Queen() {}
 Queen *Queen::clone() const { return new Queen(*this); }
 
 std::ostream &Queen::operator<<(std::ostream &os) const {
-    switch (this->get_color()) {
-    case Color::White:
-        os << "\u2655";
-        break;
-    case Color::Black:
-        os << "\u265B";
-        break;
-    default:
-        os << "!";
-        break;
-    }
-    return os;
+    return os << this->to_string();
 }
 
 std::string Queen::to_string() const {
@@ -434,7 +539,7 @@ std::string Queen::get_fen() const {
     }
 }
 
-int Queen::get_material_value() const { return 9; }
+int Queen::get_material_value() const { return 900; }
 
 double Queen::get_weighted_value() const {
     double(*weights)[8] = {0};
@@ -447,7 +552,7 @@ double Queen::get_weighted_value() const {
         break;
     }
     return weights[7 - this->get_pos().row()][this->get_pos().col()] +
-           (double)this->get_material_value() * 10.;
+           (double)this->get_material_value();
 }
 
 bool Queen::is_starting_pawn() const { return false; }
@@ -544,18 +649,7 @@ Rook::~Rook() {}
 Rook *Rook::clone() const { return new Rook(*this); }
 
 std::ostream &Rook::operator<<(std::ostream &os) const {
-    switch (this->get_color()) {
-    case Color::White:
-        os << "\u2656";
-        break;
-    case Color::Black:
-        os << "\u265C";
-        break;
-    default:
-        os << "!";
-        break;
-    }
-    return os;
+    return os << this->to_string();
 }
 
 std::string Rook::to_string() const {
@@ -586,7 +680,7 @@ std::string Rook::get_fen() const {
     }
 }
 
-int Rook::get_material_value() const { return 5; }
+int Rook::get_material_value() const { return 500; }
 
 double Rook::get_weighted_value() const {
     double(*weights)[8] = {0};
@@ -599,7 +693,7 @@ double Rook::get_weighted_value() const {
         break;
     }
     return weights[7 - this->get_pos().row()][this->get_pos().col()] +
-           (double)this->get_material_value() * 10.;
+           (double)this->get_material_value();
 }
 
 bool Rook::is_starting_pawn() const { return false; }
@@ -677,18 +771,7 @@ Bishop::~Bishop() {}
 Bishop *Bishop::clone() const { return new Bishop(*this); }
 
 std::ostream &Bishop::operator<<(std::ostream &os) const {
-    switch (this->get_color()) {
-    case Color::White:
-        os << "\u2657";
-        break;
-    case Color::Black:
-        os << "\u265D";
-        break;
-    default:
-        os << "!";
-        break;
-    }
-    return os;
+    return os << this->to_string();
 }
 
 std::string Bishop::to_string() const {
@@ -719,7 +802,7 @@ std::string Bishop::get_fen() const {
     }
 }
 
-int Bishop::get_material_value() const { return 3; }
+int Bishop::get_material_value() const { return 330; }
 
 double Bishop::get_weighted_value() const {
     double(*weights)[8] = {0};
@@ -732,7 +815,7 @@ double Bishop::get_weighted_value() const {
         break;
     }
     return weights[7 - this->get_pos().row()][this->get_pos().col()] +
-           (double)this->get_material_value() * 10.;
+           (double)this->get_material_value();
 }
 
 bool Bishop::is_starting_pawn() const { return false; }
@@ -797,18 +880,7 @@ Knight::~Knight() {}
 Knight *Knight::clone() const { return new Knight(*this); }
 
 std::ostream &Knight::operator<<(std::ostream &os) const {
-    switch (this->get_color()) {
-    case Color::White:
-        os << "\u2658";
-        break;
-    case Color::Black:
-        os << "\u265E";
-        break;
-    default:
-        os << "!";
-        break;
-    }
-    return os;
+    return os << this->to_string();
 }
 
 std::string Knight::to_string() const {
@@ -839,7 +911,7 @@ std::string Knight::get_fen() const {
     }
 }
 
-int Knight::get_material_value() const { return 3; }
+int Knight::get_material_value() const { return 320; }
 
 double Knight::get_weighted_value() const {
     double(*weights)[8] = {0};
@@ -852,7 +924,7 @@ double Knight::get_weighted_value() const {
         break;
     }
     return weights[7 - this->get_pos().row()][this->get_pos().col()] +
-           (double)this->get_material_value() * 10.;
+           (double)this->get_material_value();
 }
 
 bool Knight::is_starting_pawn() const { return false; }

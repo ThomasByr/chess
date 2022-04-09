@@ -220,11 +220,11 @@ std::string Board::end_fen() const {
 double Board::value_for(const Color &ally_color) const {
     double sum = 0;
     for (Square square : this->squares) {
-        if (square.is_empty()) {
+        Piece *piece = square.get_piece();
+        if (piece == nullptr) {
             continue;
         }
 
-        Piece *piece = square.get_piece();
         if (piece->get_color() == ally_color) {
             sum += piece->get_weighted_value();
         } else {
@@ -234,7 +234,7 @@ double Board::value_for(const Color &ally_color) const {
     return sum;
 }
 
-Color Board::get_current_player_color() const { return turn; }
+Color Board::get_current_player_color() const { return this->turn; }
 
 Square Board::get_square(const Position &pos) const {
     return this->squares[((7 - pos.row()) * 8 + pos.col())];

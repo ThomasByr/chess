@@ -1,5 +1,21 @@
 #include "app.h"
 
+extern volatile sig_atomic_t received;
+extern volatile sig_atomic_t ctrl_c;
+extern volatile sig_atomic_t ctrl_z;
+
+static void sig_handler(int signal) {
+    received = 1;
+    switch (signal) {
+    case SIGINT:
+        ctrl_c = 1;
+        break;
+    case SIGTSTP:
+        ctrl_z = 1;
+        break;
+    }
+}
+
 std::string input(std::string prompt) {
     std::string s;
     std::cout << prompt;
@@ -79,6 +95,9 @@ Move App::get_cpu_move(Board &board, bool best) {
 std::string trim(const std::string &s) {
     std::string::size_type first = s.find_first_not_of(' ');
     std::string::size_type last = s.find_last_not_of(' ');
+    if (first == std::string::npos || last == std::string::npos) {
+        return "";
+    }
     return s.substr(first, (last - first + 1));
 }
 
@@ -203,9 +222,11 @@ void App::parse_args(int argc, char *argv[]) {
 void App::check_args() {
     if (help_) {
         get_help();
+        panic("");
     }
     if (version_) {
         get_version();
+        panic("");
     }
 
     if (verbose_ && quiet_) {
@@ -221,11 +242,11 @@ void App::get_version() {
        << __VERSION_PATCH__ << "\n";
     std::cout << ss.str();
     std::cout.flush();
-    exit(0);
+    exit(EXIT_SUCCESS);
 }
 
 void App::get_help(const std::string &msg) {
-    int status = msg.empty() ? 0 : 1;
+    int status = msg.empty() ? EXIT_SUCCESS : EXIT_FAILURE;
     std::stringstream ss;
 
     if (!msg.empty()) {
@@ -257,14 +278,21 @@ std::ostream &operator<<(std::ostream &os, const App &app) {
     os << "fen: " << app.fen() << "\n";
     os << "moves: " << app.moves() << "\n";
     os << "filename: " << app.filename() << "\n";
-    os << "verbose: " << app.verbose() << "\n";
-    os << "quiet: " << app.quiet() << "\n";
-    os << "help: " << app.help() << "\n";
-    os << "version: " << app.version() << "\n";
+    os << "verbose: " << (app.verbose() ? "true" : "false") << "\n";
+    os << "quiet: " << (app.quiet() ? "true" : "false") << "\n";
+    os << "help: " << (app.help() ? "true" : "false") << "\n";
+    os << "version: " << (app.version() ? "true" : "false") << "\n";
     return os;
 }
 
 int App::run() {
+    std::stringstream ss;
+    ss << *this;
+    std_debug(ss.str());
+
+    std::signal(SIGINT, sig_handler);
+    std::signal(SIGTSTP, sig_handler);
+
     Board board = Board::new_board();
     if (!this->quiet()) {
         std::cout << board << std::endl;
@@ -277,6 +305,20 @@ int App::run() {
         std::string s = input(">>> ");
         if (!s.empty()) {
             s = to_lower(trim(s));
+        }
+
+        if (received == 1) {
+            received = 0;
+
+            if (ctrl_c == 1) {
+                ctrl_c = 0;
+                std::cout << "sigint caught" << std::endl;
+                this->count_sigint++;
+            }
+            if (ctrl_z == 1) {
+                ctrl_z = 0;
+                std::cout << "sigterm caught" << std::endl;
+            }
         }
 
         Move m;
@@ -352,6 +394,7 @@ int App::run() {
             board = r.next_board();
             break;
         }
+        s.clear();
     }
 
     if (this->verbose()) {
@@ -365,5 +408,5 @@ int App::run() {
                   << "ms\n";
     }
     std::cout << "\n" << board.end_fen() << std::endl;
-    return 0;
+    return EXIT_SUCCESS;
 }

@@ -16,15 +16,6 @@ static void sig_handler(int signal) {
     }
 }
 
-std::string input(std::string prompt) {
-    std::string s;
-    std::cout << prompt;
-    std::cout.flush();
-
-    std::getline(std::cin, s);
-    return s;
-}
-
 Move App::get_cpu_move(Board &board, bool best) {
     std::tuple<Move, unsigned, double> r;
 
@@ -90,23 +81,6 @@ Move App::get_cpu_move(Board &board, bool best) {
         std::cout << "Took " << ms << "ms" << std::endl;
     }
     return m;
-}
-
-std::string trim(const std::string &s) {
-    std::string::size_type first = s.find_first_not_of(' ');
-    std::string::size_type last = s.find_last_not_of(' ');
-    if (first == std::string::npos || last == std::string::npos) {
-        return "";
-    }
-    return s.substr(first, (last - first + 1));
-}
-
-std::string to_lower(const std::string &s) {
-    std::string r;
-    for (char c : s) {
-        r += tolower(c);
-    }
-    return r;
 }
 
 App::App(int argc, char *argv[]) {
@@ -256,6 +230,7 @@ void App::get_help(const std::string &msg) {
     ss << "chess-cli"
        << "\nversion: " << __VERSION_MAJOR__ << "." << __VERSION_MINOR__ << "."
        << __VERSION_PATCH__ << "\n";
+    ss << "author: " << __AUTHOR__ << "\n";
     ss << "usage: chess-cli [OPTION]...\n";
     ss << "  -f, --fen      FEN\n";
     ss << "  -m, --moves    MOVES\n";
@@ -270,7 +245,7 @@ void App::get_help(const std::string &msg) {
     ss << "\n";
 
     std::cout << ss.str();
-
+    std::cout.flush();
     exit(status);
 }
 
@@ -303,9 +278,7 @@ int App::run() {
 
     while (is_running) {
         std::string s = input(">>> ");
-        if (!s.empty()) {
-            s = to_lower(trim(s));
-        }
+        s = to_lower(trim(s));
 
         if (received == 1) {
             received = 0;

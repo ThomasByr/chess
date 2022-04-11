@@ -50,7 +50,6 @@
 //! Move notation is as follows:
 //!  - "e2e4" for a normal move
 //!  - "O-O" or "O-O-O" for a castling move
-//!  - "Nf3" for a pawn promotion (to a knight) (not yet implemented)
 //!  - "best" to let the CPU choose the best move
 //!  - "worst" to let the CPU choose the worst move
 //!  - "rate" to rate the current position

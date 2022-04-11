@@ -29,3 +29,5 @@
     - added signal handling and async input
     - minor improvement of the evaluation function
     - added basic endgame detection and alternate king map
+    - implemented pawn promotion for additional target pieces (ask for user input)
+    - as user is requested an additional input, cpu can only promote to queen as of now (there could still be bugs)

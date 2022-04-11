@@ -45,3 +45,29 @@ std::string repeat(std::string str, const unsigned n) {
 std::string operator*(std::string str, unsigned n) {
     return repeat(std::move(str), n);
 }
+
+std::string input(std::string prompt) {
+    std::string s;
+    std::cout << prompt;
+    std::cout.flush();
+
+    std::getline(std::cin, s);
+    return s;
+}
+
+std::string trim(const std::string &s) {
+    std::string::size_type first = s.find_first_not_of(' ');
+    std::string::size_type last = s.find_last_not_of(' ');
+    if (first == std::string::npos || last == std::string::npos) {
+        return "";
+    }
+    return s.substr(first, (last - first + 1));
+}
+
+std::string to_lower(const std::string &s) {
+    std::string r;
+    for (char c : s) {
+        r += tolower(c);
+    }
+    return r;
+}

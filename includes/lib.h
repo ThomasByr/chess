@@ -86,3 +86,9 @@ std::string repeat(std::string str, const unsigned n);
  * @return std::string - new string
  */
 std::string operator*(std::string str, unsigned n);
+
+std::string input(std::string prompt);
+
+std::string trim(const std::string &s);
+
+std::string to_lower(const std::string &s);

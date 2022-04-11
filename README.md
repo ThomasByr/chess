@@ -136,26 +136,32 @@ POSSIBILITY OF SUCH DAMAGE.
     So here is the thing. The return page does specify that we _need_ to upload (and by upload, I actually mean that we need to make a static archive and upload it somewhere else but to GitHub) a html version of the doc. Doxygen (the old dinosaur) does automate the process of generating a web page based on some .md files. The Doxyfile file is set to also build class dependance graphs as well as the full history of function calls (which is why is does take a while the first time). Well I could have used Sphinx to build a beautiful version of the doc but I actually am not sure the panel of judges will know how to setup this tool (visual studio does it for you but using Windows is another debate).
     </details>
 
+7.  <details><summary>This object orientation is kind of weired isn't it ? (please read)</summary>
+
+    Well, we were requested to do this project in the OOP approach. C++ has two major flows : the first one being memory management. Because of virtual classes, we are not able to return a static object of the Piece class for exemple, instead, we need to return a pointer to some object living in memory and trick the compiler by saying that even this is a pointer to a piece object, once created, it won't be a piece anymore. This slows down the program to a snail's pace and creates memory leaks we are not easily able to counter. In fact, when the cpu seeks for a move to play (or evaluates the board), it uses copies of the board (which is not a problem) but also copies of pieces (which would not be an issue if we could create pieces on the stack). The second big flow is the total lack control of enums and pointers. For example, we can not create an enum holding generic values such as Queen(Position, Color), which is quite usefull and is implemented in other languages. Even with enum class, switch statements seems to require a default branch. Also, the optional trait isn't very convenient and does not bring anything new since we still can manipulate pointers. On a side note, this project was first made in python, then in the rust programming language.
+    </details>
+
 ## Changelog
 
 Please refer to the [changelog.md](changelog.md) file for the full history.
 
 ```mermaid
 gantt
-    title Major
+    title C++ Major
     dateFormat  YYYY-MM-DD
     section Basic chess
-    base classes            : 2022-03-20, 1d
+    base classes            : 2022-03-27, 1d
     copy/clone constructors : 1d
     section Moves
-    moves for Pawn : 2022-03-20, 2d
-    moves for all  : 2022-03-22, 1d
+    moves for Pawn : 2022-03-28, 2d
+    moves for all  : 2022-03-29, 1d
     section CPU
-    get best move    : 2022-03-23, 2d
+    get best move    : 2022-03-30, 2d
     get worst move   : 1d
-    basic evaluation : 2022-04-9, 2d
+    basic evaluation : 2022-04-09, 2d
+    use of threads   : 2022-04-11, 6d
     section command line UI
-    base board display : 2022-03-23, 1d
+    base board display : 2022-03-27, 1d
     more commands      : 2022-04-01, 1d
 ```
 
@@ -170,6 +176,8 @@ gantt
 - added signal handling and async input
 - minor improvement of the evaluation function
 - added basic endgame detection and alternate king map
+- implemented pawn promotion for additional target pieces (ask for user input)
+- as user is requested an additional input, cpu can only promote to queen as of now (there could still be bugs)
 
 </details>
 
@@ -189,6 +197,6 @@ TODO (first implementation version)
 - opening book
 - endgame
 - iterative deepening (store best move first for next iteration)
-- pawn promotion (knight, bishop and rook)
+- ~~pawn promotion (knight, bishop and rook)~~ (input v0.1.0)
 - use of standard threads for the cpu to choose moves
 - implement a max thread limit mechanism

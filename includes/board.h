@@ -120,9 +120,10 @@ class Board {
      * @brief apply a valid move to the board and return the new board
      *
      * @param move move to be applied
+     * @param cpu is the move being made by the cpu
      * @return Board - new board
      */
-    Board apply_eval_move(const Move &move);
+    Board apply_eval_move(const Move &move, const bool &cpu = false);
     /**
      * @brief Get the legal moves object as a vector
      *
@@ -257,9 +258,11 @@ class Board {
      *
      * @param from starting position
      * @param to ending position
+     * @param cpu is the move being made by the cpu
      * @return Board - new board
      */
-    Board move_piece(const Position &from, const Position &to);
+    Board move_piece(const Position &from, const Position &to,
+                     const bool &cpu = false);
 
     /**
      * @brief if a given player can castle kingside
@@ -309,6 +312,13 @@ class Board {
      * @return false - otherwise
      */
     bool is_checkmate();
+    /**
+     * @brief is the current board is evaluated as an endgame position
+     *
+     * @return true - if endgame
+     * @return false - otherwise
+     */
+    bool is_endgame();
 
     /**
      * @brief changes the current player color
@@ -321,17 +331,19 @@ class Board {
      * @brief apply a move to the board and return the new board
      *
      * @param move move to be applied
+     * @param cpu is the move being made by the cpu
      * @return Board - new board
      */
-    Board apply_move(const Move &move);
+    Board apply_move(const Move &move, const bool &cpu = false);
 
     /**
      * @brief plays a valid more on the board
      *
      * @param move move to be applied
+     * @param cpu is the move being made by the cpu
      * @return GameResult - result of the game w/ additional info
      */
-    GameResult play_move(const Move &move);
+    GameResult play_move(const Move &move, const bool &cpu = false);
 
     /**
      * @brief returns a rating bar for the current board
@@ -401,10 +413,12 @@ class Board {
      *
      * @param move move
      * @param player_color color
+     * @param cpu is the move being made by the cpu
      * @return true - if the move is valid
      * @return false - otherwise
      */
-    bool is_legal_move(const Move &move, const Color &player_color);
+    bool is_legal_move(const Move &move, const Color &player_color,
+                       const bool &cpu = false);
 
     /**
      * @brief fmt the board

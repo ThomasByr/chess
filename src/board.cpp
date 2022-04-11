@@ -331,7 +331,8 @@ bool Board::is_in_check(const Color &color) {
     }
 }
 
-bool Board::is_legal_move(const Move &move, const Color &player_color) {
+bool Board::is_legal_move(const Move &move, const Color &player_color,
+                          const bool &cpu) {
     bool tmp;
     Piece *piece;
     Position *en_passant;
@@ -368,21 +369,22 @@ bool Board::is_legal_move(const Move &move, const Color &player_color) {
                      *en_passant == to) &&
                     piece->get_color() == player_color;
             }
-            return tmp || (piece->is_legal_move(to, *this) &&
-                           piece->get_color() == player_color &&
-                           !this->apply_move(move).is_in_check(player_color));
+            return tmp ||
+                   (piece->is_legal_move(to, *this) &&
+                    piece->get_color() == player_color &&
+                    !this->apply_move(move, cpu).is_in_check(player_color));
 
         default:
             return piece->is_legal_move(to, *this) &&
                    piece->get_color() == player_color &&
-                   !this->apply_move(move).is_in_check(player_color);
+                   !this->apply_move(move, cpu).is_in_check(player_color);
         }
     }
     return false;
 }
 
-Board Board::apply_eval_move(const Move &move) {
-    return this->apply_move(move).change_turn();
+Board Board::apply_eval_move(const Move &move, const bool &cpu) {
+    return this->apply_move(move, cpu).change_turn();
 }
 
 std::vector<Move> Board::get_legal_moves() {
@@ -405,7 +407,8 @@ std::vector<Move> Board::get_legal_moves() {
     return result;
 }
 
-Board Board::move_piece(const Position &from, const Position &to) {
+Board Board::move_piece(const Position &from, const Position &to,
+                        const bool &cpu) {
     Board result = Board(*this);
     result.en_passant = nullptr;
 
@@ -443,7 +446,32 @@ Board Board::move_piece(const Position &from, const Position &to) {
 
     if ((piece->get_type() == Piece::Pawn) &&
         (to.row() == 0 || to.row() == 7)) {
-        piece = new Queen(piece->get_color(), piece->get_pos());
+
+        if (cpu) {
+            piece = new Queen(piece->get_color(), piece->get_pos());
+        } else {
+            bool valid = false;
+            while (!valid) {
+                std::string promote = input("Promote to: ");
+                promote = to_lower(trim(promote));
+
+                if (promote.empty() || promote == "queen" || promote == "q") {
+                    piece = new Queen(piece->get_color(), piece->get_pos());
+                    valid = true;
+                } else if (promote == "rook" || promote == "r") {
+                    piece = new Rook(piece->get_color(), piece->get_pos());
+                    valid = true;
+                } else if (promote == "bishop" || promote == "b") {
+                    piece = new Bishop(piece->get_color(), piece->get_pos());
+                    valid = true;
+                } else if (promote == "knight" || promote == "n") {
+                    piece = new Knight(piece->get_color(), piece->get_pos());
+                    valid = true;
+                } else {
+                    std::cerr << "Invalid piece type" << std::endl;
+                }
+            }
+        }
     }
 
     if ((piece->is_starting_pawn()) && abs(from.row() - to.row()) == 2) {
@@ -591,12 +619,32 @@ bool Board::is_checkmate() {
            this->get_legal_moves().empty();
 }
 
+bool Board::is_endgame() {
+    std::vector<Piece *> w_pieces;
+    std::vector<Piece *> b_pieces;
+
+    for (Square square : this->squares) {
+        Piece *piece = square.get_piece();
+        if (piece == nullptr) {
+            continue;
+        }
+
+        if (piece->get_color() == Color::White) {
+            w_pieces.push_back(piece);
+        } else {
+            b_pieces.push_back(piece);
+        }
+    }
+
+    return (w_pieces.size() <= 3 && b_pieces.size() <= 3);
+}
+
 Board Board::change_turn() {
     this->turn = !this->turn;
     return *this;
 }
 
-Board Board::apply_move(const Move &move) {
+Board Board::apply_move(const Move &move, const bool &cpu) {
     Position *en_passant, king_pos, rook_pos, from, to;
     Piece *piece;
     Color player_color;
@@ -616,8 +664,8 @@ Board Board::apply_move(const Move &move) {
             rook_pos = Position(7, 7);
             break;
         }
-        return this->move_piece(king_pos, rook_pos.next_left())
-            .move_piece(rook_pos, king_pos.next_right());
+        return this->move_piece(king_pos, rook_pos.next_left(), cpu)
+            .move_piece(rook_pos, king_pos.next_right(), cpu);
 
     case Move::QueenSideCastle:
         king_pos = this->get_king_position(this->turn);
@@ -632,12 +680,12 @@ Board Board::apply_move(const Move &move) {
             rook_pos = Position(7, 0);
             break;
         }
-        return this->move_piece(king_pos, rook_pos.next_left().next_left())
-            .move_piece(rook_pos, king_pos.next_left());
+        return this->move_piece(king_pos, rook_pos.next_left().next_left(), cpu)
+            .move_piece(rook_pos, king_pos.next_left(), cpu);
 
     case Move::PieceMove:
         from = move.from(), to = move.to();
-        result = this->move_piece(from, to);
+        result = this->move_piece(from, to, cpu);
 
         en_passant = this->en_passant;
         piece = this->get_piece(from);
@@ -661,7 +709,7 @@ Board Board::apply_move(const Move &move) {
     panic("Invalid move type");
 }
 
-GameResult Board::play_move(const Move &move) {
+GameResult Board::play_move(const Move &move, const bool &cpu) {
     Color current_color = this->get_current_player_color();
     GameResult result;
 
@@ -670,8 +718,8 @@ GameResult Board::play_move(const Move &move) {
         result.next_board() =
             this->remove_all(current_color).queen_all(!current_color);
         result.winner() = !current_color;
-    } else if (this->is_legal_move(move, current_color)) {
-        Board next_turn = this->apply_move(move).change_turn();
+    } else if (this->is_legal_move(move, current_color, cpu)) {
+        Board next_turn = this->apply_move(move, cpu).change_turn();
         if (next_turn.is_checkmate()) {
             result.result_type() = GameResult::Victory;
             result.winner() = current_color;
@@ -698,9 +746,9 @@ std::string Board::rating_bar(unsigned len) {
     double your_val = your_best_val + your_lowest_val;
 
     std::tuple<Move, unsigned, double> best1 =
-        this->apply_move(best_m).change_turn().get_next_best_move(0);
+        this->apply_move(best_m, true).change_turn().get_next_best_move(0);
     std::tuple<Move, unsigned, double> worst1 =
-        this->apply_move(best_m).change_turn().get_next_worst_move(0);
+        this->apply_move(best_m, true).change_turn().get_next_worst_move(0);
     double their_best_val = std::get<2>(best1),
            their_lowest_val = std::get<2>(worst1);
     double their_val = their_best_val + their_lowest_val;
@@ -753,9 +801,9 @@ double Board::score() {
     double your_val = your_best_val + your_lowest_val;
 
     std::tuple<Move, unsigned, double> best1 =
-        this->apply_move(best_m).change_turn().get_next_best_move(0);
+        this->apply_move(best_m, true).change_turn().get_next_best_move(0);
     std::tuple<Move, unsigned, double> worst1 =
-        this->apply_move(best_m).change_turn().get_next_worst_move(0);
+        this->apply_move(best_m, true).change_turn().get_next_worst_move(0);
     double their_best_val = std::get<2>(best1),
            their_lowest_val = std::get<2>(worst1);
     double their_val = their_best_val + their_lowest_val;
@@ -993,7 +1041,7 @@ std::tuple<Move, u_int64_t, double> Board::get_next_best_move(int depth) {
     u_int64_t board_count = 0;
 
     for (Move m : legal_moves) {
-        double child_board_value = this->apply_eval_move(m).minimax(
+        double child_board_value = this->apply_eval_move(m, true).minimax(
             depth, -1000000., 1000000., false, color, &board_count);
 
         if (child_board_value >= best_move_value) {
@@ -1017,7 +1065,7 @@ std::tuple<Move, u_int64_t, double> Board::get_next_worst_move(int depth) {
     u_int64_t board_count = 0;
 
     for (Move m : legal_moves) {
-        double child_board_value = this->apply_eval_move(m).minimax(
+        double child_board_value = this->apply_eval_move(m, true).minimax(
             depth, -1000000., 1000000., true, !color, &board_count);
 
         if (child_board_value >= best_move_value) {
@@ -1045,7 +1093,7 @@ double Board::minimax(int depth, double alpha, double beta, bool is_maximizing,
     if (is_maximizing) {
         best_move_value = -999999.;
         for (Move m : legal_moves) {
-            double child_board_value = this->apply_eval_move(m).minimax(
+            double child_board_value = this->apply_eval_move(m, true).minimax(
                 depth - 1, alpha, beta, !is_maximizing, getting_move_for,
                 board_count);
 
@@ -1062,7 +1110,7 @@ double Board::minimax(int depth, double alpha, double beta, bool is_maximizing,
     } else {
         best_move_value = 999999.;
         for (Move m : legal_moves) {
-            double child_board_value = this->apply_eval_move(m).minimax(
+            double child_board_value = this->apply_eval_move(m, true).minimax(
                 depth - 1, alpha, beta, !is_maximizing, getting_move_for,
                 board_count);
 

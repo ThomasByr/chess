@@ -84,7 +84,7 @@ Move App::get_cpu_move(Board &board, bool best) {
 }
 
 App::App(int argc, char *argv[]) {
-    fen_ = "";
+    fen_ = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     moves_ = "";
     filename_ = "";
     verbose_ = false;
@@ -250,9 +250,10 @@ void App::get_help(const std::string &msg) {
 }
 
 std::ostream &operator<<(std::ostream &os, const App &app) {
-    os << "fen: " << app.fen() << "\n";
-    os << "moves: " << app.moves() << "\n";
-    os << "filename: " << app.filename() << "\n";
+    os << "fen: " << (app.fen().empty() ? "-" : app.fen()) << "\n";
+    os << "moves: " << (app.moves().empty() ? "-" : app.moves()) << "\n";
+    os << "filename: " << (app.filename().empty() ? "-" : app.filename())
+       << "\n";
     os << "verbose: " << (app.verbose() ? "true" : "false") << "\n";
     os << "quiet: " << (app.quiet() ? "true" : "false") << "\n";
     os << "help: " << (app.help() ? "true" : "false") << "\n";

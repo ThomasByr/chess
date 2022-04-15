@@ -158,6 +158,7 @@ void App::parse_args(int argc, char *argv[]) {
         {nullptr, 0, nullptr, 0}};
 
     const char *short_options = "f:m:n:vqhV";
+    std::string bad_option;
     std::stringstream ss;
 
     while ((opt = getopt_long(argc, argv, short_options, long_options,
@@ -185,9 +186,10 @@ void App::parse_args(int argc, char *argv[]) {
             version_ = true;
             break;
         default:
-            // ss << "Unknown option: " << (char)opt << std::endl;
-            // get_help(ss.str());
-            // panic("");
+            bad_option = std::string(argv[optind - 1]);
+            ss << "Unrecognized option: " << bad_option << std::endl;
+            get_help(ss.str());
+            panic("");
             break;
         }
     }

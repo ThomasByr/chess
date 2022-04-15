@@ -188,6 +188,7 @@ gantt
 Bugs (final correction version)
 
 - ~~AI is actually stupid, supposed bug on get_legal_moves on pieces~~ (v0.0.2)
+- cpu asks for promote type
 
 TODO (first implementation version)
 

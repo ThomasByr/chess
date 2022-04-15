@@ -263,6 +263,17 @@ std::ostream &operator<<(std::ostream &os, const App &app) {
     return os;
 }
 
+void history_display(const std::vector<Move> &history) {
+    for (std::vector<Move>::size_type i = 0; i < history.size(); i++) {
+        if (i < history.size() - 1) {
+            std::cout << history[i] << " | " << history[i + 1] << std::endl;
+            i++;
+        } else {
+            std::cout << history[i] << std::endl;
+        }
+    }
+}
+
 int App::run() {
     std::stringstream ss;
     ss << *this;
@@ -318,15 +329,7 @@ int App::run() {
         } else if (s == "/quit" || s == "/q" || s == "/") {
             is_running = false;
         } else if (s == "history" || s == "h") {
-            for (std::vector<Move>::size_type i = 0; i < history.size(); i++) {
-                if (i < history.size() - 1) {
-                    std::cout << history[i] << " | " << history[i + 1]
-                              << std::endl;
-                    i++;
-                } else {
-                    std::cout << history[i] << std::endl;
-                }
-            }
+            history_display(history);
             continue;
         } else {
             int t = m.update_from_string(s);
@@ -374,9 +377,7 @@ int App::run() {
     }
 
     if (this->verbose()) {
-        for (Move m : history) {
-            std::cout << m << std::endl;
-        }
+        history_display(history);
         std::cout << "\ntotal moves: " << history.size() << "\n";
         std::cout << "white cpu thinking time: " << this->white_thinking_time
                   << "ms\n";

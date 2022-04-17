@@ -2,10 +2,12 @@
 
 #include <algorithm>
 #include <cerrno>
+#include <chrono>
 #include <cstring>
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <thread>
 #include <utility>
 #include <vector>
 
@@ -14,6 +16,27 @@
 #define __VERSION_MAJOR__ 0
 #define __VERSION_MINOR__ 1
 #define __VERSION_PATCH__ 0
+
+#define TIMEOUT 3000
+
+#define RST "\x1b[m\x1b[0m"
+
+#define FG_RED "\x1b[0;31m"
+#define FG_GRN "\x1b[0;32m"
+#define FG_YEL "\x1b[0;33m"
+#define FG_BLU "\x1b[0;34m"
+#define FG_MAG "\x1b[0;35m"
+#define FG_CYN "\x1b[0;36m"
+#define FG_WHT "\x1b[0;37m"
+
+#define BG_BLU "\x1b[40m"
+#define BG_RED "\x1b[41m"
+#define BG_GRN "\x1b[42m"
+#define BG_ORA "\x1b[43m"
+#define BG_CYN1 "\x1b[44m"
+#define BG_YEL "\x1b[45m"
+#define BG_CYN2 "\x1b[46m"
+#define BG_WHT "\x1b[47m"
 
 #ifndef DEBUG
 #define std_debug(msg) (void)msg;
@@ -87,7 +110,7 @@ std::string repeat(std::string str, const unsigned n);
  */
 std::string operator*(std::string str, unsigned n);
 
-std::string input(std::string prompt);
+void input(std::string &str, const std::string &prompt);
 
 std::string trim(const std::string &s);
 

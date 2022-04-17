@@ -1,7 +1,9 @@
 #pragma once
 
 #include <algorithm>
+#include <cctype>
 #include <iostream>
+#include <map>
 #include <string>
 #include <tuple>
 
@@ -98,6 +100,13 @@ class Board {
      * @return Board - new board
      */
     static Board new_board();
+    /**
+     * @brief setup the board with a starting fen string
+     *
+     * @param fen starting fen
+     * @return Board - new board
+     */
+    static Board from_fen(const std::string &fen);
 
     CastlingRights *black_castling_rights; // black castling rights
     CastlingRights *white_castling_rights; // white castling rights

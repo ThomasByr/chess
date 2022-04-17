@@ -194,10 +194,40 @@ Board Board::new_board() {
                       .enable_castling()
                       .build();
 
-    board.turn = Color::White;
-    board.en_passant = nullptr;
+    // board.turn = Color::White;
+    // board.en_passant = nullptr;
 
     return board;
+}
+
+Board Board::from_fen(const std::string &fen) {
+    static const std::map<char, int> piece_map = {
+        {'k', Piece::King},   {'q', Piece::Queen},  {'r', Piece::Rook},
+        {'b', Piece::Bishop}, {'n', Piece::Knight}, {'p', Piece::Pawn},
+    };
+
+    BoardBuilder builder;
+    std::string fen_board = fen.substr(0, fen.find(' '));
+    int file = 0, rank = 7;
+
+    for (const unsigned char c : fen_board) {
+        if (c == '/') {
+            file = 0;
+            rank--;
+        } else {
+            if (isdigit(c)) {
+                file += c - '0';
+            } else {
+                int piece = piece_map.at(tolower(c));
+                Color color = isupper(c) ? Color::White : Color::Black;
+                Position pos = Position(rank, file);
+                builder.piece(Piece::from_id(piece, color, pos));
+                file++;
+            }
+        }
+    }
+
+    return builder.enable_castling().build();
 }
 
 Board::~Board() {}
@@ -452,7 +482,8 @@ Board Board::move_piece(const Position &from, const Position &to,
         } else {
             bool valid = false;
             while (!valid) {
-                std::string promote = input("Promote to: ");
+                std::string promote;
+                input(promote, "Promote to: ");
                 promote = to_lower(trim(promote));
 
                 if (promote.empty() || promote == "queen" || promote == "q") {
@@ -941,11 +972,11 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
 
             if (board.get_en_passant() != nullptr &&
                 pos == *board.get_en_passant()) {
-                os << "\x1b[34m" << s << "\x1b[m\x1b[0m";
+                os << FG_BLU << s << RST;
             } else if (board.is_threatened(pos, board.get_turn_color())) {
-                os << "\x1b[31m" << s << "\x1b[m\x1b[0m";
+                os << FG_RED << s << RST;
             } else if (board.is_threatened(pos, !board.get_turn_color())) {
-                os << "\x1b[32m" << s << "\x1b[m\x1b[0m";
+                os << FG_GRN << s << RST;
             } else {
                 os << s;
             }

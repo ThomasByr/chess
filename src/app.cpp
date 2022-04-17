@@ -21,9 +21,9 @@ static void sig_handler(int signal) {
             base = now;
         }
 
-        fprintf(stdout, "\033[2K\r");
-        std::cout << FG_YEL << "Ctrl-C received (send again shortly to exit).\n"
-                  << RST << ">>> ";
+        chk(write(STDOUT_FILENO, "\033[2K\r", 5));
+        std::cout << FG_YEL << "Ctrl-C received (send again shortly to exit)."
+                  << RST << "\n>>> ";
         std::cout.flush();
 
         break;
@@ -129,6 +129,8 @@ const bool &App::help() const { return help_; }
 
 const bool &App::version() const { return version_; }
 
+const bool &App::license() const { return license_; }
+
 std::string &App::fen() { return fen_; }
 
 std::string &App::moves() { return moves_; }
@@ -142,6 +144,8 @@ bool &App::quiet() { return quiet_; }
 bool &App::help() { return help_; }
 
 bool &App::version() { return version_; }
+
+bool &App::license() { return license_; }
 
 void App::fen(const std::string &fen) { fen_ = std::move(fen); }
 
@@ -159,6 +163,8 @@ void App::help(const bool help) { help_ = std::move(help); }
 
 void App::version(const bool version) { version_ = std::move(version); }
 
+void App::license(const bool license) { license_ = std::move(license); }
+
 void App::parse_args(int argc, char *argv[]) {
     int opt;
     const struct option long_options[] = {
@@ -169,9 +175,10 @@ void App::parse_args(int argc, char *argv[]) {
         {"quiet", no_argument, nullptr, 'q'},
         {"help", no_argument, nullptr, 'h'},
         {"version", no_argument, nullptr, 'V'},
+        {"license", no_argument, nullptr, 'L'},
         {nullptr, 0, nullptr, 0}};
 
-    const char *short_options = "f:m:n:vqhV";
+    const char *short_options = "f:m:n:vqhVL";
     std::string bad_option;
     std::stringstream ss;
 
@@ -199,6 +206,9 @@ void App::parse_args(int argc, char *argv[]) {
         case 'V':
             version_ = true;
             break;
+        case 'L':
+            license_ = true;
+            break;
         default:
             bad_option = std::string(argv[optind - 1]);
             ss << "Unrecognized option: " << bad_option << std::endl;
@@ -216,6 +226,10 @@ void App::check_args() {
     }
     if (version_) {
         get_version();
+        panic("");
+    }
+    if (license_) {
+        get_license();
         panic("");
     }
 
@@ -246,7 +260,7 @@ void App::get_help(const std::string &msg) {
     ss << "chess-cli"
        << "\nversion: " << __VERSION_MAJOR__ << "." << __VERSION_MINOR__ << "."
        << __VERSION_PATCH__ << "\n";
-    ss << "author: " << __AUTHOR__ << "\n";
+    ss << "author: " << __AUTHOR__ << "\n\n";
     ss << "usage: chess-cli [OPTION]...\n";
     ss << "  -f, --fen      FEN\n";
     ss << "  -m, --moves    MOVES\n";
@@ -255,6 +269,7 @@ void App::get_help(const std::string &msg) {
     ss << "  -q, --quiet\n";
     ss << "  -h, --help\n";
     ss << "  -V, --version\n";
+    ss << "  -L, --license\n";
     ss << "\n";
     ss << "Report bugs on <https://github.com/ThomasByr/chess/issues>\n";
     ss << "chess-cli home page: <https://github.com/ThomasByr/chess>\n";
@@ -263,6 +278,42 @@ void App::get_help(const std::string &msg) {
     std::cout << ss.str();
     std::cout.flush();
     std::exit(status);
+}
+
+void App::get_license() {
+    std::stringstream ss;
+    ss << "chess-cli"
+       << "\nversion: " << __VERSION_MAJOR__ << "." << __VERSION_MINOR__ << "."
+       << __VERSION_PATCH__ << "\n";
+    ss << "author: " << __AUTHOR__ << "\n\n";
+    ss << "This Chess engine is licensed under the [GPL-3.0](LICENSE) license. "
+          "Please see the [license](LICENSE) file for more "
+          "details.\n\nRedistribution and use in source and binary forms, with "
+          "or without\nmodification, are permitted provided that the following "
+          "conditions are met:\n\n- Redistributions of source code must retain "
+          "the above copyright notice,\n  this list of conditions and the "
+          "following disclaimer.\n\n- Redistributions in binary form must "
+          "reproduce the above copyright notice,\n  this list of conditions "
+          "and the following disclaimer in the documentation\n  and/or other "
+          "materials provided with the distribution.\n\n- Neither the name of "
+          "the chess-cli authors nor the names of its\n  contributors may be "
+          "used to endorse or promote products derived from\n  this software "
+          "without specific prior written permission.\n\nTHIS SOFTWARE IS "
+          "PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\""
+          "\nAND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED "
+          "TO, THE\nIMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A "
+          "PARTICULAR PURPOSE\nARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT "
+          "HOLDER OR CONTRIBUTORS BE\nLIABLE FOR ANY DIRECT, INDIRECT, "
+          "INCIDENTAL, SPECIAL, EXEMPLARY, OR\nCONSEQUENTIAL DAMAGES "
+          "(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF\nSUBSTITUTE GOODS OR "
+          "SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS\nINTERRUPTION) "
+          "HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER "
+          "IN\nCONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR "
+          "OTHERWISE)\nARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, "
+          "EVEN IF ADVISED OF THE\nPOSSIBILITY OF SUCH DAMAGE.\n";
+    std::cout << ss.str();
+    std::cout.flush();
+    std::exit(EXIT_SUCCESS);
 }
 
 std::ostream &operator<<(std::ostream &os, const App &app) {
@@ -274,6 +325,7 @@ std::ostream &operator<<(std::ostream &os, const App &app) {
     os << "quiet: " << (app.quiet() ? "true" : "false") << "\n";
     os << "help: " << (app.help() ? "true" : "false") << "\n";
     os << "version: " << (app.version() ? "true" : "false") << "\n";
+    os << "license: " << (app.license() ? "true" : "false") << "\n";
     return os;
 }
 

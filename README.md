@@ -162,7 +162,7 @@ gantt
     get best move    : 2022-03-30, 2d
     get worst move   : 1d
     basic evaluation : 2022-04-09, 2d
-    use of threads   : 2022-04-11, 6d
+    use of threads   : 2022-04-11, 5d
     section command line UI
     base board display : 2022-03-27, 1d
     more commands      : 2022-04-01, 1d

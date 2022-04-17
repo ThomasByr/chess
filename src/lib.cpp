@@ -2,7 +2,8 @@
 
 void panic(const std::string &msg) {
     std::stringstream ss;
-    ss << "panic: " << msg << " (" << strerror(errno) << ")" << std::endl;
+    ss << FG_RED << "panic: " << msg << " (" << strerror(errno) << ")" << RST
+       << std::endl;
     throw std::runtime_error(ss.str());
 }
 
@@ -46,13 +47,12 @@ std::string operator*(std::string str, unsigned n) {
     return repeat(std::move(str), n);
 }
 
-std::string input(std::string prompt) {
-    std::string s;
-    std::cout << prompt;
-    std::cout.flush();
-
-    std::getline(std::cin, s);
-    return s;
+void input(std::string &str, const std::string &prompt) {
+    std::thread([&str, &prompt]() {
+        std::cout << prompt;
+        std::cout.flush();
+        std::getline(std::cin, str);
+    }).join();
 }
 
 std::string trim(const std::string &s) {

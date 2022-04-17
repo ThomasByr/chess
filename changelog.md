@@ -31,3 +31,4 @@
     - added basic endgame detection and alternate king map
     - implemented pawn promotion for additional target pieces (ask for user input)
     - as user is requested an additional input, cpu can only promote to queen as of now (there could still be bugs)
+    - async input reduced, sigint sent by user does not always close the app

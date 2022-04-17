@@ -32,14 +32,15 @@ This is a school small project for OOP : a chess game in the command-line. It ha
 
 ## Prerequisites
 
-The base project currently has no prerequisites but to have a recent enough distribution of Linux. To run tests (as well as the debug mode), valgrind is necessary. You will need doxygen and graphviz installed in order to build the html version of the documentation.
+The base project currently assumes you do run a recent enough distribution of Linux with pthread installed. To run tests (as well as the debug mode), valgrind is necessary. You will need doxygen and graphviz installed in order to build the html version of the documentation.
 
-Here you can find the code standard used during dev. The compatibility version corresponds to the minimum version in which the program is guaranteed (the real min version could be much lower) to perform as originally intended in the terms and conditions mentionned in [LICENSE](LICENSE) and the [main](src/main.cpp) source file.
+Here you can find the code standard used during dev. The compatibility version corresponds to the minimum version in which the program is guaranteed (the real min version could be much lower) to perform as originally intended regarding the terms and conditions mentionned in [LICENSE](LICENSE) and the [main](src/main.cpp) source file.
 
 | dev version used      | compatibility version |
 | --------------------- | --------------------- |
 | g++-11                | g++-9                 |
 | -std=gnu++20          | -std=gnu++17          |
+| linux kernel 5.15     | linux kernel 5.13     |
 | valgrind-3.15.0       | \*                    |
 | python 3.10.4         | python 3.9.12         |
 | doxygen 1.8.17        | \*                    |
@@ -55,7 +56,7 @@ make run-release
 
 Alternatively `make release` will produce a release version of the executable, `make debug` a debug one, `make run-release` will compile and then run a release version, `make run-debug` will compile and run a debug version with valgrind, `make docs` will trigger doxygen and finally `make` builds a release version and updates the doc. You can run an existing executable with `make run`, and clean with `make clean`.
 
-![example_ui](assets/example_ui.jpg)
+[![example_ui - link to font](assets/example_ui.jpg)](https://www.jetbrains.com/fr-fr/lp/mono/)
 
 Moves should be typed in the command line (the program should be asking for it though). Moves are defined by the starting position and the end position, for example b1c3 which would (at the beggining of the game) move the white knight. To play a sample game, please type `make run < tests/play.txt` and then hit enter. To only view error messages on auto-play, please redirect standard output (only) `... > /dev/null` as all errors are thrown to standard error.
 
@@ -180,6 +181,7 @@ gantt
 - added basic endgame detection and alternate king map
 - implemented pawn promotion for additional target pieces (ask for user input)
 - as user is requested an additional input, cpu can only promote to queen as of now (there could still be bugs)
+- async input reduced, sigint sent by user does not always close the app
 
 </details>
 
@@ -188,7 +190,7 @@ gantt
 Bugs (final correction version)
 
 - ~~AI is actually stupid, supposed bug on get_legal_moves on pieces~~ (v0.0.2)
-- cpu asks for promote type
+- ~~cpu asks for promote type~~ (v0.1.0)
 
 TODO (first implementation version)
 
@@ -200,6 +202,6 @@ TODO (first implementation version)
 - opening book
 - endgame
 - iterative deepening (store best move first for next iteration)
-- ~~pawn promotion (knight, bishop and rook)~~ (input v0.1.0)
+- ~~pawn promotion (knight, bishop and rook)~~ (user input v0.1.0)
 - use of standard threads for the cpu to choose moves
 - implement a max thread limit mechanism

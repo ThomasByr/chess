@@ -1,17 +1,31 @@
 #include "app.h"
 
-extern volatile sig_atomic_t received;
-extern volatile sig_atomic_t ctrl_c;
-extern volatile sig_atomic_t ctrl_z;
-
 static void sig_handler(int signal) {
-    received = 1;
+    static int64_t ms = 0;
+    static std::chrono::milliseconds elapsed;
+    static auto base = std::chrono::high_resolution_clock::now();
+    static auto now = base;
+
     switch (signal) {
     case SIGINT:
-        ctrl_c = 1;
-        break;
-    case SIGTSTP:
-        ctrl_z = 1;
+        now = std::chrono::high_resolution_clock::now();
+        elapsed =
+            std::chrono::duration_cast<std::chrono::milliseconds>(now - base);
+        ms = elapsed.count();
+
+        if (ms <= 1) {
+        } else if (ms <= TIMEOUT) {
+            std::exit(EXIT_FAILURE);
+        } else {
+            ms = 0;
+            base = now;
+        }
+
+        fprintf(stdout, "\033[2K\r");
+        std::cout << FG_YEL << "Ctrl-C received (send again shortly to exit).\n"
+                  << RST << ">>> ";
+        std::cout.flush();
+
         break;
     }
 }
@@ -218,7 +232,7 @@ void App::get_version() {
        << __VERSION_PATCH__ << "\n";
     std::cout << ss.str();
     std::cout.flush();
-    exit(EXIT_SUCCESS);
+    std::exit(EXIT_SUCCESS);
 }
 
 void App::get_help(const std::string &msg) {
@@ -248,7 +262,7 @@ void App::get_help(const std::string &msg) {
 
     std::cout << ss.str();
     std::cout.flush();
-    exit(status);
+    std::exit(status);
 }
 
 std::ostream &operator<<(std::ostream &os, const App &app) {
@@ -280,9 +294,8 @@ int App::run() {
     std_debug(ss.str());
 
     std::signal(SIGINT, sig_handler);
-    std::signal(SIGTSTP, sig_handler);
 
-    Board board = Board::new_board();
+    Board board = Board::from_fen(this->fen());
     if (!this->quiet()) {
         std::cout << board << std::endl;
     }
@@ -291,22 +304,9 @@ int App::run() {
     bool is_running = true;
 
     while (is_running) {
-        std::string s = input(">>> ");
+        std::string s;
+        input(s, ">>> ");
         s = to_lower(trim(s));
-
-        if (received == 1) {
-            received = 0;
-
-            if (ctrl_c == 1) {
-                ctrl_c = 0;
-                std::cout << "sigint caught" << std::endl;
-                this->count_sigint++;
-            }
-            if (ctrl_z == 1) {
-                ctrl_z = 0;
-                std::cout << "sigterm caught" << std::endl;
-            }
-        }
 
         Move m;
         if (s.empty() || s == "best" || s == "b") {

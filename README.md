@@ -60,7 +60,7 @@ Alternatively `make release` will produce a release version of the executable, `
 
 Moves should be typed in the command line (the program should be asking for it though). Moves are defined by the starting position and the end position, for example b1c3 which would (at the beggining of the game) move the white knight. To play a sample game, please type `make run < tests/play.txt` and then hit enter. To only view error messages on auto-play, please redirect standard output (only) `... > /dev/null` as all errors are thrown to standard error.
 
-Since v0.1.0, some optional arguments can be typed in the command line from `"f:m:n:vqhV"`. At the time of writing, only vqhV are implemented but that is susceptible to change. Arguments have a short and a long version, please type `./bin/echecs --help` to learn more.
+Since v0.1.0, some optional arguments can be typed in the command line from `"f:m:n:vqhVL"`. At the time of writing, only vqhVL are implemented but that is susceptible to change. Arguments have a short and a long version, please type `./bin/echecs --help` to learn more.
 
 The list of known and supported move patterns and commands is as follow :
 
@@ -172,7 +172,7 @@ gantt
     <summary> v0.1.0 : first release package version (click here to expand) </summary>
 
 - app class
-- command line arguments from `"f:m:n:vqhV"` (`./bin/echecs --help` to learn more)
+- command line arguments from `"f:m:n:vqhVL"` (`./bin/echecs --help` to learn more)
 - released a compatibility mode for gnu++17 (c++17)
 - makefile does not use g++11 explicitely
 - github workflow for security checks

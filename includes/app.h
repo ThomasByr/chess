@@ -6,6 +6,7 @@
 #include <vector>
 
 #include <getopt.h>
+#include <unistd.h>
 
 #include "lib.h"
 
@@ -36,6 +37,7 @@ class App {
     const bool &quiet() const;           // accessor
     const bool &help() const;            // accessor
     const bool &version() const;         // accessor
+    const bool &license() const;         // accessor
 
     std::string &fen();      // mutator
     std::string &moves();    // mutator
@@ -44,6 +46,7 @@ class App {
     bool &quiet();           // mutator
     bool &help();            // mutator
     bool &version();         // mutator
+    bool &license();         // mutator
 
     void fen(const std::string &fen);           // mutator
     void moves(const std::string &moves);       // mutator
@@ -52,6 +55,7 @@ class App {
     void quiet(const bool quiet);               // mutator
     void help(const bool help);                 // mutator
     void version(const bool version);           // mutator
+    void license(const bool license);           // mutator
 
     /**
      * @brief gets the move played by CPU
@@ -71,6 +75,7 @@ class App {
 
     void get_help [[noreturn]] (const std::string &msg = "");
     void get_version [[noreturn]] ();
+    void get_license [[noreturn]] ();
 
     /**
      * @brief parse the command line arguments
@@ -95,6 +100,7 @@ class App {
     bool quiet_;           // quiet mode
     bool help_;            // display help
     bool version_;         // display version
+    bool license_;         // display small license
 
     int64_t white_thinking_time; // white thinking time
     int64_t black_thinking_time; // black thinking time

@@ -1,7 +1,7 @@
 CC = g++
 
 CFLAGS = -march=native -pipe -std=gnu++17 -pedantic -Wall -Wextra -Werror
-LDLIBS =
+LDLIBS = -pthread
 
 INCLUDE_PATH = ./includes
 

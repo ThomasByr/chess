@@ -105,6 +105,7 @@ App::App(int argc, char *argv[]) {
     quiet_ = false;
     help_ = false;
     version_ = false;
+    license_ = false;
 
     white_thinking_time = 0;
     black_thinking_time = 0;

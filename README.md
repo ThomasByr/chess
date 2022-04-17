@@ -194,14 +194,14 @@ Bugs (final correction version)
 
 TODO (first implementation version)
 
-- ~~command line options (file input)~~ (v0.1.0)
-- ~~piece cemetery (piece symbol, times taken, for both players)~~ (v0.0.2)
-- ~~move ordering~~ (basic v0.0.2)
-- Zobrist Hashing for transpositions (this technique allows to update hash rather than computing it every time)
-- improve pawn structure on the board
-- opening book
-- endgame
-- iterative deepening (store best move first for next iteration)
-- ~~pawn promotion (knight, bishop and rook)~~ (user input v0.1.0)
-- use of standard threads for the cpu to choose moves
-- implement a max thread limit mechanism
+- [x] command line options (file input) (v0.1.0)
+- [x] piece cemetery (piece symbol, times taken, for both players) (v0.0.2)
+- [x] move ordering (basic v0.0.2)
+- [ ] Zobrist Hashing for transpositions (this technique allows to update hash rather than computing it every time)
+- [ ] improve pawn structure on the board
+- [ ] opening book
+- [ ] endgame
+- [ ] iterative deepening (store best move first for next iteration)
+- [x] pawn promotion (knight, bishop and rook) (user input v0.1.0)
+- [ ] use of standard threads for the cpu to choose moves
+- [ ] implement a max thread limit mechanism

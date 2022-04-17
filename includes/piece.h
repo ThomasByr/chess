@@ -49,7 +49,7 @@ class Piece {
      */
     Piece(Color color, Position position, bool starting_piece = false);
     virtual ~Piece();
-    static Piece *from_id(int type, Color color);
+    static Piece *from_id(int type, Color color, const Position pos = A1);
 
     virtual Piece *clone() const = 0;
 

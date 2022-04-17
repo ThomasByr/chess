@@ -160,20 +160,20 @@ Piece::Piece(Color color, Position position, bool starting_piece) {
 
 Piece::~Piece() {}
 
-Piece *Piece::from_id(int type, Color color) {
+Piece *Piece::from_id(int type, Color color, const Position pos) {
     switch (type) {
     case 1:
-        return new class King(color, A1);
+        return new class King(color, pos);
     case 2:
-        return new class Pawn(color, A1);
+        return new class Pawn(color, pos);
     case 3:
-        return new class Knight(color, A1);
+        return new class Knight(color, pos);
     case 4:
-        return new class Bishop(color, A1);
+        return new class Bishop(color, pos);
     case 5:
-        return new class Rook(color, A1);
+        return new class Rook(color, pos);
     case 6:
-        return new class Queen(color, A1);
+        return new class Queen(color, pos);
     default:
         panic("Invalid piece id");
     }
@@ -196,13 +196,13 @@ std::vector<Move> Piece::get_valid_moves(std::vector<Move> &result,
         switch (move.move_type()) {
         case Move::PieceMove:
             if (move.from().is_on_board() && move.to().is_on_board()) {
-                if (board.is_legal_move(move, ally_color)) {
+                if (board.is_legal_move(move, ally_color, true)) {
                     moves.push_back(move);
                 }
             }
             break;
         default:
-            if (board.is_legal_move(move, ally_color)) {
+            if (board.is_legal_move(move, ally_color, true)) {
                 moves.push_back(move);
             }
             break;

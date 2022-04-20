@@ -192,6 +192,7 @@ std::vector<Move> Piece::get_valid_moves(std::vector<Move> &result,
     Color ally_color = this->get_color();
     std::vector<Move> moves;
 
+    // TODO: Optimize this
     for (Move move : result) {
         switch (move.move_type()) {
         case Move::PieceMove:
@@ -288,7 +289,7 @@ std::vector<Move> Pawn::get_legal_moves(Board &board) {
     Color ally_color = this->get_color();
     Position pos = this->get_pos();
 
-    Position up = pos.pawn_up(ally_color);
+    Position up = pos.pawn_up(ally_color); // up or down depending on color
     Position next_up = up.pawn_up(ally_color);
     Position up_left = up.next_left();
     Position up_right = up.next_right();
@@ -301,7 +302,7 @@ std::vector<Move> Pawn::get_legal_moves(Board &board) {
             move.from() = pos;
             move.to() = *en_passant;
             result.push_back(move);
-        }
+        } // if en passant is on the left or right
     }
 
     if (next_up.is_on_board() && this->is_starting_pawn() &&
@@ -311,7 +312,7 @@ std::vector<Move> Pawn::get_legal_moves(Board &board) {
         move.from() = pos;
         move.to() = next_up;
         result.push_back(move);
-    }
+    } // if pawn is on starting row and can move two squares
 
     if (up.is_on_board() && board.has_no_piece(up)) {
         Move move;
@@ -319,7 +320,7 @@ std::vector<Move> Pawn::get_legal_moves(Board &board) {
         move.from() = pos;
         move.to() = up;
         result.push_back(move);
-    }
+    } // if pawn can move one square
 
     if (up_left.is_on_board() && board.has_enemy_piece(up_left, ally_color)) {
         Move move;
@@ -327,14 +328,14 @@ std::vector<Move> Pawn::get_legal_moves(Board &board) {
         move.from() = pos;
         move.to() = up_left;
         result.push_back(move);
-    }
+    } // if pawn can attack left
     if (up_right.is_on_board() && board.has_enemy_piece(up_right, ally_color)) {
         Move move;
         move.move_type() = Move::PieceMove;
         move.from() = pos;
         move.to() = up_right;
         result.push_back(move);
-    }
+    } // if pawn can attack right
 
     return this->get_valid_moves(result, board);
 }
@@ -471,7 +472,7 @@ std::vector<Move> King::get_legal_moves(Board &board) {
             move.from() = pos;
             move.to() = p;
             result.push_back(move);
-        }
+        } // for all adjacent squares, if enemy or empty
     }
     if (board.can_kingside_castle(ally_color)) {
         Move move;
@@ -481,7 +482,7 @@ std::vector<Move> King::get_legal_moves(Board &board) {
         Move move;
         move.move_type() = Move::QueenSideCastle;
         result.push_back(move);
-    }
+    } // if can castle
     return this->get_valid_moves(result, board);
 }
 
@@ -575,7 +576,7 @@ std::vector<Move> Queen::get_legal_moves(Board &board) {
             move.from() = pos;
             move.to() = new_pos;
             result.push_back(move);
-        }
+        } // for all squares on the same row, if enemy or empty
     }
     for (unsigned col = 0; col < 8; col++) {
         Position new_pos = Position(pos.row(), col);
@@ -586,7 +587,7 @@ std::vector<Move> Queen::get_legal_moves(Board &board) {
             move.from() = pos;
             move.to() = new_pos;
             result.push_back(move);
-        }
+        } // for all squares on the same column, if enemy or empty
     }
     for (unsigned row = 0; row < 8; row++) {
         for (unsigned col = 0; col < 8; col++) {
@@ -598,7 +599,7 @@ std::vector<Move> Queen::get_legal_moves(Board &board) {
                 move.from() = pos;
                 move.to() = new_pos;
                 result.push_back(move);
-            }
+            } // for all squares on the same diagonal, if enemy or empty
         }
     }
     return this->get_valid_moves(result, board);
@@ -721,7 +722,7 @@ std::vector<Move> Rook::get_legal_moves(Board &board) {
             move.to() = new_pos;
             result.push_back(move);
         }
-    }
+    } // for all squares on the same row, if enemy or empty
     for (unsigned col = 0; col < 8; col++) {
         Position new_pos = Position(pos.row(), col);
         if (new_pos != pos && !board.has_ally_piece(new_pos, ally_color) &&
@@ -732,7 +733,7 @@ std::vector<Move> Rook::get_legal_moves(Board &board) {
             move.to() = new_pos;
             result.push_back(move);
         }
-    }
+    } // for all squares on the same column, if enemy or empty
     return this->get_valid_moves(result, board);
 }
 
@@ -839,7 +840,7 @@ std::vector<Move> Bishop::get_legal_moves(Board &board) {
                 move.from() = pos;
                 move.to() = new_pos;
                 result.push_back(move);
-            }
+            } // for all squares on the same diagonal, if enemy or empty
         }
     }
     return this->get_valid_moves(result, board);
@@ -954,7 +955,7 @@ std::vector<Move> Knight::get_legal_moves(Board &board) {
             move.from() = pos;
             move.to() = p;
             result.push_back(move);
-        }
+        } // for all squares on the "L" shape, if enemy or empty
     }
     return this->get_valid_moves(result, board);
 }

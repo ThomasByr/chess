@@ -49,12 +49,12 @@ BoardBuilder BoardBuilder::row(const Piece &piece) {
     Position pos = piece.get_pos();
     while (pos.col() > 0) {
         pos = pos.next_left();
-    }
+    } // move to leftmost position
 
     for (int i = 0; i < 8; i++) {
         this->board->set_square(pos, Square::from_piece(piece.move_to(pos)));
         pos = pos.next_right();
-    }
+    } // move to rightmost position and set square
 
     return *this;
 }
@@ -63,12 +63,12 @@ BoardBuilder BoardBuilder::column(const Piece &piece) {
     Position pos = piece.get_pos();
     while (pos.row() > 0) {
         pos = pos.next_below();
-    }
+    } // move to bottommost position
 
     for (int i = 0; i < 8; i++) {
         this->board->set_square(pos, Square::from_piece(piece.move_to(pos)));
         pos = pos.next_above();
-    }
+    } // move to topmost position and set square
 
     return *this;
 }
@@ -143,7 +143,7 @@ Board BoardBuilder::build() const { return *board; }
 
 Board::Board() {
     for (int i = 0; i < 64; i++) {
-        squares[i] = EMPTY_SQUARE;
+        squares[i] = EMPTY_SQUARE; // set all squares to empty
     }
     turn = Color::White;
     white_castling_rights = new CastlingRights();
@@ -158,7 +158,7 @@ Board::Board() {
 
 Board::Board(const Board &board) {
     for (unsigned i = 0; i < 64; i++) {
-        squares[i] = Square(board.squares[i]);
+        squares[i] = Square(board.squares[i]); // copy all squares
     }
     turn = board.turn;
     en_passant = board.en_passant;
@@ -173,6 +173,8 @@ Board::Board(const Board &board) {
 
 Board Board::new_board() {
     BoardBuilder builder;
+
+    // fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     Board board = builder.piece(new Rook(Color::Black, A8, true))
                       .piece(new Knight(Color::Black, B8, true))
                       .piece(new Bishop(Color::Black, C8, true))
@@ -332,6 +334,9 @@ bool Board::is_threatened(const Position &pos, const Color &ally_color) {
         int col = i % 8;
         Position square_pos = Position(row, col);
 
+        // if the square position is either not in the same file or rank,
+        // not in the same diagonal, as the position we are checking,
+        // or does not represent a knight move, we can skip it
         if (!square_pos.is_orthogonal_to(pos) &&
             !square_pos.is_diagonal_to(pos) &&
             !square_pos.is_knight_move(pos)) {
@@ -365,7 +370,7 @@ bool Board::is_legal_move(const Move &move, const Color &player_color,
                           const bool &cpu) {
     bool tmp;
     Piece *piece;
-    Position *en_passant;
+    Position *en_passant, from, to;
 
     switch (move.move_type()) {
     case Move::Invalid:
@@ -377,8 +382,8 @@ bool Board::is_legal_move(const Move &move, const Color &player_color,
     case Move::Resign:
         return true;
     case Move::PieceMove:
-        Position from = move.from();
-        Position to = move.to();
+        from = move.from();
+        to = move.to();
 
         piece = this->get_piece(from);
         if (piece == nullptr) {
@@ -409,6 +414,8 @@ bool Board::is_legal_move(const Move &move, const Color &player_color,
                    piece->get_color() == player_color &&
                    !this->apply_move(move, cpu).is_in_check(player_color);
         }
+    default:
+        panic("Invalid move type");
     }
     return false;
 }
@@ -478,8 +485,11 @@ Board Board::move_piece(const Position &from, const Position &to,
         (to.row() == 0 || to.row() == 7)) {
 
         if (cpu) {
+            // the cpu will always choose the queen
+            // TODO: make the cpu choose the best piece
             piece = new Queen(piece->get_color(), piece->get_pos());
         } else {
+            // ask the user what piece to promote to
             bool valid = false;
             while (!valid) {
                 std::string promote;
@@ -511,6 +521,7 @@ Board Board::move_piece(const Position &from, const Position &to,
 
     result.add_piece(piece->move_to(to));
 
+    // check for castling validity
     CastlingRights *castling_rights;
     switch (piece->get_color()) {
     case Color::White:
@@ -609,10 +620,19 @@ bool Board::has_sufficient_material(const Color &color) const {
         }
     }
 
+    // sort the pieces based of their base material value
     std::sort(pieces.begin(), pieces.end(), [](Piece *a, Piece *b) {
         return a->get_material_value() < b->get_material_value();
     });
 
+    // if there are no pieces, then the game is over
+    // if the remaining pieces are :
+    // 1. only one piece
+    // 2. one knight
+    // 3. one bishop
+    // 4. two knights
+    // 5. two bishops
+    // then the current player has insufficient material
     if (pieces.size() == 0) {
         return false;
     } else if (pieces.size() == 1 && pieces[0]->get_type() == Piece::King) {
@@ -639,6 +659,10 @@ bool Board::has_insufficient_material(const Color &color) const {
 }
 
 bool Board::is_stalemate() {
+    // if there is no legal moves,
+    // and the player is not in check,
+    // or if both players have insufficient material,
+    // then the game is a stalemate
     return (this->get_legal_moves().empty() &&
             !this->is_in_check(this->get_current_player_color())) ||
            (this->has_insufficient_material(this->turn) &&
@@ -646,6 +670,9 @@ bool Board::is_stalemate() {
 }
 
 bool Board::is_checkmate() {
+    // if there is no legal moves,
+    // and the player is in check,
+    // then the game is a checkmate
     return this->is_in_check(this->get_current_player_color()) &&
            this->get_legal_moves().empty();
 }
@@ -672,7 +699,7 @@ bool Board::is_endgame() {
 
 Board Board::change_turn() {
     this->turn = !this->turn;
-    return *this;
+    return *this; // return a copy of the board
 }
 
 Board Board::apply_move(const Move &move, const bool &cpu) {
@@ -907,6 +934,7 @@ int Board::get_material_advantage(const Color &color) const {
 std::ostream &operator<<(std::ostream &os, Board &board) {
     std::string rating_bar = board.rating_bar(16);
 
+    // this string flips over depending on whose turn it is
     std::string abc;
     switch (board.get_turn_color()) {
     case Color::White:
@@ -986,6 +1014,7 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
         os << "║ " << print_row + 1 << " ";
 
         if (row == 0) {
+            // display material advantage
             int white_adv = board.get_material_advantage(Color::White);
             int black_adv = board.get_material_advantage(Color::Black);
 
@@ -997,6 +1026,7 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
                 os << " Black +" << black_adv << " points";
             }
         } else if (row == 1) {
+            // piece cemetery (white takes)
             for (unsigned id = 1; id < 7; id++) {
                 unsigned count = board.white_takes[id];
                 Piece *piece = Piece::from_id(id, Color::Black);
@@ -1006,6 +1036,7 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
                 os << " " << piece->to_string() << "*" << count;
             }
         } else if (row == 2) {
+            // piece cemetery (black takes)
             for (unsigned id = 1; id < 7; id++) {
                 unsigned count = board.black_takes[id];
                 Piece *piece = Piece::from_id(id, Color::White);
@@ -1015,8 +1046,10 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
                 os << " " << piece->to_string() << "*" << count;
             }
         } else if (row == 3) {
+            // display the current player's color
             os << " " << board.get_turn_color() << " to move";
         } else if (row == 4) {
+            // display the rating bar
             os << " [" << rating_bar << "]";
         }
 

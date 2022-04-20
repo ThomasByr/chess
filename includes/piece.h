@@ -145,10 +145,10 @@ class Piece {
     virtual bool is_kingside_rook() const = 0;
 
     /**
-     * @brief returns a collection of all pseudo legal moves
-     * 
+     * @brief returns a collection of all legal moves
+     *
      * @param board board
-     * @return std::vector<Move> - pseudo legal moves
+     * @return std::vector<Move> -  legal moves
      */
     virtual std::vector<Move> get_legal_moves(Board &board) = 0;
     /**

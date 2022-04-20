@@ -48,6 +48,7 @@ std::string operator*(std::string str, unsigned n) {
 }
 
 void input(std::string &str, const std::string &prompt) {
+    // launch a thread to handle input
     std::thread([&str, &prompt]() {
         std::cout << prompt;
         std::cout.flush();
@@ -58,10 +59,12 @@ void input(std::string &str, const std::string &prompt) {
 std::string trim(const std::string &s) {
     std::string::size_type first = s.find_first_not_of(' ');
     std::string::size_type last = s.find_last_not_of(' ');
-    if (first == std::string::npos || last == std::string::npos) {
-        return "";
-    }
-    return s.substr(first, (last - first + 1));
+
+    // std::string::npos is returned if all characters are whitespace
+    // in this case s.substr returns an empty string, which is what we want
+    return (first == std::string::npos || last == std::string::npos)
+               ? std::string()
+               : s.substr(first, last - first + 1);
 }
 
 std::string to_lower(const std::string &s) {

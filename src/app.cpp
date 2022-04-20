@@ -8,6 +8,7 @@ static void sig_handler(int signal) {
 
     switch (signal) {
     case SIGINT:
+        // count elapsed time since last SIGINT
         now = std::chrono::high_resolution_clock::now();
         elapsed =
             std::chrono::duration_cast<std::chrono::milliseconds>(now - base);
@@ -15,8 +16,10 @@ static void sig_handler(int signal) {
 
         if (ms <= 1) {
         } else if (ms <= TIMEOUT) {
+            // force exit
             std::exit(EXIT_FAILURE);
         } else {
+            // reset timer
             ms = 0;
             base = now;
         }
@@ -33,6 +36,7 @@ static void sig_handler(int signal) {
 Move App::get_cpu_move(Board &board, bool best) {
     std::tuple<Move, unsigned, double> r;
 
+    // get move and time
     auto start = std::chrono::high_resolution_clock::now();
     if (best) {
         r = board.get_next_best_move(4);
@@ -46,7 +50,7 @@ Move App::get_cpu_move(Board &board, bool best) {
     int64_t ms = elapsed.count();
     switch (board.get_turn_color()) {
     case Color::White:
-        this->white_thinking_time += ms;
+        this->white_thinking_time += ms; // record total thinking time
         break;
     case Color::Black:
         this->black_thinking_time += ms;
@@ -59,6 +63,7 @@ Move App::get_cpu_move(Board &board, bool best) {
     std::cout << "CPU evaluated " << count << " moves before choosing to ";
     std::cout.flush();
 
+    // display move to user
     Piece *from;
     Piece *to;
     switch (m.move_type()) {
@@ -88,6 +93,8 @@ Move App::get_cpu_move(Board &board, bool best) {
     case Move::Invalid:
         std::cout << "fliptables" << std::endl;
         break;
+    default:
+        panic("unhandled move type");
     }
 
     if (this->verbose()) {
@@ -168,6 +175,7 @@ void App::license(const bool license) { license_ = std::move(license); }
 
 void App::parse_args(int argc, char *argv[]) {
     int opt;
+    // long options
     const struct option long_options[] = {
         {"fen", required_argument, nullptr, 'f'},
         {"moves", required_argument, nullptr, 'm'},
@@ -179,35 +187,35 @@ void App::parse_args(int argc, char *argv[]) {
         {"license", no_argument, nullptr, 'L'},
         {nullptr, 0, nullptr, 0}};
 
-    const char *short_options = "f:m:n:vqhVL";
-    std::string bad_option;
+    const char *short_options = "f:m:n:vqhVL"; // short options
+    std::string bad_option;                    // bad option full name
     std::stringstream ss;
 
     while ((opt = getopt_long(argc, argv, short_options, long_options,
                               nullptr)) != -1) {
         switch (opt) {
-        case 'f':
+        case 'f': // starting fen position
             fen_ = optarg;
             break;
-        case 'm':
+        case 'm': // list of moves to make before starting
             moves_ = optarg;
             break;
-        case 'n':
+        case 'n': // filename to load moves from
             filename_ = optarg;
             break;
-        case 'v':
+        case 'v': // verbose mode
             verbose_ = true;
             break;
-        case 'q':
+        case 'q': // quiet mode
             quiet_ = true;
             break;
-        case 'h':
+        case 'h': // get help
             help_ = true;
             break;
-        case 'V':
+        case 'V': // get version
             version_ = true;
             break;
-        case 'L':
+        case 'L': // get license
             license_ = true;
             break;
         default:
@@ -251,6 +259,7 @@ void App::get_version() {
 }
 
 void App::get_help(const std::string &msg) {
+    // exit status is 0 if no error
     int status = msg.empty() ? EXIT_SUCCESS : EXIT_FAILURE;
     std::stringstream ss;
 
@@ -331,7 +340,9 @@ std::ostream &operator<<(std::ostream &os, const App &app) {
 }
 
 void history_display(const std::vector<Move> &history) {
+    // display history
     for (std::vector<Move>::size_type i = 0; i < history.size(); i++) {
+        // this is to display two moves per line
         if (i < history.size() - 1) {
             std::cout << history[i] << " | " << history[i + 1] << std::endl;
             i++;
@@ -348,20 +359,21 @@ int App::run() {
 
     std::signal(SIGINT, sig_handler);
 
+    // load board from FEN (default fen is set in constructor)
     Board board = Board::from_fen(this->fen());
     if (!this->quiet()) {
         std::cout << board << std::endl;
-    }
+    } // display board is not quiet
 
     std::vector<Move> history = std::vector<Move>();
     bool is_running = true;
 
     while (is_running) {
         std::string s;
-        input(s, ">>> ");
-        s = to_lower(trim(s));
+        input(s, ">>> ");      // async input
+        s = to_lower(trim(s)); // trim and lowercase
 
-        Move m;
+        Move m; // invalid move
         if (s.empty() || s == "best" || s == "b") {
             std::cout << "Waiting for CPU to choose best move..." << std::endl;
             m = get_cpu_move(board, true);
@@ -385,7 +397,7 @@ int App::run() {
             history_display(history);
             continue;
         } else {
-            int t = m.update_from_string(s);
+            int t = m.update_from_string(s); // update move from string
             switch (t) {
             case Move::Invalid:
                 std::cerr << "Invalid move: " << s << std::endl;
@@ -394,8 +406,10 @@ int App::run() {
             }
         }
 
-        GameResult r;
+        GameResult r; // invalid result
         std::cout << "\n";
+
+        // play move and either continue or end game
         switch ((r = board.play_move(m)).result_type()) {
         case GameResult::Continuing:
             board = r.next_board();
@@ -425,8 +439,10 @@ int App::run() {
             is_running = false;
             board = r.next_board();
             break;
+        default:
+            panic("Unknown game result.");
         }
-        s.clear();
+        s.clear(); // clear input buffer for next move
     }
 
     if (this->verbose()) {
@@ -436,7 +452,9 @@ int App::run() {
                   << "ms\n";
         std::cout << "black cpu thinking time: " << this->black_thinking_time
                   << "ms\n";
-    }
+    } // display history if verbose
+
+    // end position requested by subject paper
     std::cout << "\n" << board.end_fen() << std::endl;
     return EXIT_SUCCESS;
 }

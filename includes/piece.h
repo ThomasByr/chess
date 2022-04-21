@@ -8,6 +8,8 @@
 #include "move.h"
 #include "position.h"
 
+extern const bool WHITE_IS_FILLED;
+
 /**
 * @brief The Piece class
 *

@@ -233,7 +233,8 @@ std::ostream &Pawn::operator<<(std::ostream &os) const {
 }
 
 std::string Pawn::to_string() const {
-    switch (this->get_color()) {
+    Color color = WHITE_IS_FILLED ? !this->get_color() : this->get_color();
+    switch (color) {
     case Color::White:
         return "\u2659";
     case Color::Black:
@@ -402,7 +403,8 @@ std::ostream &King::operator<<(std::ostream &os) const {
 }
 
 std::string King::to_string() const {
-    switch (this->get_color()) {
+    Color color = WHITE_IS_FILLED ? !this->get_color() : this->get_color();
+    switch (color) {
     case Color::White:
         return "\u2654";
     case Color::Black:
@@ -513,7 +515,8 @@ std::ostream &Queen::operator<<(std::ostream &os) const {
 }
 
 std::string Queen::to_string() const {
-    switch (this->get_color()) {
+    Color color = WHITE_IS_FILLED ? !this->get_color() : this->get_color();
+    switch (color) {
     case Color::White:
         return "\u2655";
     case Color::Black:
@@ -654,7 +657,8 @@ std::ostream &Rook::operator<<(std::ostream &os) const {
 }
 
 std::string Rook::to_string() const {
-    switch (this->get_color()) {
+    Color color = WHITE_IS_FILLED ? !this->get_color() : this->get_color();
+    switch (color) {
     case Color::White:
         return "\u2656";
     case Color::Black:
@@ -776,7 +780,8 @@ std::ostream &Bishop::operator<<(std::ostream &os) const {
 }
 
 std::string Bishop::to_string() const {
-    switch (this->get_color()) {
+    Color color = WHITE_IS_FILLED ? !this->get_color() : this->get_color();
+    switch (color) {
     case Color::White:
         return "\u2657";
     case Color::Black:
@@ -885,7 +890,8 @@ std::ostream &Knight::operator<<(std::ostream &os) const {
 }
 
 std::string Knight::to_string() const {
-    switch (this->get_color()) {
+    Color color = WHITE_IS_FILLED ? !this->get_color() : this->get_color();
+    switch (color) {
     case Color::White:
         return "\u2658";
     case Color::Black:

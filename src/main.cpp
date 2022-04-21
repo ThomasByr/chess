@@ -65,6 +65,13 @@
 
 #include "app.h"
 
+/* constants */
+
+// WHITE_IS_FILLED means that white pieces will be displayed
+// with a white filled character
+// (e.g. "♜" for white rook)
+const bool WHITE_IS_FILLED = true;
+
 int main(int argc, char *argv[]) {
     std_debug("running in debug mode");
     App app = App(argc, argv);

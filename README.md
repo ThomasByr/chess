@@ -60,7 +60,7 @@ Alternatively `make release` will produce a release version of the executable, `
 
 Moves should be typed in the command line (the program should be asking for it though). Moves are defined by the starting position and the end position, for example b1c3 which would (at the beggining of the game) move the white knight. To play a sample game, please type `make run < tests/play.txt` and then hit enter. To only view error messages on auto-play, please redirect standard output (only) `... > /dev/null` as all errors are thrown to standard error. You can also pass `--quiet` as command line argument as it shuts down most display (but still outputs the end fen string).
 
-Since v0.1.0, some optional arguments can be typed in the command line from `"f:m:n:vqhVL"`. At the time of writing, only vqhVL are implemented but that is susceptible to change. Arguments have a short and a long version, please type `./bin/echecs --help` to learn more.
+Since v0.1.0, some optional arguments can be typed in the command line from `"f:m:n:vqhVL"`. At the time of writing, only fvqhVL are implemented but that is susceptible to change. Arguments have a short and a long version, please type `./bin/echecs --help` to learn more.
 
 The list of known and supported move patterns and commands is as follow :
 

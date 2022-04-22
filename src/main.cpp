@@ -65,7 +65,7 @@
 
 #include "app.h"
 
-/* constants */
+/** constants **/
 
 // WHITE_IS_FILLED means that white pieces will be displayed
 // with a white filled character

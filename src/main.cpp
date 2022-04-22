@@ -45,7 +45,7 @@
 //! @param [in] -V, --version
 //!
 //! @note -f, -m, -n are mutually exclusive and at the time of writing,
-//!   not yet implemented.
+//!   only -f is implemented.
 //!
 //! Move notation is as follows:
 //!  - "e2e4" for a normal move

@@ -33,3 +33,5 @@
     - as user is requested an additional input, cpu can only promote to queen as of now (there could still be bugs)
     - async input reduced, sigint sent by user does not always close the app
     - added simple display tweak, user can switch filling up white pieces for display
+    - add pop command to go to the previous board if available (not recoverable)
+    - global state of the program is registered

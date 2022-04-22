@@ -6,6 +6,8 @@ static void sig_handler(int signal) {
     static auto base = std::chrono::high_resolution_clock::now();
     static auto now = base;
 
+    state = State::HANDLING_SIGNAL;
+
     switch (signal) {
     case SIGINT:
         // count elapsed time since last SIGINT
@@ -17,6 +19,7 @@ static void sig_handler(int signal) {
         if (ms <= 1) {
         } else if (ms <= TIMEOUT) {
             // force exit
+            state = State::REGISTERING_EXIT;
             chk(write(STDOUT_FILENO, "\033[2K\r", 5));
             std::cout << FG_RED << "Ctrl-C (user interrupt)." << RST << "\n";
             std::exit(EXIT_FAILURE);
@@ -31,6 +34,15 @@ static void sig_handler(int signal) {
                   << RST << "\n>>> ";
         std::cout.flush();
 
+        break;
+
+    case SIGSEGV:
+        std::cout << FG_RED << "Segmentation fault." << RST << "\n";
+        if (ask("Display current state? ")) {
+            std::cout << FG_WHT << "State: " << state << RST << "\n";
+        }
+        std::cout.flush();
+        std::exit(EXIT_FAILURE);
         break;
     }
 }
@@ -68,6 +80,7 @@ Move App::get_cpu_move(Board &board, bool best) {
     // display move to user
     Piece *from;
     Piece *to;
+    state = State::DISPLAYING_CPU_MOVE;
     switch (m.move_type()) {
     case Move::PieceMove:
         from = board.get_piece(m.from());
@@ -119,7 +132,10 @@ App::App(int argc, char *argv[]) {
     white_thinking_time = 0;
     black_thinking_time = 0;
 
+    state = State::PARSING_ARGS;
     parse_args(argc, argv);
+
+    state = State::CHECKING_ARGS;
     check_args();
 }
 
@@ -360,6 +376,7 @@ int App::run() {
     std_debug(ss.str());
 
     std::signal(SIGINT, sig_handler);
+    std::signal(SIGSEGV, sig_handler);
 
     // load board from FEN (default fen is set in constructor)
     Board board = Board::from_fen(this->fen());
@@ -367,6 +384,7 @@ int App::run() {
         std::cout << board << std::endl;
     } // display board is not quiet
 
+    std::vector<Board> boards = std::vector<Board>();
     std::vector<Move> history = std::vector<Move>();
     bool is_running = true;
 
@@ -374,6 +392,8 @@ int App::run() {
         std::string s;
         input(s, ">>> ");      // async input
         s = to_lower(trim(s)); // trim and lowercase
+
+        state = State::PARSING_MOVE;
 
         Move m; // invalid move
         if (s.empty() || s == "best" || s == "b") {
@@ -398,6 +418,16 @@ int App::run() {
         } else if (s == "history" || s == "h") {
             history_display(history);
             continue;
+        } else if (s == "pop" || s == "back" || s == "b") {
+            if (boards.size() > 0) {
+                board = boards.back();
+                boards.pop_back();
+                history.pop_back();
+                std::cout << board << std::endl;
+            } else {
+                std::cout << "No previous board to pop" << std::endl;
+            }
+            continue;
         } else {
             int t = m.update_from_string(s); // update move from string
             switch (t) {
@@ -414,6 +444,7 @@ int App::run() {
         // play move and either continue or end game
         switch ((r = board.play_move(m)).result_type()) {
         case GameResult::Continuing:
+            boards.push_back(std::move(board));
             board = r.next_board();
             if (!this->quiet()) {
                 std::cout << board << std::endl;
@@ -428,6 +459,7 @@ int App::run() {
                       << " is victorious." << std::endl;
             history.push_back(m);
             is_running = false;
+            boards.push_back(std::move(board));
             board = r.next_board();
             break;
         case GameResult::IllegalMove:
@@ -439,6 +471,7 @@ int App::run() {
             std::cout << "Drawn game." << std::endl;
             history.push_back(m);
             is_running = false;
+            boards.push_back(std::move(board));
             board = r.next_board();
             break;
         default:

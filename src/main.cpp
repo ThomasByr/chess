@@ -72,7 +72,14 @@
 // (e.g. "♜" for white rook)
 const bool WHITE_IS_FILLED = true;
 
+// enum class to represent the current state of the program
+// (e.g. CPU is thinking, waiting for input, etc.)
+State state = State::PROGRAM_STARTING;
+
+void at_exit(void) { state = State::REGISTERING_EXIT; }
+
 int main(int argc, char *argv[]) {
+    chk(atexit(at_exit));
     std_debug("running in debug mode");
     App app = App(argc, argv);
     // std::cout << app << std::endl;

@@ -358,6 +358,7 @@ bool Board::is_threatened(const Position &pos, const Color &ally_color) {
 }
 
 bool Board::is_in_check(const Color &color) {
+    state = State::CHECKING_CHECK;
     Position king_pos = this->get_king_position(color);
     if (king_pos.is_off_board()) {
         return false;
@@ -421,10 +422,12 @@ bool Board::is_legal_move(const Move &move, const Color &player_color,
 }
 
 Board Board::apply_eval_move(const Move &move, const bool &cpu) {
+    state = State::PLAYING_MOVES;
     return this->apply_move(move, cpu).change_turn();
 }
 
 std::vector<Move> Board::get_legal_moves() {
+    state = State::GETTING_LEGAL_MOVES;
     std::vector<Move> result;
     Color color = this->get_current_player_color();
 
@@ -673,6 +676,7 @@ bool Board::is_checkmate() {
     // if there is no legal moves,
     // and the player is in check,
     // then the game is a checkmate
+    state = State::CHECKING_CHECKMATE;
     return this->is_in_check(this->get_current_player_color()) &&
            this->get_legal_moves().empty();
 }
@@ -703,6 +707,7 @@ Board Board::change_turn() {
 }
 
 Board Board::apply_move(const Move &move, const bool &cpu) {
+    state = State::PLAYING_MOVES;
     Position *en_passant, king_pos, rook_pos, from, to;
     Piece *piece;
     Color player_color;
@@ -768,6 +773,7 @@ Board Board::apply_move(const Move &move, const bool &cpu) {
 }
 
 GameResult Board::play_move(const Move &move, const bool &cpu) {
+    state = State::PLAYING_MOVES;
     Color current_color = this->get_current_player_color();
     GameResult result;
 
@@ -932,6 +938,7 @@ int Board::get_material_advantage(const Color &color) const {
 }
 
 std::ostream &operator<<(std::ostream &os, Board &board) {
+    state = State::WRITING_OSTREAM;
     std::string rating_bar = board.rating_bar(16);
 
     // this string flips over depending on whose turn it is
@@ -952,6 +959,7 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
     unsigned height = 8, width = 8;
 
     for (unsigned row = 0; row < height; row++) {
+        state = State::WRITING_OSTREAM;
         unsigned print_row = 0;
         os << "\n";
         switch (board.get_turn_color()) {
@@ -967,6 +975,7 @@ std::ostream &operator<<(std::ostream &os, Board &board) {
         os << print_row + 1 << " ║";
 
         for (unsigned col = 0; col < width; col++) {
+            state = State::WRITING_OSTREAM;
             unsigned print_col = 0;
             switch (board.get_turn_color()) {
             case Color::Black:
@@ -1094,9 +1103,14 @@ bool cmp(Board &board, Move a, Move b) {
 }
 
 std::tuple<Move, u_int64_t, double> Board::get_next_best_move(int depth) {
+    state = State::GETTING_LEGAL_MOVES;
     std::vector<Move> legal_moves = this->get_legal_moves();
+
+    state = State::SORTING_MOVES;
     std::sort(legal_moves.begin(), legal_moves.end(),
               [&](Move a, Move b) { return cmp(*this, a, b); });
+    state = State::PLAYING_MOVES;
+
     double best_move_value = -999999.;
     Move best_move = Move();
     best_move.move_type() = Move::Resign;
@@ -1118,9 +1132,14 @@ std::tuple<Move, u_int64_t, double> Board::get_next_best_move(int depth) {
 }
 
 std::tuple<Move, u_int64_t, double> Board::get_next_worst_move(int depth) {
+    state = State::GETTING_LEGAL_MOVES;
     std::vector<Move> legal_moves = this->get_legal_moves();
+
+    state = State::SORTING_MOVES;
     std::sort(legal_moves.begin(), legal_moves.end(),
               [&](Move a, Move b) { return cmp(*this, a, b); });
+    state = State::PLAYING_MOVES;
+
     double best_move_value = -999999.;
     Move best_move = Move();
     best_move.move_type() = Move::Resign;
@@ -1149,9 +1168,14 @@ double Board::minimax(int depth, double alpha, double beta, bool is_maximizing,
         return this->value_for(getting_move_for);
     }
 
+    state = State::GETTING_LEGAL_MOVES;
     std::vector<Move> legal_moves = this->get_legal_moves();
+
+    state = State::SORTING_MOVES;
     std::sort(legal_moves.begin(), legal_moves.end(),
               [&](Move a, Move b) { return cmp(*this, a, b); });
+    state = State::PLAYING_MOVES;
+
     double best_move_value;
 
     if (is_maximizing) {

@@ -104,6 +104,4 @@ class App {
 
     int64_t white_thinking_time; // white thinking time
     int64_t black_thinking_time; // black thinking time
-
-    unsigned count_sigint; // count registered sigint
 };

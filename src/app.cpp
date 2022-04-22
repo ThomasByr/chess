@@ -17,6 +17,8 @@ static void sig_handler(int signal) {
         if (ms <= 1) {
         } else if (ms <= TIMEOUT) {
             // force exit
+            chk(write(STDOUT_FILENO, "\033[2K\r", 5));
+            std::cout << FG_RED << "Ctrl-C (user interrupt)." << RST << "\n";
             std::exit(EXIT_FAILURE);
         } else {
             // reset timer

@@ -52,6 +52,7 @@
     } while (0)
 
 void panic [[noreturn]] (const std::string &msg);
+bool ask(const std::string &msg);
 
 class App;
 class Square;
@@ -76,6 +77,31 @@ class Rook;
 enum class Color { White, Black };
 
 /**
+ * @brief The State class
+ *
+ * This class represents the state of the program for debug purposes.
+ */
+enum class State {
+    CPU_THINKING,
+    WAITING_FOR_INPUT,
+    PROGRAM_STARTING,
+    SORTING_MOVES,
+    MOVING_PIECE,
+    CHECKING_CHECK,
+    CHECKING_CHECKMATE,
+    CHECKING_STALEMATE,
+    GETTING_LEGAL_MOVES,
+    PLAYING_MOVES,
+    HANDLING_SIGNAL,
+    REGISTERING_EXIT,
+    PARSING_MOVE,
+    DISPLAYING_CPU_MOVE,
+    PARSING_ARGS,
+    CHECKING_ARGS,
+    WRITING_OSTREAM,
+};
+
+/**
  * @brief not operator for enum class Color
  * 
  * @param color color
@@ -91,6 +117,15 @@ Color operator!(Color color);
  * @return std::ostream& - ostream
  */
 std::ostream &operator<<(std::ostream &os, Color color);
+
+/**
+ * @brief fmt a state
+ *
+ * @param os ostream
+ * @param state state
+ * @return std::ostream& - ostream
+ */
+std::ostream &operator<<(std::ostream &os, State state);
 
 /**
  * @brief implements repeat for a string
@@ -134,3 +169,5 @@ std::string trim(const std::string &s);
  * @return std::string - new string
  */
 std::string to_lower(const std::string &s);
+
+extern State state;

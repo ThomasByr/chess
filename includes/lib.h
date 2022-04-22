@@ -110,8 +110,27 @@ std::string repeat(std::string str, const unsigned n);
  */
 std::string operator*(std::string str, unsigned n);
 
+/**
+ * @brief launches a thread to handle input
+ * so that the main thread can continue
+ *
+ * @param str place to store input
+ * @param prompt prompt to display
+ */
 void input(std::string &str, const std::string &prompt);
 
+/**
+ * @brief removes whitespace from the beginning and end of a string
+ *
+ * @param s string
+ * @return std::string - new string
+ */
 std::string trim(const std::string &s);
 
+/**
+ * @brief makes a string lowercase
+ *
+ * @param s string
+ * @return std::string - new string
+ */
 std::string to_lower(const std::string &s);

@@ -42,7 +42,7 @@ class GameResult {
     void move(const Move &move); // mutator
 
   private:
-    int result_type_;
+    int result_type_; // type of the result
 
     Color winner_;     // Color::White or Color::Black if result_type == Victory
     Board next_board_; // Board after the move if result_type == Continuing

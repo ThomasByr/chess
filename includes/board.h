@@ -91,6 +91,12 @@ class Board {
      *
      */
     Board();
+    /**
+     * @brief Construct a new Board object
+     * needed since gnu++17 does not provide the wanted default constructor
+     *
+     * @param other other Board
+     */
     Board(const Board &other);
     ~Board();
 

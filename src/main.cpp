@@ -79,10 +79,10 @@ State state = State::PROGRAM_STARTING;
 void at_exit(void) { state = State::REGISTERING_EXIT; }
 
 int main(int argc, char *argv[]) {
-    chk(atexit(at_exit));
     std_debug("running in debug mode");
     App app = App(argc, argv);
     // std::cout << app << std::endl;
 
+    chk(atexit(at_exit));
     return app.run();
 }

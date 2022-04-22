@@ -54,7 +54,7 @@ class Move {
     friend std::ostream &operator<<(std::ostream &os, const Move &move);
 
   private:
-    int move_type_;
+    int move_type_; // type of the move
     Position from_; // Position of the piece that is moving
     Position to_;   // Position of the piece that is moving to
 };

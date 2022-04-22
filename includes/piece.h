@@ -51,8 +51,21 @@ class Piece {
      */
     Piece(Color color, Position position, bool starting_piece = false);
     virtual ~Piece();
+    /**
+     * @brief create a new piece given a type, a color and a position
+     *
+     * @param type type of the piece
+     * @param color color of the piece
+     * @param pos position, (optional)
+     * @return Piece* - new Piece
+     */
     static Piece *from_id(int type, Color color, const Position pos = A1);
 
+    /**
+     * @brief duplicate a piece
+     *
+     * @return Piece* - new Piece
+     */
     virtual Piece *clone() const = 0;
 
     /**
@@ -112,15 +125,15 @@ class Piece {
      * @return int - value
      */
     virtual int get_material_value() const = 0;
-    /** 
+    /**
      * @brief Get the weighted value of a piece. This simply factors in position
      * to the pieces value. For example, a knight that is in the center is
      * more favorable than a knight on the side of the board. Similarly,
      * a king in the center of the board is highly unfavorable compared to
      * a king its respective side.
-     * 
+     *
      * Additionally, the weighted value of the piece is 10 times greater than
-     * its material value, plus or minus a weight ranging between 5.0 and -5.0.
+     * its material value, plus or minus a weight ranging between 50 and -50.
      */
     virtual double get_weighted_value() const = 0;
 

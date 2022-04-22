@@ -75,6 +75,7 @@ The list of known and supported move patterns and commands is as follow :
 | <details><summary>`pass`</summary>or `p`</details>                                                             | to immediately change turn without playing    |
 | <details><summary>`rate`</summary>or `r`</details>                                                             | to rate the current position                  |
 | <details><summary>`history`</summary>or `h`</details>                                                          | to show the valid moves history               |
+| <details><summary>`pop`</summary>or `back` or `b`</details>                                                    | to load the previous board if available       |
 | <details><summary>`/quit`</summary>or `/q` or `/`</details>                                                    | to quit the game and display the final state  |
 
 ## License
@@ -183,6 +184,8 @@ gantt
 - as user is requested an additional input, cpu can only promote to queen as of now (there could still be bugs)
 - async input reduced, sigint sent by user does not always close the app
 - added simple display tweak, user can switch filling up white pieces for display
+- add pop command to go to the previous board if available (not recoverable)
+- global state of the program is registered
 
 </details>
 

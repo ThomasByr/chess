@@ -210,9 +210,10 @@ Board Board::from_fen(const std::string &fen) {
 
     BoardBuilder builder;
     std::string fen_board = fen.substr(0, fen.find(' '));
-    int file = 0, rank = 7;
+    int file = 0, rank = 7, piece_id;
 
     for (const unsigned char c : fen_board) {
+        assert_debug(file <= 8 && rank >= -1);
         if (c == '/') {
             file = 0;
             rank--;
@@ -220,16 +221,55 @@ Board Board::from_fen(const std::string &fen) {
             if (isdigit(c)) {
                 file += c - '0';
             } else {
-                int piece = piece_map.at(tolower(c));
+                try {
+                    piece_id = piece_map.at(tolower(c));
+                } catch (std::out_of_range &e) {
+                    throw std::invalid_argument("Invalid piece in FEN");
+                }
+                assert_debug(file < 8 && rank > -1);
                 Color color = isupper(c) ? Color::White : Color::Black;
                 Position pos = Position(rank, file);
-                builder.piece(Piece::from_id(piece, color, pos));
+
+                Piece *piece_ptr = Piece::from_id(piece_id, color, pos);
+                std::stringstream ss;
+                ss << "Placing " << piece_ptr->to_string() << " at " << pos;
+                std_debug(ss.str());
+
+                builder.piece(piece_ptr);
                 file++;
             }
         }
     }
 
-    return builder.enable_castling().build();
+    // get turn
+    Color turn =
+        fen.find("w") != std::string::npos ? Color::White : Color::Black;
+
+    // get castling rights
+    std::string castling_rights = fen.substr(fen.find(' ') + 1);
+    if (castling_rights.find('K') != std::string::npos) {
+        std_debug("Enabling white kingside castle");
+        builder.enable_kingside_castle(Color::White);
+    }
+    if (castling_rights.find('Q') != std::string::npos) {
+        std_debug("Enabling white queenside castle");
+        builder.enable_queenside_castle(Color::White);
+    }
+    if (castling_rights.find('k') != std::string::npos) {
+        std_debug("Enabling black kingside castle");
+        builder.enable_kingside_castle(Color::Black);
+    }
+    if (castling_rights.find('q') != std::string::npos) {
+        std_debug("Enabling black queenside castle");
+        builder.enable_queenside_castle(Color::Black);
+    }
+
+    // TODO: en passant
+
+    Board board = builder.build();
+    board.set_turn(turn);
+
+    return board;
 }
 
 Board::~Board() {}

@@ -35,3 +35,6 @@
     - added simple display tweak, user can switch filling up white pieces for display
     - add pop command to go to the previous board if available (not recoverable)
     - global state of the program is registered
+5.  **v0.1.1** more functionalities and patches
+    - use of standard assert library
+    - added better starting fen handle (turn, castling rights, en passant)

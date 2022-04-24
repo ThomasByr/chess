@@ -381,7 +381,7 @@ int App::run() {
     // load board from FEN (default fen is set in constructor)
     Board board = Board::from_fen(this->fen());
     if (!this->quiet()) {
-        std::cout << board << std::endl;
+        std::cout << "\n" << board << std::endl;
     } // display board is not quiet
 
     std::vector<Board> boards = std::vector<Board>();
@@ -420,6 +420,7 @@ int App::run() {
             continue;
         } else if (s == "pop" || s == "back" || s == "b") {
             if (boards.size() > 0) {
+                assert_debug(boards.size() == history.size());
                 board = boards.back();
                 boards.pop_back();
                 history.pop_back();

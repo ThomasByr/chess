@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cassert>
 #include <cerrno>
 #include <chrono>
 #include <cstring>
@@ -15,7 +16,7 @@
 
 #define __VERSION_MAJOR__ 0
 #define __VERSION_MINOR__ 1
-#define __VERSION_PATCH__ 0
+#define __VERSION_PATCH__ 1
 
 #define TIMEOUT 3000
 
@@ -40,8 +41,11 @@
 
 #ifndef DEBUG
 #define std_debug(msg) (void)msg;
+#define assert_debug(cond) (void)(cond);
 #else
 #define std_debug(msg) std::cout << msg << std::endl;
+#define assert_debug(cond) assert(cond);
+
 #endif
 
 #define chk(op)           \

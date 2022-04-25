@@ -264,10 +264,25 @@ Board Board::from_fen(const std::string &fen) {
         builder.enable_queenside_castle(Color::Black);
     }
 
-    // TODO: en passant
+    // get en passant
+    std::string en_passant =
+        castling_rights.substr(castling_rights.find(' ', 5) + 1);
+    std::stringstream ss;
+    Position *en_passant_pos;
+    std::cout << en_passant << std::endl;
+    if (en_passant.find('-') == std::string::npos) {
+        en_passant_pos = new Position(en_passant.substr(0, 2));
+        ss << "En passant at " << *en_passant_pos;
+        std_debug(ss.str());
+    } else {
+        en_passant_pos = nullptr;
+        ss << "No en passant";
+        std_debug(ss.str());
+    }
 
     Board board = builder.build();
     board.set_turn(turn);
+    board.en_passant = en_passant_pos;
 
     return board;
 }

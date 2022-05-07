@@ -34,16 +34,16 @@ This is a school small project for OOP : a chess game in the command-line. It ha
 
 The base project currently assumes you do run a recent enough distribution of Linux with pthread installed. To run tests (as well as the debug mode), valgrind is necessary. You will need doxygen and graphviz installed in order to build the html version of the documentation.
 
-Here you can find the code standard used during dev. The compatibility version corresponds to the minimum version in which the program is guaranteed (the real min version could be much lower) to perform as originally intended regarding the terms and conditions mentionned in [LICENSE](LICENSE) and the [main](src/main.cpp) source file.
+Here you can find the code standard used during dev. The compatibility version corresponds to the minimum version in which the program is guaranteed (the real min version could be much lower) to perform as originally intended regarding the terms and conditions mentioned in [LICENSE](LICENSE) and the [main](src/main.cpp) source file.
 
 | dev version used      | compatibility version |
 | --------------------- | --------------------- |
 | g++-11                | g++-9                 |
 | -std=gnu++20          | -std=gnu++17          |
 | linux kernel 5.15     | linux kernel 5.13     |
-| valgrind-3.15.0       | \*                    |
+| valgrind-3.18.1       | valgrind-3.15.0       |
 | python 3.10.4         | python 3.9.12         |
-| doxygen 1.8.17        | \*                    |
+| doxygen 1.9.1         | doxygen 1.8.17        |
 | dot - graphviz 2.43.0 | \*                    |
 
 ## Usage
@@ -58,9 +58,9 @@ Alternatively `make release` will produce a release version of the executable, `
 
 [![example_ui - link to font](assets/example_ui.jpg)](https://www.jetbrains.com/fr-fr/lp/mono/)
 
-Moves should be typed in the command line (the program should be asking for it though). Moves are defined by the starting position and the end position, for example b1c3 which would (at the beggining of the game) move the white knight. To play a sample game, please type `make run < tests/play.txt` and then hit enter. To only view error messages on auto-play, please redirect standard output (only) `... > /dev/null` as all errors are thrown to standard error. You can also pass `--quiet` as command line argument as it shuts down most display (but still outputs the end fen string).
+Moves should be typed in the command line (the program should be asking for it though). Moves are defined by the starting position and the end position, for example b1c3 which would (at the beginning of the game) move the white knight. To play a sample game, please type `make run < tests/play.txt` and then hit enter. To only view error messages on auto-play, please redirect standard output (only) `... > /dev/null` as all errors are thrown to standard error. You can also pass `--quiet` as command line argument as it shuts down most display (but still outputs the end fen string).
 
-Since v0.1.0, some optional arguments can be typed in the command line from `"f:m:n:vqhVL"`. At the time of writing, only fvqhVL are implemented but that is susceptible to change. Arguments have a short and a long version, please type `./bin/echecs --help` to learn more.
+Since v0.1.0, some optional arguments can be typed in the command line from `"f:m:n:vqhVL"`. At the time of writing, only fvqhVL are implemented but that is susceptible to change. Arguments have a short and a long version, please type `./bin/chess --help` to learn more.
 
 The list of known and supported move patterns and commands is as follow :
 
@@ -122,7 +122,7 @@ POSSIBILITY OF SUCH DAMAGE.
 
 3.  <details><summary>It at least has an AI to it right ?</summary>
 
-    Well about that... That is not even on the damn paper. I, however, am going to try my best and implement it even though you can rest assured that it won't bring any bonnuses. The subject paper is just about implementing the right pieces movements for two human players, which is quite boring and serves no purpose.
+    Well about that... That is not even on the damn paper. I, however, am going to try my best and implement it even though you can rest assured that it won't bring any bonuses. The subject paper is just about implementing the right pieces movements for two human players, which is quite boring and serves no purpose.
     </details>
 
 4.  <details><summary>Serious question this time, what is the algorithm I am playing against ?</summary>
@@ -140,7 +140,7 @@ POSSIBILITY OF SUCH DAMAGE.
     So here is the thing. The return page does specify that we _need_ to upload (and by upload, I actually mean that we need to make a static archive and upload it somewhere else but to GitHub) a html version of the doc. Doxygen (the old dinosaur) does automate the process of generating a web page based on some .md files. The Doxyfile file is set to also build class dependance graphs as well as the full history of function calls (which is why is does take a while the first time). Well I could have used Sphinx to build a beautiful version of the doc but I actually am not sure the panel of judges will know how to setup this tool (visual studio does it for you but using Windows is another debate).
     </details>
 
-7.  <details><summary>This object orientation is kind of weired isn't it ? (please read)</summary>
+7.  <details><summary>This object orientation is kind of weird isn't it ? (please read)</summary>
 
     Well, we were requested to do this project in the OOP approach. C++ has two major flows : the first one being memory management. Because of virtual classes, we are not able to return a static object of the Piece class for example, instead, we need to return a pointer to some object living in memory and trick the compiler by saying that even this is a pointer to a piece object, once created, it won't be a piece anymore. This slows down the program to a snail's pace and creates memory leaks we are not easily able to counter. In fact, when the cpu seeks for a move to play (or evaluates the board), it uses copies of the board (which is not a problem) but also copies of pieces (which would not be an issue if we could create pieces on the stack). The second big flow is the total lack control of enums and pointers. For example, we can not create an enum holding generic values such as Queen(Position, Color), which is quite usefull and is implemented in other languages. Even with enum class, switch statements seems to require a default branch. Also, the optional trait isn't very convenient and does not bring anything new since we still can manipulate pointers. On a side note, this project was first made in python, then in the rust programming language.
     </details>
@@ -170,10 +170,11 @@ gantt
 ```
 
 <details>
-    <summary> v0.1.1 : more functionalities and patches (click here to expand) </summary>
+    <summary> v0.1.2 : towards next stable release (click here to expand) </summary>
 
-- use of standard assert library
-- added better starting fen handle (turn, castling rights, en passant)
+- renamed executable to something more english
+- makefile uses specific micro architecture and c++20 since ubuntu 22.04 stable release
+- more fitting time/duration display
 
 </details>
 

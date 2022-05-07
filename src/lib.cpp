@@ -123,3 +123,17 @@ std::string to_lower(const std::string &s) {
     }
     return r;
 }
+
+std::string get_time(const int64_t &time) {
+    // transform time in ms to time in xh:ymin:zsec:ms
+    std::stringstream ss;
+    int64_t ms = time % 1000;
+    int64_t s = time / 1000;
+    int64_t m = s / 60;
+    int64_t h = m / 60;
+    m %= 60;
+    s %= 60;
+    ss << h << "h:" << m << "min:" << s << "sec:" << ms << "ms";
+    
+    return ss.str();
+}

@@ -22,9 +22,9 @@
     - avoided the access (when possible on pointers) to direct members of classes
 4.  **v0.1.0** first release package version
     - app class
-    - command line arguments from `"f:m:n:vqhVL"` (`./bin/echecs --help` to learn more)
+    - command line arguments from `"f:m:n:vqhVL"` (`./bin/chess --help` to learn more)
     - released a compatibility mode for gnu++17 (c++17)
-    - makefile does not use g++11 explicitely
+    - makefile does not use g++11 explicitly
     - github workflow for security checks
     - added signal handling and async input
     - minor improvement of the evaluation function
@@ -38,3 +38,8 @@
 5.  **v0.1.1** more functionalities and patches
     - use of standard assert library
     - added better starting fen handle (turn, castling rights, en passant)
+6.  **v0.1.2** towards next stable release
+    - renamed executable to something more english
+    - updated dependencies
+    - makefile uses specific micro architecture and c++20 since ubuntu 22.04 stable release
+    - more fitting time/duration display

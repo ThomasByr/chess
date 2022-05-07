@@ -1,11 +1,11 @@
 CC = g++
 
-CFLAGS = -march=native -pipe -std=gnu++17 -pedantic -Wall -Wextra -Werror
+CFLAGS = -march=znver3 -pipe -std=gnu++20 -pedantic -Wall -Wextra -Werror
 LDLIBS = -pthread
 
 INCLUDE_PATH = ./includes
 
-TARGET       = echecs
+TARGET       = chess
 FILEXT       = cpp
 
 SRCDIR       = src

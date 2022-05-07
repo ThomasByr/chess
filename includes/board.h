@@ -1,12 +1,5 @@
 #pragma once
 
-#include <algorithm>
-#include <cctype>
-#include <iostream>
-#include <map>
-#include <string>
-#include <tuple>
-
 #include "lib.h"
 
 #include "move.h"

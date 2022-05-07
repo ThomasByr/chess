@@ -2,15 +2,23 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cctype>
 #include <cerrno>
 #include <chrono>
+#include <csignal>
 #include <cstring>
 #include <iostream>
+#include <map>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <thread>
+#include <tuple>
 #include <utility>
 #include <vector>
+
+#include <getopt.h>
+#include <unistd.h>
 
 #define __AUTHOR__ "ThomasByr"
 
@@ -107,7 +115,7 @@ enum class State {
 
 /**
  * @brief not operator for enum class Color
- * 
+ *
  * @param color color
  * @return Color - enum class
  */
@@ -115,7 +123,7 @@ Color operator!(Color color);
 
 /**
  * @brief fmt a color
- * 
+ *
  * @param os ostream
  * @param color color
  * @return std::ostream& - ostream
@@ -133,7 +141,7 @@ std::ostream &operator<<(std::ostream &os, State state);
 
 /**
  * @brief implements repeat for a string
- * 
+ *
  * @param str string
  * @param n unsigned
  * @return std::string - new string
@@ -142,7 +150,7 @@ std::string repeat(std::string str, const unsigned n);
 
 /**
  * @brief * operator for a string and an unsigned
- * 
+ *
  * @param str string
  * @param n unsigned
  * @return std::string - new string
@@ -173,5 +181,13 @@ std::string trim(const std::string &s);
  * @return std::string - new string
  */
 std::string to_lower(const std::string &s);
+
+/**
+ * @brief get string representation of time
+ *
+ * @param time time
+ * @return std::string - string representation of time
+ */
+std::string get_time(const int64_t &time);
 
 extern State state;

@@ -1,13 +1,3 @@
-#include <chrono>
-#include <csignal>
-#include <iostream>
-#include <stdexcept>
-#include <string>
-#include <vector>
-
-#include <getopt.h>
-#include <unistd.h>
-
 #include "lib.h"
 
 #include "board.h"

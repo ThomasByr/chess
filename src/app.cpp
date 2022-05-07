@@ -114,7 +114,7 @@ Move App::get_cpu_move(Board &board, bool best) {
 
     if (this->verbose()) {
         std::cout << "CPU score: " << score << std::endl;
-        std::cout << "Took " << ms << "ms" << std::endl;
+        std::cout << "Took " << get_time(ms) << "ms" << std::endl;
     }
     return m;
 }
@@ -203,7 +203,8 @@ void App::parse_args(int argc, char *argv[]) {
         {"help", no_argument, nullptr, 'h'},
         {"version", no_argument, nullptr, 'V'},
         {"license", no_argument, nullptr, 'L'},
-        {nullptr, 0, nullptr, 0}};
+        {nullptr, 0, nullptr, 0},
+    };
 
     const char *short_options = "f:m:n:vqhVL"; // short options
     std::string bad_option;                    // bad option full name
@@ -484,10 +485,10 @@ int App::run() {
     if (this->verbose()) {
         history_display(history);
         std::cout << "\ntotal moves: " << history.size() << "\n";
-        std::cout << "white cpu thinking time: " << this->white_thinking_time
-                  << "ms\n";
-        std::cout << "black cpu thinking time: " << this->black_thinking_time
-                  << "ms\n";
+        std::cout << "white cpu thinking time: "
+                  << get_time(this->white_thinking_time) << "\n";
+        std::cout << "black cpu thinking time: "
+                  << get_time(this->black_thinking_time) << "\n";
     } // display history if verbose
 
     // end position requested by subject paper

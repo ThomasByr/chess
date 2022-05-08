@@ -188,6 +188,6 @@ std::string to_lower(const std::string &s);
  * @param time time
  * @return std::string - string representation of time
  */
-std::string get_time(const int64_t &time);
+std::string time_to_string(const int64_t &time);
 
 extern State state;

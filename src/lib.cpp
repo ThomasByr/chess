@@ -124,7 +124,7 @@ std::string to_lower(const std::string &s) {
     return r;
 }
 
-std::string get_time(const int64_t &time) {
+std::string time_to_string(const int64_t &time) {
     // transform time in ms to time in xh:ymin:zsec:ms
     std::stringstream ss;
     int64_t ms = time % 1000;

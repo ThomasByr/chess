@@ -114,7 +114,7 @@ Move App::get_cpu_move(Board &board, bool best) {
 
     if (this->verbose()) {
         std::cout << "CPU score: " << score << std::endl;
-        std::cout << "Took " << get_time(ms) << "ms" << std::endl;
+        std::cout << "Took " << time_to_string(ms) << "ms" << std::endl;
     }
     return m;
 }
@@ -486,9 +486,9 @@ int App::run() {
         history_display(history);
         std::cout << "\ntotal moves: " << history.size() << "\n";
         std::cout << "white cpu thinking time: "
-                  << get_time(this->white_thinking_time) << "\n";
+                  << time_to_string(this->white_thinking_time) << "\n";
         std::cout << "black cpu thinking time: "
-                  << get_time(this->black_thinking_time) << "\n";
+                  << time_to_string(this->black_thinking_time) << "\n";
     } // display history if verbose
 
     // end position requested by subject paper

@@ -173,8 +173,10 @@ gantt
     <summary> v0.1.2 : towards next stable release (click here to expand) </summary>
 
 - renamed executable to something more english
+- updated dependencies
 - makefile uses specific micro architecture and c++20 since ubuntu 22.04 stable release
 - more fitting time/duration display
+- manual copy in makefile of the assets folder into html to display images
 
 </details>
 

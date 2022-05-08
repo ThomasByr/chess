@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS = -march=native -Og -pipe -std=gnu++17 -pedantic -Wall -Wextra -Werror -DDEBUG -g
+CFLAGS = -march=native -Og -pipe -std=gnu++20 -pedantic -Wall -Wextra -Werror -DDEBUG -g
 LDLIBS = -pthread
 
 INCLUDE_PATH = ../includes

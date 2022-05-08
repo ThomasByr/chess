@@ -23,6 +23,8 @@ all : release docs
 .PHONY : docs
 docs:
 	@echo "\033[95mBuilding documentation...\033[0m"
+	@mkdir -p html/assets
+	@cp -r assets/* html/assets
 	@doxygen ./Doxyfile > /dev/null 2>&1
 	@echo "\033[97mDocumentation built!\033[0m"
 

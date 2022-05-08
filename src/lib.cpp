@@ -134,6 +134,6 @@ std::string time_to_string(const int64_t &time) {
     m %= 60;
     s %= 60;
     ss << h << "h:" << m << "min:" << s << "sec:" << ms << "ms";
-    
+
     return ss.str();
 }

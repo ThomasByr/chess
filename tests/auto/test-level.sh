@@ -10,7 +10,7 @@ if [ $level -lt 4 ]; then
   exit 1
 fi
 
-CHESS_PROG="../../bin/echecs"
+CHESS_PROG="../../bin/chess"
 LOG="../test.log"
 
 leg_games="${level}-leg-*"

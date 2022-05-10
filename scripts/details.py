@@ -27,7 +27,7 @@ def get_changes() -> list[str]:
     chg: list[str] = []
     for e in reversed(changelog):
         chg.append(e)
-        if e[0] != "-" and e[0] != "*":
+        if len(e) > 0 and e[0] == "#":
             break
     return list(reversed(chg))
 
@@ -56,7 +56,7 @@ def update(chg: list[str]) -> None:
             elif "</details>" in e:
                 index1 = i
         else:
-            if "## Changelog" in e:
+            if ("Changelog" in e or "changelog" in e) and "##" in e:
                 seen = True
     if not seen:
         raise ValueError("Error [README make] : no changelog subsection found")
@@ -64,12 +64,12 @@ def update(chg: list[str]) -> None:
         raise ValueError("Error [README make] : bad format, <details> tag not found")
 
     head = chg[0]
-    index_of = head.find("*")
-    head = head[index_of::].strip("*").replace("**", " :")
+    index_of = head.find("#")
+    head = head[index_of::].strip("##")
 
     details: list[str] = []
     details.append(f"    <summary> {head} (click here to expand) </summary>")
-    details.append("\n\n")
+    details.append("\n")
     for e in chg[1:]:
         details.append(f"{e}\n")
     details.append("\n")

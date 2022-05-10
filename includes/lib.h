@@ -24,7 +24,7 @@
 
 #define __VERSION_MAJOR__ 0
 #define __VERSION_MINOR__ 1
-#define __VERSION_PATCH__ 2
+#define __VERSION_PATCH__ 3
 
 #define TIMEOUT 3000
 

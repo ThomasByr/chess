@@ -18,19 +18,19 @@
 
 _note_ : doxygen actually can't deal with new markdown GitHub style... please view this page on a proper web editor or even better, on GitHub
 
-1. [In short](#in-short)
-2. [Prerequisites](#prerequisites)
-3. [Usage](#usage)
-4. [License](#license)
-5. [F.A.Q.](#faq)
-6. [Changelog](#changelog)
-7. [Bugs & TODO](#bugs--todo)
+1. [✏️ In short](#️-in-short)
+2. [🔰 Prerequisites](#-prerequisites)
+3. [👩‍🏫 Usage](#-usage)
+4. [⚖️ License](#️-license)
+5. [💁 F.A.Q.](#-faq)
+6. [🔄 Changelog](#-changelog)
+7. [🐛 Bugs & TODO](#-bugs--todo)
 
-## In short
+## ✏️ In short
 
 This is a school small project for OOP : a chess game in the command-line. It has some additional features (color map, minimax algorithm).
 
-## Prerequisites
+## 🔰 Prerequisites
 
 The base project currently assumes you do run a recent enough distribution of Linux with pthread installed. To run tests (as well as the debug mode), valgrind is necessary. You will need doxygen and graphviz installed in order to build the html version of the documentation.
 
@@ -46,7 +46,7 @@ Here you can find the code standard used during dev. The compatibility version c
 | doxygen 1.9.1         | doxygen 1.8.17        |
 | dot - graphviz 2.43.0 | \*                    |
 
-## Usage
+## 👩‍🏫 Usage
 
 Compile and run a release version with
 
@@ -78,7 +78,7 @@ The list of known and supported move patterns and commands is as follow :
 | <details><summary>`pop`</summary>or `back` or `b`</details>                                                    | to load the previous board if available       |
 | <details><summary>`/quit`</summary>or `/q` or `/`</details>                                                    | to quit the game and display the final state  |
 
-## License
+## ⚖️ License
 
 This Chess engine is licensed under the [GPL-3.0](LICENSE) license. Please see the [license](LICENSE) file for more details.
 
@@ -108,7 +108,7 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 
-## F.A.Q.
+## 💁 F.A.Q.
 
 1.  <details><summary>Why in the world is there no gui here yet ?</summary>
 
@@ -145,7 +145,7 @@ POSSIBILITY OF SUCH DAMAGE.
     Well, we were requested to do this project in the OOP approach. C++ has two major flows : the first one being memory management. Because of virtual classes, we are not able to return a static object of the Piece class for example, instead, we need to return a pointer to some object living in memory and trick the compiler by saying that even this is a pointer to a piece object, once created, it won't be a piece anymore. This slows down the program to a snail's pace and creates memory leaks we are not easily able to counter. In fact, when the cpu seeks for a move to play (or evaluates the board), it uses copies of the board (which is not a problem) but also copies of pieces (which would not be an issue if we could create pieces on the stack). The second big flow is the total lack control of enums and pointers. For example, we can not create an enum holding generic values such as Queen(Position, Color), which is quite usefull and is implemented in other languages. Even with enum class, switch statements seems to require a default branch. Also, the optional trait isn't very convenient and does not bring anything new since we still can manipulate pointers. On a side note, this project was first made in python, then in the rust programming language.
     </details>
 
-## Changelog
+## 🔄 Changelog
 
 Please refer to the [changelog.md](changelog.md) file for the full history.
 
@@ -170,7 +170,31 @@ gantt
 ```
 
 <details>
-    <summary> v0.1.2 : towards next stable release (click here to expand) </summary>
+    <summary>  Beta first minor release (click here to expand) </summary>
+
+**v0.1.0** first release package version
+
+- app class
+- command line arguments from `"f:m:n:vqhVL"` (`./bin/chess --help` to learn more)
+- released a compatibility mode for gnu++17 (c++17)
+- makefile does not use g++11 explicitly
+- github workflow for security checks
+- added signal handling and async input
+- minor improvement of the evaluation function
+- added basic endgame detection and alternate king map
+- implemented pawn promotion for additional target pieces (ask for user input)
+- as user is requested an additional input, cpu can only promote to queen as of now (there could still be bugs)
+- async input reduced, sigint sent by user does not always close the app
+- added simple display tweak, user can switch filling up white pieces for display
+- add pop command to go to the previous board if available (not recoverable)
+- global state of the program is registered
+
+**v0.1.1** more functionalities and patches
+
+- use of standard assert library
+- added better starting fen handle (turn, castling rights, en passant)
+
+**v0.1.2** towards next stable release
 
 - renamed executable to something more english
 - updated dependencies
@@ -178,9 +202,13 @@ gantt
 - more fitting time/duration display
 - manual copy in makefile of the assets folder into html to display images
 
+**v0.1.3** dumped null pointers for nullopt
+
+- use of `std::optional<T>` (c++17 feature)
+
 </details>
 
-## Bugs & TODO
+## 🐛 Bugs & TODO
 
 Bugs (final correction version)
 
